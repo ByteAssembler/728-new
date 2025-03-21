@@ -20,3 +20,6 @@ dist
 
 # docker-compose db
 db
+
+# Will be removed
+drizzle/
