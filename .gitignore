@@ -23,3 +23,9 @@ db
 
 # Will be removed
 drizzle/
+
+# Hidden Files
+*hidden*
+*hide*
+*secret*
+*~*

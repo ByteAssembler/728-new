@@ -1,0 +1,132 @@
+html,
+body,
+#root,
+.control-grid {
+  touch-action: none;
+}
+
+.split-horizontal {
+  display: flex;
+  width: 100%;
+}
+
+.gutter {
+  background-repeat: no-repeat;
+  background-position: 50%;
+  opacity: 0.075;
+}
+
+.gutter.gutter-horizontal {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
+  cursor: col-resize;
+}
+
+.gutter.gutter-vertical {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=");
+  cursor: row-resize;
+}
+
+/* ***************************************************************** */
+
+.control-grid {
+  background-color: black;
+  padding: 12px;
+  height: 100%;
+  width: 100%;
+}
+
+/* Card Content & Animation */
+.card-content {
+  position: relative;
+  border-radius: 0.5rem;
+  background: #1c1c1e;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.card-content-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: block;
+}
+
+.card-content-container .grid-cell-button-fullscreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+
+  top: 0.5rem;
+  right: 0.5rem;
+
+  width: 36px;
+  height: 36px;
+
+  background-color: black;
+  fill: white;
+  color: white;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+
+/* Modal State */
+.card-content-container.open {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 1;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.open .card-content {
+  max-height: 80vh;
+  max-width: 80vw;
+  /*
+  min-width: 15vw;
+  min-height: 15vh;
+  height: auto;
+  width: auto;
+  */
+  overflow: hidden;
+}
+
+/* Overlay */
+.overlay {
+  z-index: 1;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.7);
+  will-change: opacity;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+
+.widget-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.widget {
+  background-color: rgba(0, 0, 0, 0.35);
+  /*
+  width: 93.5%;
+  height: 93.5%;
+  */
+}
