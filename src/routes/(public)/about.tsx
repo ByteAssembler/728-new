@@ -2,7 +2,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { createFileRoute } from "@tanstack/react-router";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { AboutSection, NavigationButton, PersonalItem } from "~/lib/components/ui/about";
 import Ufo from "~/lib/components/ui/about-ufo";
 
@@ -57,9 +57,21 @@ const features = [
 ];
 
 function About() {
+  const [height, setHeight] = useState(300); // default for SSR
+
+  useEffect(() => {
+    const handleResize = () => {
+      setHeight(window.innerWidth >= 432 ? 450 : 300);
+    };
+
+    handleResize(); // Set initial value
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="md:pl-12 p-4 md:p-10 font-Electrolize">
-      <div style={{ width: "100%", height: "450px" }}>
+      <div style={{ width: "100%", height: height }}>
         <Canvas
           style={{
             left: 0,
@@ -69,14 +81,14 @@ function About() {
             zIndex: 0,
           }}
           camera={{ position: [0, 3, 4], fov: 45 }}
-          className="pt-10 w-full h-[50vh] md:h-[60vh] lg:h-[70vh]"
+          className="pt-10 w-full h-[40vh] md:h-[60vh] lg:h-[70vh]"
           dpr={[1, 1.5]}
           gl={{
             antialias: true,
           }}
         >
           <ambientLight intensity={0.5} />
-          <directionalLight position={[2, 2, 2]} />
+          <directionalLight position={[2, 4, 4]} />
           <Suspense fallback={null}>
             <Ufo />
           </Suspense>

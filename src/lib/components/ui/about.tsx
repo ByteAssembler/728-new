@@ -70,7 +70,7 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
     <div className="block pb-5 md:pb-2">
       {/* Mobile Layout (stacked: image → title → text) */}
       <div className="flex flex-col xs:hidden">
-        <div className="relative aspect-[3/4] w-full max-w-xs mx-auto mb-3">
+        <div className="relative aspect-[3/4] w-4/5 max-w-[25rem] mx-auto mb-3">
           <Image
             src={portrait}
             alt="Picture of Member"
@@ -80,7 +80,7 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
         <div className="flex justify-center mb-3">
           <img src={titleSvg} alt="title" className="m-0" />
         </div>
-        <p className="text-base">{text}</p>
+        <p className="text-white text-base">{text}</p>
       </div>
 
       {/* Tablet/Desktop Layout (title at top, image and text below side by side) */}
@@ -120,7 +120,7 @@ interface AboutSectionProp {
 
 const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
   <div>
-    <h2 className="text-white font-Orbitron font-extrabold text-center text-2xl">
+    <h2 className="text-white font-Orbitron font-extrabold text-center text-4xl">
       Über Uns
     </h2>
     <div className="flex flex-col md:flex-row gap-4 w-full justify-between md:p-10">
@@ -137,12 +137,18 @@ const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
 );
 
 const NavigationButton: React.FC = () => {
+  const svgString= encodeURIComponent("<svg width=\"334\" height=\"117\" viewBox=\"0 0 334 117\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+    "<path d=\"M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z\" fill=\"#23CF51\"/>\n" +
+    "</svg>\n");
+
+  const dataUrl = `url("data:image/svg+xml,${svgString}")`;
+
   return (
     <button
       className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white"
       style={{
         fontSize: 30,
-        backgroundImage: `url(${buttonBackground.src})`,
+        backgroundImage: dataUrl,
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
