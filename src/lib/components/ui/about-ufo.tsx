@@ -44,7 +44,10 @@ export default function Ufo() {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width < 640) {
+      if (width < 432) {
+        // Mobile
+        setScale(0.047);
+      } else if (width < 640) {
         // Mobile
         setScale(0.035);
       } else if (width < 1024) {
