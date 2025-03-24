@@ -59,12 +59,12 @@ function HeaderNormal() {
     if (screenWidth < 360) {
       // Segment 1: 350px to 360px (assuming linear continuation from Segment 2)
       const m = 3.8;
-      const b = -1033;
+      const b = -930;
       return m * screenWidth + b;
-    } else if (screenWidth >= 360 && screenWidth < 375) {
+    } else if (screenWidth >= 360 && screenWidth <= 375) {
       // Segment 2: 360px to 375px
       const m = 3.8;
-      const b = -1033;
+      const b = -1066;
       return m * screenWidth + b;
     } else if (screenWidth >= 375 && screenWidth < 390) {
       // Segment 3: 375px to 390px
