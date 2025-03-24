@@ -113,7 +113,7 @@ export const dbCreateDiaryEntryServerFn = createServerFn({ method: "POST" })
       const res = await db
         .insert(dbSchemaDiaryCategory)
         .values({
-          name: "Unkown",
+          name: "Unknown",
         })
         .returning({
           id: dbSchemaDiaryCategory.id,
