@@ -103,17 +103,28 @@ export async function dbSaveDiaryEntryContent_server(
 ) {
   if (!authed) return { lastEditedTimestamp: 0, diaryEntry: null };
 
+  const updateValues: Partial<typeof diaryEntry> = {};
+  if (params.dataJson !== undefined) {
+    updateValues.contentJson = params.dataJson;
+  }
+  if (params.dataHtml !== undefined) {
+    updateValues.contentHtml = params.dataHtml;
+  }
+  if (Object.keys(updateValues).length === 0) {
+    throw new Error("No values to set");
+  }
+
   const [result] = await db
     .update(diaryEntry)
-    .set({ content: params.data })
+    .set(updateValues)
     .where(eq(diaryEntry.id, params.diaryEntryId))
     .returning();
 
   revalidatePath("/diary");
 
   return result
-    ? { lastEditedTimestamp: params.data.time, diaryEntry: result }
-    : { lastEditedTimestamp: 0, diaryEntry: null };
+    ? { diaryEntry: result }
+    : { diaryEntry: null };
 }
 
 export async function dbCreateDiaryEntry_server() {
@@ -143,7 +154,7 @@ export async function dbCreateDiaryEntry_server() {
   await db.insert(diaryEntry).values({
     id: newEntryId,
     title: "New Diary Entry " + new Date().toLocaleString(),
-    content: JSON.stringify([{ type: "paragraph", content: [""] }]), // getDefaultContent(),
+    contentJson: JSON.stringify([{ type: "paragraph", content: [""] }]), // getDefaultContent(),
     published: false,
     diaryCategoryId: unknownCategoryId,
   });
@@ -153,10 +164,30 @@ export async function dbCreateDiaryEntry_server() {
 }
 
 export async function dbDeleteDiaryEntry_server(params: z.infer<typeof DeleteDiaryEntryParamsSchema>) {
-  await db
-    .delete(diaryEntry)
-    .where(eq(diaryEntry.id, params.diaryEntryId));
+  await db.transaction(async (tx) => {
+    // Delete dependent collaborator rows using a subquery for Work Table Entry IDs
+    const workTableIds = (
+      await tx
+        .select({ id: diaryWorkTableEntryCollaborator.id })
+        .from(diaryWorkTableEntryCollaborator)
+        .where(eq(diaryWorkTableEntryCollaborator.diaryEntryId, params.diaryEntryId))
+    ).map(item => item.id);
 
+    if (workTableIds.length) {
+      // changed: use column "collaborator_id" instead of "collaboratorId"
+      await tx
+        .delete(collaboratorUserRelation)
+        .where(inArray(collaboratorUserRelation.collaboratorId, workTableIds));
+    }
+
+    // Delete work table entries
+    await tx
+      .delete(diaryWorkTableEntryCollaborator)
+      .where(eq(diaryWorkTableEntryCollaborator.diaryEntryId, params.diaryEntryId));
+
+    // Delete the diary entry itself
+    await tx.delete(diaryEntry).where(eq(diaryEntry.id, params.diaryEntryId));
+  });
   revalidatePath("/diary");
 }
 

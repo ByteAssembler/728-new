@@ -41,7 +41,8 @@ export const SaveDiaryEntryTableDataParamsSchema = z.object({
 });
 
 export const SaveDiaryEntryContentParamsSchema = z.object({
-  data: z.any(),
+  dataJson: z.any(),
+  dataHtml: z.any(),
   diaryEntryId: z.string(),
 });
 

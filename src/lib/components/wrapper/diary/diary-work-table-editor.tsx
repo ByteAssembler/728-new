@@ -77,7 +77,7 @@ export default function DiaryWorkTableEntryEditor({
     setRows([
       ...rows,
       {
-        id: crypto.randomUUID(), // Generate a unique ID for the new row - TODO check for error
+        id: Date.now(), // Generate a unique numeric ID using timestamp
         workers: [],
         workedAt: null,
         workedSeconds: time30mins,

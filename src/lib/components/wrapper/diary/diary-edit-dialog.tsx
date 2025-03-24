@@ -82,18 +82,19 @@ export function EditDiary({ diaryEntry }: { diaryEntry: DbDiaryEntry }) {
   >(diaryEntry.workTableEntries);
   const debouncedWorkTableData = useDebounce(workTableData, 500);
 
-  async function saveContent(data: OutputData) {
+  async function saveContent(dataJsonString: string, dataHtmlString: string) {
     setEditStatusContent("saving");
 
     const result = await dbSaveDiaryEntryContentFn({
       data: {
         diaryEntryId: diaryEntry.id,
-        data,
+        dataJson: dataJsonString,
+        dataHtml: dataHtmlString,
       }
     });
 
     // setContent(result.data?.diaryEntry?.content);
-    setContent(data);
+    setContent(dataJsonString);
 
     if (result.success) { // data.time === result.lastEditedTimestamp
       setEditStatusContent("saved");

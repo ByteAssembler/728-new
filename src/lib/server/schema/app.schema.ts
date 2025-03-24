@@ -28,7 +28,8 @@ export const diaryCategory = pgTable("DiaryCategory", {
 export const diaryEntry = pgTable("DiaryEntry", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
-  content: text("content").notNull(),
+  contentJson: text("content_json").notNull(),
+  contentHtml: text("content_html"),
   published: boolean("published").default(false).notNull(),
   diaryCategoryId: integer("diary_category_id").notNull(),
   day: timestamp("day").defaultNow().notNull(),
