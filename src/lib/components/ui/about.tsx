@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import React from "react";
 import Image from "~/lib/components/ui/image";
 
-import buttonBackground from "~/assets/about-header.svg";
 import dogsen from "~/assets/dognig.png";
 
 import moritzImage from "~/assets/Moritz.png";
@@ -137,9 +136,11 @@ const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
 );
 
 const NavigationButton: React.FC = () => {
-  const svgString= encodeURIComponent("<svg width=\"334\" height=\"117\" viewBox=\"0 0 334 117\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
-    "<path d=\"M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z\" fill=\"#23CF51\"/>\n" +
-    "</svg>\n");
+  const svgString = encodeURIComponent(
+    '<svg width="334" height="117" viewBox="0 0 334 117" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
+      '<path d="M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z" fill="#23CF51"/>\n' +
+      "</svg>\n",
+  );
 
   const dataUrl = `url("data:image/svg+xml,${svgString}")`;
 
