@@ -8,7 +8,7 @@ import {
   diaryWorkTableEntryCollaborator,
   diaryWorkTableEntryCollaborator_User as collaboratorUserRelation,
 } from "~/lib/server/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, inArray } from "drizzle-orm";
 import { z } from "zod";
 import {
   DbDiaryEntry,
@@ -51,7 +51,22 @@ export async function dbSaveDiaryEntryTableData_server(
   params: z.infer<typeof SaveDiaryEntryTableDataParamsSchema>
 ) {
   await db.transaction(async (tx) => {
-    // Delete existing entries
+    // New deletion: First, get the existing work table entry collaborator ids.
+    const existingCollaborators = await tx
+      .select({ id: diaryWorkTableEntryCollaborator.id })
+      .from(diaryWorkTableEntryCollaborator)
+      .where(eq(diaryWorkTableEntryCollaborator.diaryEntryId, params.diaryEntryId));
+
+    const collaboratorIds = existingCollaborators.map((item) => item.id);
+
+    // Delete dependent Collaborators rows if any exist.
+    if (collaboratorIds.length) {
+      await tx
+        .delete(collaboratorUserRelation)
+        .where(inArray(collaboratorUserRelation.collaboratorId, collaboratorIds));
+    }
+
+    // Then delete the work table collaborator entries.
     await tx
       .delete(diaryWorkTableEntryCollaborator)
       .where(eq(diaryWorkTableEntryCollaborator.diaryEntryId, params.diaryEntryId));

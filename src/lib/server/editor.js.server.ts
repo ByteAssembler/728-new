@@ -27,7 +27,8 @@ export const DiaryWorkerSchema = z.object({
 });
 
 export const DiaryWorkTableEntryCollaboratorExtendedSchema = z.object({
-  id: z.string(),
+  // String to number
+  id: z.coerce.number(),
   workers: z.array(DiaryWorkerSchema),
   workedAt: z.date().nullable(),
   workedSeconds: z.number(),
