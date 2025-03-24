@@ -117,24 +117,26 @@
   --font-Orbitron: "Orbitron", "sans-serif";
   --font-Electrolize: "Electrolize", "sans-serif";
 }
+
 @font-face {
   font-family: "Electrolize";
-  src: url("/public/Electrolize-Regular.ttf") format("ttf");
+  src: url("/Electrolize-Regular.ttf") format("ttf");
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: "Orbitron";
-  src: url("/public/Orbitron-VariableFont_wght.ttf") format("ttf");
+  src: url("/Orbitron-VariableFont_wght.ttf") format("ttf");
   font-style: normal;
   font-display: swap;
 }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-Orbitron;
   }
 }
