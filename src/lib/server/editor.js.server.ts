@@ -1,13 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
-import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { z } from "zod";
+import { authMiddleware } from "~/lib/middleware/auth-guard";
 
+import { eq } from "drizzle-orm";
 import { db } from "~/lib/server/db";
 import {
-  user as dbSchemaUser, diaryEntry as dbSchemaDiaryEntry,
-  diaryCategory as dbSchemaDiaryCategory
+  diaryCategory as dbSchemaDiaryCategory,
+  diaryEntry as dbSchemaDiaryEntry,
+  user as dbSchemaUser,
 } from "~/lib/server/schema";
-import { eq } from "drizzle-orm";
 
 /*
 function createAuthedPostServerFn<Z extends z.ZodType<unknown, z.ZodTypeDef, unknown>>
@@ -54,8 +55,6 @@ export const dbSaveDiaryEntryMetadata = createServerFn({ method: "POST" })
     }
   });
 
-
-
 export const dbDiaryEntryGetWorkers = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async (req) => {
@@ -64,14 +63,14 @@ export const dbDiaryEntryGetWorkers = createServerFn({ method: "GET" })
       throw new Error("Unauthorized");
     }
 
-    return await db.select({
-      id: dbSchemaUser.id,
-      name: dbSchemaUser.name,
-      email: dbSchemaUser.email,
-    }).from(dbSchemaUser);
+    return await db
+      .select({
+        id: dbSchemaUser.id,
+        name: dbSchemaUser.name,
+        email: dbSchemaUser.email,
+      })
+      .from(dbSchemaUser);
   });
-
-
 
 const dbGetDiaryEntrySchema = z.string();
 
@@ -86,15 +85,11 @@ export const dbGetDiaryEntry = createServerFn({ method: "POST" })
 
     const a = await db.query.diaryEntry.findFirst({
       where: eq(dbSchemaDiaryEntry.id, req.data),
-      with: {
-
-      }
+      with: {},
     });
 
     return a;
   });
-
-
 
 export const dbCreateDiaryEntryServerFn = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
@@ -104,9 +99,10 @@ export const dbCreateDiaryEntryServerFn = createServerFn({ method: "POST" })
       throw new Error("Unauthorized");
     }
 
-    const categoryId_ = await db.select({
-      id: dbSchemaDiaryCategory.id,
-    })
+    const categoryId_ = await db
+      .select({
+        id: dbSchemaDiaryCategory.id,
+      })
       .from(dbSchemaDiaryCategory)
       .limit(1)
       .execute();
@@ -127,14 +123,16 @@ export const dbCreateDiaryEntryServerFn = createServerFn({ method: "POST" })
       categoryId = res[0].id;
     }
 
-    const res = await db.insert(dbSchemaDiaryEntry).values({
-      id: crypto.randomUUID(), // Generate a unique ID
-      title: "New Diary Entry " + new Date().toLocaleString(),
-      content: "",
-      published: false,
-      diaryCategoryId: categoryId,
-      day: new Date(),
-    })
+    const res = await db
+      .insert(dbSchemaDiaryEntry)
+      .values({
+        id: crypto.randomUUID(), // Generate a unique ID
+        title: "New Diary Entry " + new Date().toLocaleString(),
+        content: "",
+        published: false,
+        diaryCategoryId: categoryId,
+        day: new Date(),
+      })
       .returning({
         id: dbSchemaDiaryEntry.id,
       })
@@ -142,7 +140,6 @@ export const dbCreateDiaryEntryServerFn = createServerFn({ method: "POST" })
 
     return res[0].id;
   });
-
 
 /*
 function getDefaultContent() {

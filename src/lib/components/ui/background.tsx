@@ -66,8 +66,7 @@ const Background: React.FC = () => {
     const updateStars = () => {
       stars.forEach((star) => {
         star.y -= star.speed;
-        star.opacity = star.baseOpacity +
-          Math.sin(Date.now() * 0.001 * star.speed) * 0.3;
+        star.opacity = star.baseOpacity + Math.sin(Date.now() * 0.001 * star.speed) * 0.3;
 
         if (star.y < 0) {
           star.y = canvas.height;
@@ -184,10 +183,7 @@ const Background: React.FC = () => {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed top-0 left-0 w-screen h-screen z-[-100]"
-    />
+    <canvas ref={canvasRef} className="fixed top-0 left-0 w-screen h-screen z-[-100]" />
   );
 };
 

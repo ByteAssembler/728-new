@@ -1,17 +1,17 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
+import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useRef } from "react";
-import { OrbitControls } from "@react-three/drei";
-import { DropperAnimation } from '~/lib/components/ui/modelAnimation';
+import { DropperAnimation } from "~/lib/components/ui/modelAnimation";
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Ufo from '~/lib/components/ui/ufo';
+import Ufo from "~/lib/components/ui/ufo";
 
-export const Route = createFileRoute('/(public)/guardian-of-the-galaxy')({
+export const Route = createFileRoute("/(public)/guardian-of-the-galaxy")({
   component: Home,
-})
+});
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -636,12 +636,7 @@ function Home() {
           intensity={Math.PI}
           castShadow
         />
-        <pointLight
-          position={[-10, -10, -10]}
-          decay={0}
-          intensity={Math.PI}
-          castShadow
-        />
+        <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} castShadow />
         <Ufo />
       </Canvas>
 
@@ -725,10 +720,7 @@ function Home() {
             ref={dropperAnimation}
             className="opacity-0 fixed top-[7.5%] left-[-5%] w-[75vh] h-[50vh]"
           >
-            <Canvas
-              camera={{ position: [0, 1, 4], fov: 45 }}
-              style={{}}
-            >
+            <Canvas camera={{ position: [0, 1, 4], fov: 45 }} style={{}}>
               <ambientLight intensity={0.5} />
               <directionalLight position={[2, 2, 2]} />
               <Suspense fallback={null}>
@@ -830,4 +822,3 @@ function Home() {
     </>
   );
 }
-

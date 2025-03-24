@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { useAnimations, useGLTF } from "@react-three/drei";
+import { useEffect } from "react";
 
 export function DropperAnimation() {
   const { scene, animations } = useGLTF("/dropperAnimation.glb"); // Load the GLB

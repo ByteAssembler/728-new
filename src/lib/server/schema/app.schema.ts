@@ -1,13 +1,13 @@
 import {
+  boolean,
+  integer,
+  json,
+  pgEnum,
   pgTable,
+  primaryKey,
   serial,
   text,
-  integer,
   timestamp,
-  boolean,
-  json,
-  primaryKey,
-  pgEnum
 } from "drizzle-orm/pg-core";
 import { user } from "./auth.schema";
 
@@ -48,13 +48,17 @@ export const logs = pgTable("Logs", {
 });
 
 // Many‑to‑Many Relation: DiaryWorkTableEntryCollaborator <-> User
-export const diaryWorkTableEntryCollaborator_User = pgTable("Collaborators", {
-  collaboratorId: integer("collaborator_id")
-    .notNull()
-    .references(() => diaryWorkTableEntryCollaborator.id),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id)
-}, (t) => ({
-  pk: primaryKey(t.collaboratorId, t.userId)
-}));
+export const diaryWorkTableEntryCollaborator_User = pgTable(
+  "Collaborators",
+  {
+    collaboratorId: integer("collaborator_id")
+      .notNull()
+      .references(() => diaryWorkTableEntryCollaborator.id),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+  },
+  (t) => ({
+    pk: primaryKey(t.collaboratorId, t.userId),
+  }),
+);

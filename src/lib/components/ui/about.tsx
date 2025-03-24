@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import React from "react";
+import Image from "~/lib/components/ui/image";
 
 import buttonBackground from "~/assets/about-header.svg";
 import dogsen from "~/assets/dognig.png";
@@ -70,7 +71,7 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
       {/* Mobile Layout (stacked: image → title → text) */}
       <div className="flex flex-col xs:hidden">
         <div className="relative aspect-[3/4] w-full max-w-xs mx-auto mb-3">
-          <img
+          <Image
             src={portrait}
             alt="Picture of Member"
             className="object-cover object-top p-0"
@@ -89,7 +90,7 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
         </div>
         <div className={`flex gap-1 ${isImageFirst ? "flex-row" : "flex-row-reverse"}`}>
           <div className="relative aspect-[3/4] w-1/2 lg:w-2/5 h-auto md:max-h-[30rem] lg:max-h-[28rem]">
-            <img
+            <Image
               src={portrait}
               alt="Picture of Member"
               className="object-cover object-[center_20%] p-0"
@@ -125,7 +126,7 @@ const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
     <div className="flex flex-col md:flex-row gap-4 w-full justify-between md:p-10">
       <p className="text-lg md:text-2xl md:w-1/2 text-white">{text}</p>
       <div className="w-full md:w-1/2 flex justify-center">
-        <img
+        <Image
           src={dogsen}
           alt="About Us"
           className="w-full max-w-full h-auto object-contain"
