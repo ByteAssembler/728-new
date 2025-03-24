@@ -22,8 +22,7 @@ export default function Home() {
       curY += (tgY - curY) / 20;
       interBubble.style.transform = `translate(${Math.round(
         curX,
-      )
-        }px, ${Math.round(curY)}px)`;
+      )}px, ${Math.round(curY)}px)`;
       requestAnimationFrame(move);
     }
 
@@ -87,11 +86,7 @@ export default function Home() {
           <svg xmlns="http://www.w3.org/2000/svg">
             <defs>
               <filter id="goo">
-                <feGaussianBlur
-                  in="SourceGraphic"
-                  stdDeviation="10"
-                  result="blur"
-                />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
                 <feColorMatrix
                   in="blur"
                   mode="matrix"

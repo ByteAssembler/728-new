@@ -1,9 +1,6 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function ReRender(
-  { children }: { children: React.ReactNode },
-) {
+export default function ReRender({ children }: { children: React.ReactNode }) {
   const [isLocked, setLocked] = useState(true);
 
   useEffect(() => {
@@ -14,18 +11,18 @@ export default function ReRender(
     return () => clearTimeout(timer);
   }, []);
 
-  return isLocked
-    ? (
-      <div
-        style={{
-          pointerEvents: "none",
-          height: "100%",
-          width: "100%",
-          cursor: "not-allowed",
-        }}
-      >
-        {children}
-      </div>
-    )
-    : <>{children}</>;
+  return isLocked ? (
+    <div
+      style={{
+        pointerEvents: "none",
+        height: "100%",
+        width: "100%",
+        cursor: "not-allowed",
+      }}
+    >
+      {children}
+    </div>
+  ) : (
+    <>{children}</>
+  );
 }

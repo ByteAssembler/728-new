@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { motion } from "motion/react";
-import { Link, useLocation } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
 import Ufo from "~/assets/ufo.png";
 
 function HeaderNormal() {
@@ -20,31 +20,29 @@ function HeaderNormal() {
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation(); // Get the current route
 
-  const headerEntries: { title: string; pathname: string; description: string }[] =
-    [
-      {
-        title: "Log",
-        pathname: "/log",
-        description: "Log where all the activities of the car are displayed",
-      },
-      {
-        title: "Auto",
-        pathname: "/guardian-of-the-galaxy",
-        description:
-          "A UFO-shaped emergency ambulance that hovers in to save the day, proving that when it comes to emergencies, even aliens know speed matters!",
-      },
-      {
-        title: "Memoire",
-        pathname: "/diary",
-        description:
-          "A simple diary application to keep track of your thoughts.",
-      },
-      {
-        title: "Über uns",
-        pathname: "/about",
-        description: "We are 72Aid, founded to save lives.",
-      },
-    ] as const;
+  const headerEntries: { title: string; pathname: string; description: string }[] = [
+    {
+      title: "Log",
+      pathname: "/log",
+      description: "Log where all the activities of the car are displayed",
+    },
+    {
+      title: "Auto",
+      pathname: "/guardian-of-the-galaxy",
+      description:
+        "A UFO-shaped emergency ambulance that hovers in to save the day, proving that when it comes to emergencies, even aliens know speed matters!",
+    },
+    {
+      title: "Memoire",
+      pathname: "/diary",
+      description: "A simple diary application to keep track of your thoughts.",
+    },
+    {
+      title: "Über uns",
+      pathname: "/about",
+      description: "We are 72Aid, founded to save lives.",
+    },
+  ] as const;
 
   function disableScroll() {
     document.body.style.overflow = isOpen ? "auto" : "hidden";
@@ -185,19 +183,16 @@ function HeaderNormal() {
       console.log("globalthis:" + globalThis.innerWidth);
       console.log(
         "function:" +
-        (globalThis.innerWidth /
-          (25 + 0.015 * (globalThis.innerWidth - 361))) *
-        (24 + 0.015 * (globalThis.innerWidth - 361)),
+          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+            (24 + 0.015 * (globalThis.innerWidth - 361)),
       );
       console.log("triangle:" + triangle.width);
 
       const middleX = isMobile
-        ? calculateX(globalThis.innerWidth) -
-        triangle.width
+        ? calculateX(globalThis.innerWidth) - triangle.width
         : isTablet
-          ? calculateX(globalThis.innerWidth) -
-          triangle.width
-          : rect.left + (rect.width / 2) * 1.30 - triangle.width;
+          ? calculateX(globalThis.innerWidth) - triangle.width
+          : rect.left + (rect.width / 2) * 1.3 - triangle.width;
       const middleY = rect.top + rect.height - 25;
       setUfoPosition({ x: middleX, y: middleY });
       console.log(middleX + "," + middleY);
@@ -239,10 +234,12 @@ function HeaderNormal() {
           >
             {!isOpen && (
               <div
-                className="fixed md:absolute inset-0 max-h-12 md:max-h-14 max-w-[220px] md:max-w-[300px] bg-black bg-opacity-10 backdrop-filter md:transform-none md:left-0 left-1/2 md:translate-x-0 -translate-x-1/2 backdrop-blur-sm md:pl-3 pb-1 md:pr-3"
+                className="fixed md:absolute inset-0 max-h-12 md:max-h-14 max-w-[220px] md:max-w-[300px] bg-black/[0.1] bg-opacity-10 backdrop-filter md:transform-none md:left-0 left-1/2 md:translate-x-0 -translate-x-1/2 backdrop-blur-sm md:pl-3 pb-1 md:pr-3 "
                 style={{
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
                   borderRadius: "12px",
-                  zIndex: -1, // Ensure it stays behind the children
+                  zIndex: 0, // Ensure it stays behind the children
                   maskImage:
                     "linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%)",
                   WebkitMaskImage:
@@ -251,7 +248,7 @@ function HeaderNormal() {
               />
             )}
 
-            <span className="font-Orbitron font-extrabold text-3xl text-center md:static md:transform-none fixed left-1/2 -translate-x-1/2 pt-2 md:pt-0">
+            <span className="font-Orbitron font-extrabold fixed left-1/2 -translate-1/2 md:translate-0 md:left-0 md:static text-3xl z-90 top-6 text-center md:top-0 md:pt-0 text-white">
               {pageTitle}
             </span>
 
@@ -262,7 +259,7 @@ function HeaderNormal() {
             >
               <motion.button
                 ref={buttonRef}
-                className="pt-2 md:pr-0 pr-1 text-white font-bold translate-y-2 md:translate-y-0 p-1"
+                className="pt-1 md:pr-0 pr-1 text-white font-bold translate-y-2 md:translate-y-0 p-1"
                 onClick={toggleDropdown}
                 animate={{
                   y: [0, -4, 3, -2, 2, -3, 4, -1, 1, 0],
@@ -348,7 +345,7 @@ function HeaderNormal() {
                               : index == 2
                                 ? 64
                                 : index == 3
-                                  ? 35 + (32 * (globalThis.innerWidth / 431))
+                                  ? 35 + 32 * (globalThis.innerWidth / 431)
                                   : 0
                             : 55 //tablet
                           : isTablet
@@ -381,11 +378,11 @@ function HeaderNormal() {
                               : index == 2
                                 ? 290
                                 : index == 3
-                                  ? 325 - (85 * (globalThis.innerWidth / 431))
+                                  ? 325 - 85 * (globalThis.innerWidth / 431)
                                   : 0
                             : 499
-                          //mobile
-                          : isTablet
+                          : //mobile
+                            isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -395,8 +392,8 @@ function HeaderNormal() {
                                     ? 110
                                     : 0
                               : 499
-                            //tablet
-                            : index !== 0
+                            : //tablet
+                              index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
@@ -496,36 +493,34 @@ function HeaderAdmin() {
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation(); // Get the current route
 
-  const headerEntries: { title: string; pathname: string; description: string }[] =
-    [
-      {
-        title: "Log",
-        pathname: "/log",
-        description: "Log where all the activities of the car are displayed",
-      },
-      {
-        title: "Auto",
-        pathname: "/guardian-of-the-galaxy",
-        description:
-          "A UFO-shaped emergency ambulance that hovers in to save the day, proving that when it comes to emergencies, even aliens know speed matters!",
-      },
-      {
-        title: "Admin",
-        pathname: "/admin",
-        description: "The Admin Page to control the car",
-      },
-      {
-        title: "Memoire",
-        pathname: "/diary",
-        description:
-          "A simple diary application to keep track of your thoughts.",
-      },
-      {
-        title: "Über uns",
-        pathname: "/about",
-        description: "We are 72Aid, founded to save lives.",
-      },
-    ] as const;
+  const headerEntries: { title: string; pathname: string; description: string }[] = [
+    {
+      title: "Log",
+      pathname: "/log",
+      description: "Log where all the activities of the car are displayed",
+    },
+    {
+      title: "Auto",
+      pathname: "/guardian-of-the-galaxy",
+      description:
+        "A UFO-shaped emergency ambulance that hovers in to save the day, proving that when it comes to emergencies, even aliens know speed matters!",
+    },
+    {
+      title: "Admin",
+      pathname: "/admin",
+      description: "The Admin Page to control the car",
+    },
+    {
+      title: "Memoire",
+      pathname: "/diary",
+      description: "A simple diary application to keep track of your thoughts.",
+    },
+    {
+      title: "Über uns",
+      pathname: "/about",
+      description: "We are 72Aid, founded to save lives.",
+    },
+  ] as const;
 
   function disableScroll() {
     document.body.style.overflow = isOpen ? "auto" : "hidden";
@@ -603,16 +598,14 @@ function HeaderAdmin() {
       const triangle = triangleRef.current.getBoundingClientRect();
       console.log(rect.left);
       const middleX = isTablet
-        ? (globalThis.innerWidth /
-          (25 + 0.02 * (globalThis.innerWidth - 600.5))) *
-        (24 + 0.02 * (globalThis.innerWidth - 600.5)) -
-        triangle.width
-        : isMobile
-          ? (globalThis.innerWidth /
-            (49 + 0.015 * (globalThis.innerWidth - 361))) *
-          (47 + 0.015 * (globalThis.innerWidth - 361)) -
+        ? (globalThis.innerWidth / (25 + 0.02 * (globalThis.innerWidth - 600.5))) *
+            (24 + 0.02 * (globalThis.innerWidth - 600.5)) -
           triangle.width
-          : rect.left + (rect.width / 2) * 1.30 - triangle.width;
+        : isMobile
+          ? (globalThis.innerWidth / (49 + 0.015 * (globalThis.innerWidth - 361))) *
+              (47 + 0.015 * (globalThis.innerWidth - 361)) -
+            triangle.width
+          : rect.left + (rect.width / 2) * 1.3 - triangle.width;
       const middleY = rect.top + rect.height - 25;
       setUfoPosition({ x: middleX, y: middleY });
     }
@@ -659,7 +652,7 @@ function HeaderAdmin() {
               />
             )}
 
-            <span className="font-Orbitron font-extrabold text-3xl text-center md:static md:transform-none fixed left-1/2 -translate-x-1/2 pt-2 md:pt-0">
+            <span className="font-Orbitron font-extrabold text-3xl text-center md:static md:transform-none fixed left-1/2 -translate-x-1/2 pt-2 md:pt-0 text-white">
               {pageTitle}
             </span>
 
@@ -757,9 +750,9 @@ function HeaderAdmin() {
                               : index == 2
                                 ? 64
                                 : index == 3
-                                  ? 34 + (32 * (globalThis.innerWidth / 431))
+                                  ? 34 + 32 * (globalThis.innerWidth / 431)
                                   : index == 4
-                                    ? 34 + (32 * (globalThis.innerWidth / 431))
+                                    ? 34 + 32 * (globalThis.innerWidth / 431)
                                     : 0
                             : 55 //tablet
                           : isTablet
@@ -796,13 +789,13 @@ function HeaderAdmin() {
                               : index == 2
                                 ? 290
                                 : index == 3
-                                  ? 335 - (85 * (globalThis.innerWidth / 431))
+                                  ? 335 - 85 * (globalThis.innerWidth / 431)
                                   : index == 4
-                                    ? 335 - (85 * (globalThis.innerWidth / 431))
+                                    ? 335 - 85 * (globalThis.innerWidth / 431)
                                     : 0
                             : 499
-                          //mobile
-                          : isTablet
+                          : //mobile
+                            isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -814,8 +807,8 @@ function HeaderAdmin() {
                                       ? 110
                                       : 0
                               : 499
-                            //tablet
-                            : index !== 0
+                            : //tablet
+                              index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2

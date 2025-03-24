@@ -1,4 +1,4 @@
-import React, { createContext, use, useEffect, useRef, useMemo } from "react";
+import React, { createContext, use, useEffect, useMemo, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
 type SocketContextType = {
@@ -7,9 +7,7 @@ type SocketContextType = {
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
-const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const socketRef = useRef<Map<string, Socket>>(new Map());
 
   const getSocket = (url: string) => {
@@ -40,11 +38,7 @@ const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const contextValue = useMemo(() => ({ getSocket }), []);
 
-  return (
-    <SocketContext value={contextValue}>
-      {children}
-    </SocketContext>
-  );
+  return <SocketContext value={contextValue}>{children}</SocketContext>;
 };
 
 const useSocket = (url: string) => {

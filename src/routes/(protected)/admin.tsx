@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
 import { useState } from "react";
 
@@ -15,10 +15,10 @@ import ReRender from "~/lib/components/wrapper/admin/re-render";
 // import ControlWidget from "~/lib/components/wrapper/admin/~ControlState";
 // import BatteryWidget from "~/lib/components/wrapper/admin/~BatteryWidget";
 
-export const Route = createFileRoute('/(protected)/admin')({
+export const Route = createFileRoute("/(protected)/admin")({
   component: Admin,
   ssr: false,
-})
+});
 
 const defaultCells = [
   [
@@ -28,13 +28,11 @@ const defaultCells = [
       title: "a",
       itemChildren: (
         <CONTENT>
-          {
-            /*
+          {/*
           <ConnectionStateWidget connectionState="online" />
           <ControlWidget />
           <BatteryWidget />
-          */
-          }
+          */}
         </CONTENT>
       ),
       closeOnContentClick: true,
@@ -117,9 +115,7 @@ export default function Admin() {
   return (
     <>
       <MainContent selectedId={selectedId} onSelect={setSelectedId} />
-      <AnimatePresence>
-        {selectedId && <_Outside id={selectedId} />}
-      </AnimatePresence>
+      <AnimatePresence>{selectedId && <_Outside id={selectedId} />}</AnimatePresence>
     </>
   );
 }
@@ -176,10 +172,7 @@ function Card({ children, id, onSelect }: CardProps) {
     <div className="card-content-container">
       <motion.div className="card-content" layoutId={`card-container-${id}`}>
         {children}
-        <div
-          className="grid-cell-button-fullscreen"
-          onClick={() => onSelect(id)}
-        >
+        <div className="grid-cell-button-fullscreen" onClick={() => onSelect(id)}>
           <Expand size={18} />
         </div>
       </motion.div>
@@ -187,12 +180,7 @@ function Card({ children, id, onSelect }: CardProps) {
   );
 }
 
-function CardOutside({
-  children,
-  id,
-  closeOnContentClick,
-  onClose,
-}: ItemProps) {
+function CardOutside({ children, id, closeOnContentClick, onClose }: ItemProps) {
   const item = defaultCells.flat().find((it) => it.id === id);
   if (!item) return null;
 
@@ -224,13 +212,7 @@ function CardOutside({
   );
 }
 
-function CONTENT({
-  title,
-  children,
-}: {
-  title?: string;
-  children?: React.ReactNode;
-}) {
+function CONTENT({ title, children }: { title?: string; children?: React.ReactNode }) {
   return (
     <div className="w-full h-full">
       <div className="flex flex-col p-2 w-full h-full">

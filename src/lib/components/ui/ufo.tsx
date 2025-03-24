@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { Float, useGLTF } from "@react-three/drei";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef } from "react";
 import {
   AdditiveBlending,
   Color,
@@ -56,7 +56,7 @@ const shaderHidden = new ShaderMaterial({
   blending: AdditiveBlending, // Ensures smooth transparency
 
   uniforms: {
-    uColor: { value: new Color(0x23CF51) },
+    uColor: { value: new Color(0x23cf51) },
     uOpacity: { value: 1.0 },
   },
   vertexShader: `
@@ -159,11 +159,7 @@ export default function Ufo() {
     ufoTl
       .to(ufoRotation, { x: -Math.PI * 0.65, ease: "power2.out" }, 0) // Start at time 0
       .to(ufoPosition, { y: -1, ease: "power2.out" }, 0)
-      .to(
-        shader.uniforms.uOpacity,
-        { value: 0.1, ease: "power2.out" },
-        0,
-      );
+      .to(shader.uniforms.uOpacity, { value: 0.1, ease: "power2.out" }, 0);
 
     // Second animation: Restore UFO rotation on a different ScrollTrigger
     const rotateToNormal = gsap.timeline({
@@ -204,10 +200,7 @@ export default function Ufo() {
         //markers: true,
       },
     });
-    changeToCrane.to(
-      shaderHidden.uniforms.uOpacity,
-      { value: 1, ease: "power2.out" },
-    );
+    changeToCrane.to(shaderHidden.uniforms.uOpacity, { value: 1, ease: "power2.out" });
 
     const rotateToTop = gsap.timeline({
       scrollTrigger: {
@@ -218,11 +211,14 @@ export default function Ufo() {
         //markers: true,
       },
     });
-    rotateToTop.to(ufoRotation, { x: -Math.PI * 1.6, ease: "power2.out" }, 0)
-      .to(shader.uniforms.uOpacity, {
+    rotateToTop.to(ufoRotation, { x: -Math.PI * 1.6, ease: "power2.out" }, 0).to(
+      shader.uniforms.uOpacity,
+      {
         value: 0.2,
         ease: "power2.out",
-      }, 0);
+      },
+      0,
+    );
 
     const changeSize = gsap.timeline({
       scrollTrigger: {
@@ -233,17 +229,13 @@ export default function Ufo() {
         //markers: true,
       },
     });
-    changeSize.to(ufoPosition, { z: 0.2, ease: "power2.out" }, 0)
+    changeSize
+      .to(ufoPosition, { z: 0.2, ease: "power2.out" }, 0)
       .to(ufoPosition, { y: 0, ease: "power2.out" }, 0);
   });
 
   return (
-    <Float
-      rotation={[0.4, 0, 0]}
-      speed={3}
-      rotationIntensity={0.2}
-      floatIntensity={1}
-    >
+    <Float rotation={[0.4, 0, 0]} speed={3} rotationIntensity={0.2} floatIntensity={1}>
       <group dispose={null} ref={ref}>
         <group rotation={[0, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]}>

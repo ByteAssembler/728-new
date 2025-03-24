@@ -1,24 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-import { Button } from '~/lib/components/ui/button';
+import { Button } from "~/lib/components/ui/button";
 
-import Controller, { ControllerRef } from '~/lib/components/wrapper/admin/controller/Controller';
-import { SocketProvider, useSocket } from '~/lib/components/wrapper/admin/socket-provider';
+import Controller, {
+  ControllerRef,
+} from "~/lib/components/wrapper/admin/controller/Controller";
+import {
+  SocketProvider,
+  useSocket,
+} from "~/lib/components/wrapper/admin/socket-provider";
 
-export const Route = createFileRoute('/(protected)/admin-socket')({
+export const Route = createFileRoute("/(protected)/admin-socket")({
   component: SocketPageApp,
   ssr: false,
-})
+});
 
 function SocketPageApp() {
   return (
     <SocketProvider>
       <SocketPage />
     </SocketProvider>
-  )
-};
+  );
+}
 
 function SocketPage() {
   const { socket, on, emit } = useSocket("http://192.168.160.229:5000");
@@ -144,4 +149,4 @@ function SocketPage() {
       </div>
     </div>
   );
-};
+}
