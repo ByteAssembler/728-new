@@ -267,8 +267,8 @@ function Home() {
 
     // Use ScrollTrigger.matchMedia to create responsive animations
     ScrollTrigger.matchMedia({
-      // Desktop animations (default)
-      "(min-width: 432px)": () => {
+      // Desktop animations
+      "(min-width: 769px)": () => {
         //wheels animation
         if (
           wheelsTitleRef.current &&
@@ -700,59 +700,34 @@ function Home() {
         }
       },
 
-      // Mobile animations (under 432px)
-      "(max-width: 431px)": () => {
+      // Mobile animations
+      "(max-width: 768px)": () => {
         // Create a container for mobile text elements
-        const textContainer = document.createElement("div");
-        textContainer.className = "mobile-text-container";
-        textContainer.style.position = "fixed";
-        textContainer.style.bottom = "20px";
-        textContainer.style.left = "0";
-        textContainer.style.width = "100%";
-        textContainer.style.display = "flex";
-        textContainer.style.flexDirection = "column";
-        textContainer.style.alignItems = "center";
-        textContainer.style.justifyContent = "flex-end";
-        textContainer.style.padding = "20px";
-        textContainer.style.zIndex = "30";
-        textContainer.style.pointerEvents = "none";
-        document.body.appendChild(textContainer);
+        gsap.set(
+          [
+            wheelsFlyText1.current,
+            wheelsFlyText2.current,
+            wheelsFlyText3.current,
+            dropperFlyText1.current,
+            dropperFlyText2.current,
+            dropperFlyText3.current,
+            craneFlyText1.current,
+            craneFlyText2.current,
+            craneFlyText3.current,
+            raspberryFlyText1.current,
+            raspberryFlyText2.current,
+            raspberryFlyText3.current,
+            sensorFlyText1.current,
+            sensorFlyText2.current,
+            sensorFlyText3.current,
+          ],
+          {
+            maxWidth: "100vw", // Limit width to prevent overflow
+            wordWrap: "break-word", // Ensure text wraps
+            whiteSpace: "normal", // Allow text to wrap
+          },
+        );
 
-        // Clean up function to remove the container when component unmounts
-        return () => {
-          if (document.body.contains(textContainer)) {
-            document.body.removeChild(textContainer);
-          }
-        };
-        // First, update the text elements to make them more visible on mobile
-        if (wheelsFlyText1.current && wheelsFlyText2.current && wheelsFlyText3.current) {
-          // Make text more visible on mobile
-          gsap.set(
-            [
-              wheelsFlyText1.current,
-              wheelsFlyText2.current,
-              wheelsFlyText3.current,
-              dropperFlyText1.current,
-              dropperFlyText2.current,
-              dropperFlyText3.current,
-              craneFlyText1.current,
-              craneFlyText2.current,
-              craneFlyText3.current,
-              raspberryFlyText1.current,
-              raspberryFlyText2.current,
-              raspberryFlyText3.current,
-              sensorFlyText1.current,
-              sensorFlyText2.current,
-              sensorFlyText3.current,
-            ],
-            {
-              fontSize: "1rem", // Smaller font size for mobile
-              maxWidth: "80vw", // Limit width to prevent overflow
-              wordWrap: "break-word", // Ensure text wraps
-              whiteSpace: "normal", // Allow text to wrap
-            },
-          );
-        }
 
         // Mobile wheels animation
         if (
@@ -797,14 +772,14 @@ function Home() {
           fadeInText
             .fromTo(
               wheelsFlyText1.current,
-              { opacity: 0, x: "-100vw", y: 0 },
+              { opacity: 0, x: "-100vw" },
               {
                 opacity: 1,
-                x: 0,
+                x: "0%",
                 y: 0,
-                position: "relative",
-                bottom: "120px", // Different height
-                width: "80%",
+
+                bottom: "50vh", // Different height
+                width: "100%",
                 textAlign: "center",
                 margin: "0 auto 10px auto",
                 zIndex: 20,
@@ -812,14 +787,14 @@ function Home() {
             )
             .fromTo(
               wheelsFlyText2.current,
-              { opacity: 0, x: "100vw", y: 0 },
+              { opacity: 0, x: "100vw" },
               {
                 opacity: 1,
-                x: 0,
-                y: 0,
-                position: "relative",
-                bottom: "80px", // Different height
-                width: "80%",
+                x: "0%",
+
+
+                bottom: "35vh", // Different height
+                width: "100%",
                 textAlign: "center",
                 margin: "0 auto 10px auto",
                 zIndex: 20,
@@ -827,14 +802,13 @@ function Home() {
             )
             .fromTo(
               wheelsFlyText3.current,
-              { opacity: 0, x: "-100vw", y: 0 },
+              { opacity: 0, x: "-100vw" },
               {
                 opacity: 1,
-                x: 0,
-                y: 0,
-                position: "relative",
-                bottom: "40px", // Different height
-                width: "80%",
+                x: "0%",
+
+                bottom: "10vh", // Different height
+                width: "100%",
                 textAlign: "center",
                 margin: "0 auto 10px auto",
                 zIndex: 20,
@@ -1438,19 +1412,19 @@ function Home() {
           </h3>
           <p
             ref={wheelsFlyText1}
-            className="opacity-0 fixed md:top-3/4 left-0 md:translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
+            className="opacity-0 fixed md:top-3/4 left-0 translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
           >
             A mysterious force pulls us deeper...
           </p>
           <p
             ref={wheelsFlyText2}
-            className="opacity-0 fixed md:top-3/4 left-0 md:translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
+            className="opacity-0 fixed md:top-3/4 left-0 translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
           >
             The unknown awaits below...
           </p>
           <p
             ref={wheelsFlyText3}
-            className="opacity-0 fixed md:top-1/4 left-0 md:translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
+            className="opacity-0 fixed md:top-1/4 left-0 translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
           >
             The unknown awaits below...
           </p>
