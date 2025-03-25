@@ -25,7 +25,7 @@ export function DropperAnimation() {
     <primitive
       object={scene}
       scale={10}
-      position={[0, 0, 2]}
+      position={[0, 0, 0]}
       rotation={[-Math.PI / 4, 0, 0]}
     />
   );

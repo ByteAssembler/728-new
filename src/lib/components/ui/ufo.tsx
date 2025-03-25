@@ -3,7 +3,7 @@
 import { Float, useGLTF } from "@react-three/drei";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AdditiveBlending,
   Color,
@@ -84,6 +84,30 @@ const shaderHidden = new ShaderMaterial({
 export default function Ufo() {
   const { nodes } = useGLTF("/scene.glb");
   const ref = useRef<Group>(null);
+  const [scale, setScale] = useState(0.06);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 432) {
+        // Mobile
+        setScale(0.047);
+      } else if (width < 640) {
+        // Mobile
+        setScale(0.035);
+      } else if (width < 1024) {
+        // Tablet
+        setScale(0.055);
+      } else {
+        // Desktop
+        setScale(0.06);
+      }
+    };
+
+    handleResize(); // set on mount
+    window.addEventListener("resize", handleResize); // update on resize
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -243,7 +267,7 @@ export default function Ufo() {
               geometry={(nodes.Körper as Mesh).geometry}
               material={shader} // Ensure the correct material name
               position={[0, 0, -0.2]}
-              scale={0.06}
+              scale={scale}
               castShadow
               receiveShadow
             />
@@ -251,7 +275,7 @@ export default function Ufo() {
               geometry={(nodes.Kuppel as Mesh).geometry}
               material={shader} // Ensure the correct material name
               position={[0, 0, -0.2]}
-              scale={0.06}
+              scale={scale}
               castShadow
               receiveShadow
             />
@@ -259,7 +283,7 @@ export default function Ufo() {
               geometry={(nodes.hiddenobject as Mesh).geometry}
               material={shaderHidden} // Ensure the correct material name
               position={[0, 0, -0.2]}
-              scale={0.04}
+              scale={scale - 0.02}
               castShadow
               receiveShadow
               renderOrder={1}

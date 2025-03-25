@@ -1,3 +1,5 @@
+"use client";
+
 import { createFileRoute } from "@tanstack/react-router";
 
 import { OrbitControls } from "@react-three/drei";
@@ -5,6 +7,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useRef } from "react";
 import { DropperAnimation } from "~/lib/components/ui/modelAnimation";
 
+import { useMediaQuery } from "@uidotdev/usehooks";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Ufo from "~/lib/components/ui/ufo";
@@ -17,6 +20,7 @@ export const Route = createFileRoute("/(public)/guardian-of-the-galaxy")({
 gsap.registerPlugin(ScrollTrigger);
 
 function Home() {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const wheelsTitleRef = useRef<HTMLHeadingElement | null>(null);
   const generalFlyText = useRef<HTMLHeadingElement | null>(null);
@@ -45,6 +49,159 @@ function Home() {
     // Ensure smooth scrolling for better animation effects
     document.documentElement.style.scrollBehavior = "smooth";
 
+    // Function to handle window resize
+    const handleResize = () => {
+      // Refresh ScrollTrigger to update animations based on new window size
+      ScrollTrigger.refresh();
+    };
+
+    // Add resize event listener
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Ensure smooth scrolling for better animation effects
+    document.documentElement.style.scrollBehavior = "smooth";
+    if (isMobile) {
+      // Mobile initial positions (off-screen)
+      gsap.set([generalFlyText.current], { x: "-100%", opacity: 0 });
+      gsap.set([wheelsFlyText1.current, wheelsFlyText2.current, wheelsFlyText3.current], {
+        x: "-100%",
+        opacity: 0,
+      });
+      gsap.set(
+        [dropperFlyText1.current, dropperFlyText2.current, dropperFlyText3.current],
+        {
+          x: "-100%",
+          opacity: 0,
+        },
+      );
+      gsap.set([craneFlyText1.current, craneFlyText2.current, craneFlyText3.current], {
+        x: "-100%",
+        opacity: 0,
+      });
+      gsap.set(
+        [raspberryFlyText1.current, raspberryFlyText2.current, raspberryFlyText3.current],
+        {
+          x: "-100%",
+          opacity: 0,
+        },
+      );
+      gsap.set([sensorFlyText1.current, sensorFlyText2.current, sensorFlyText3.current], {
+        x: "-100%",
+        opacity: 0,
+      });
+    } else {
+      // Desktop initial positions (center)
+      gsap.set([generalFlyText.current], {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+
+      // Position the three texts at center initially
+      gsap.set(wheelsFlyText1.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(wheelsFlyText2.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(wheelsFlyText3.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+
+      gsap.set(dropperFlyText1.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(dropperFlyText2.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(dropperFlyText3.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+
+      gsap.set(craneFlyText1.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(craneFlyText2.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(craneFlyText3.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+
+      gsap.set(raspberryFlyText1.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(raspberryFlyText2.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(raspberryFlyText3.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+
+      gsap.set(sensorFlyText1.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(sensorFlyText2.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+      gsap.set(sensorFlyText3.current, {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
+    }
+
     // Title animation
     gsap.fromTo(
       titleRef.current,
@@ -61,553 +218,1163 @@ function Home() {
       },
     );
 
+    // Update the general text animation to use relative positioning
     // general Text animation
     if (generalFlyText.current) {
-      const flyTextWidth = generalFlyText.current.offsetWidth;
-      //start from outside to middle of screen
-      gsap.fromTo(
+      const flyIn = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#fly-outside",
+          start: "top center",
+          end: "bottom center",
+          scrub: true,
+        },
+      });
+
+      flyIn.fromTo(
         generalFlyText.current,
-        { x: -flyTextWidth, opacity: 0 },
         {
-          x: globalThis.innerWidth / 2 - flyTextWidth / 2, //center
+          x: "-100vw",
+          opacity: 0,
+        },
+        {
+          x: "50vw",
+          xPercent: -50,
           opacity: 1,
-          scrollTrigger: {
-            trigger: "#fly-outside",
-            start: "top center",
-            end: "bottom center",
-            scrub: true,
-            //markers: true,
-          },
+          left: "0",
+          right: "0",
+          maxWidth: "80%",
+          textAlign: "center",
         },
       );
 
-      //from middle of screen to outside
-      gsap.fromTo(
-        generalFlyText.current,
-        { x: globalThis.innerWidth / 2 - flyTextWidth / 2 },
-        {
-          x: globalThis.innerWidth, //outside
-          opacity: 0,
-          scrollTrigger: {
-            trigger: "#fly-middle",
-            start: "top center",
-            end: "bottom center",
-            scrub: true,
-          },
+      // Exit: from center to right
+      const flyOut = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#fly-middle",
+          start: "top center",
+          end: "bottom center",
+          scrub: true,
+          immediateRender: false, // Important to prevent overwrite
         },
-      );
+      });
+
+      flyOut.to(generalFlyText.current, {
+        x: "100vw",
+        xPercent: 0,
+        opacity: 0,
+      });
     }
 
-    //wheels animation
-    if (
-      wheelsTitleRef.current &&
-      wheelsFlyText1.current &&
-      wheelsFlyText2.current &&
-      wheelsFlyText3.current
-    ) {
-      const text1 = wheelsFlyText1.current.offsetWidth;
-      const text2 = wheelsFlyText2.current.offsetWidth;
-      const text3 = wheelsFlyText3.current.offsetWidth;
+    // Use ScrollTrigger.matchMedia to create responsive animations
+    ScrollTrigger.matchMedia({
+      // Desktop animations (default)
+      "(min-width: 432px)": () => {
+        //wheels animation
+        if (
+          wheelsTitleRef.current &&
+          wheelsFlyText1.current &&
+          wheelsFlyText2.current &&
+          wheelsFlyText3.current
+        ) {
+          const text1 = wheelsFlyText1.current.offsetWidth;
+          const text2 = wheelsFlyText2.current.offsetWidth;
+          const text3 = wheelsFlyText3.current.offsetWidth;
 
-      //title
-      //fade in
-      const fadeInTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#rotate-to-bottom",
-          start: "top center",
-          end: "bottom center",
+          //title
+          //fade in
+          const fadeInTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-bottom",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInTitle.to(wheelsTitleRef.current, { opacity: 1 });
 
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInTitle.to(wheelsTitleRef.current, { opacity: 1 });
+          //fade out
+          const fadeOutTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-normal",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutTitle.to(wheelsTitleRef.current, { opacity: 0 });
 
-      //fade out
-      const fadeOutTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#rotate-to-normal",
-          start: "top center",
-          end: "bottom center",
+          //text
+          const fadeInText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-bottom",
+              start: "top center-=10%",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInText
+            .fromTo(
+              wheelsFlyText1.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "25vw", xPercent: -50, left: 0 }, // Position at 25% of viewport width
+            )
+            .fromTo(
+              wheelsFlyText2.current,
+              { opacity: 0, x: "100vw" },
+              { opacity: 1, x: "75vw", xPercent: -50, left: 0 }, // Position at 75% of viewport width
+            )
+            .fromTo(
+              wheelsFlyText3.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "25vw", xPercent: -50, left: 0 }, // Position at 25% of viewport width
+            );
+          const fadeOutText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-normal",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutText
+            .to(wheelsFlyText1.current, {
+              opacity: 0,
+              x: "-100%", // Use percentage instead of pixel values
+            })
+            .to(wheelsFlyText2.current, {
+              opacity: 0,
+              x: "500%", // Use percentage instead of pixel values
+            })
+            .to(wheelsFlyText3.current, {
+              opacity: 0,
+              x: "-100%", // Use percentage instead of pixel values
+            });
+        }
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutTitle.to(wheelsTitleRef.current, { opacity: 0 });
+        //dropper animation
+        if (
+          dropperTitleRef.current &&
+          dropperFlyText1.current &&
+          dropperFlyText2.current &&
+          dropperFlyText3.current &&
+          dropperAnimation.current
+        ) {
+          const text1 = dropperFlyText1.current.offsetWidth;
+          const text2 = dropperFlyText2.current.offsetWidth;
+          const text3 = dropperFlyText3.current.offsetWidth;
 
-      //text
-      const fadeInText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#rotate-to-bottom",
-          start: "top center-=10%",
-          end: "bottom center",
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInText
-        .fromTo(
-          wheelsFlyText1.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - -text1 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text1 / 2 },
-        )
-        .fromTo(
-          wheelsFlyText2.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text2 / 2 },
-          { opacity: 1, x: (globalThis.innerWidth / 4) * 3 - text2 / 2 },
-        )
-        .fromTo(
-          wheelsFlyText3.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text3 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text3 / 2 },
-          //"<" for playing with last animation
-        );
-      const fadeOutText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#rotate-to-normal",
-          start: "top center",
-          end: "bottom center",
+          //title
+          //fade in
+          const fadeInTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-in-dropper",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInTitle.to(dropperTitleRef.current, { opacity: 1 });
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutText
-        .to(wheelsFlyText1.current, {
-          opacity: 0,
-          x: -globalThis.innerWidth, // Move to the left side of the screen
-        })
-        .to(
-          wheelsFlyText2.current,
-          {
-            opacity: 0,
-            x: globalThis.innerWidth, // Move to the right side of the screen
-          },
-          //"<" // Start at the same time as the previous animation
-        )
-        .to(
-          wheelsFlyText3.current,
-          {
-            opacity: 0,
-            x: -globalThis.innerWidth, // Move to the left side of the screen
-          },
-          //"<" // Start at the same time as the previous animation
-        );
-    }
+          //fade out
+          const fadeOutTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-out-dropper",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutTitle.to(dropperTitleRef.current, { opacity: 0 });
 
-    //dropper animation
-    if (
-      dropperTitleRef.current &&
-      dropperFlyText1.current &&
-      dropperFlyText2.current &&
-      dropperFlyText3.current &&
-      dropperAnimation.current
-    ) {
-      const text1 = dropperFlyText1.current.offsetWidth;
-      const text2 = dropperFlyText2.current.offsetWidth;
-      const text3 = dropperFlyText3.current.offsetWidth;
-      // const animation = dropperAnimation.current.offsetWidth;
+          //text
+          const fadeInText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-in-dropper",
+              start: "top center-=10%",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInText
+            .fromTo(
+              dropperFlyText1.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "25vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              dropperFlyText2.current,
+              { opacity: 0, x: "100vw" },
+              { opacity: 1, x: "75vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              dropperFlyText3.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "25vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              dropperAnimation.current,
+              { opacity: 0, x: "100vw" },
+              { opacity: 1, x: "75vw", xPercent: -50, left: 0 },
+            );
+          const fadeOutText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-out-dropper",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutText
+            .to(dropperFlyText1.current, {
+              opacity: 0,
+              x: "-100%", // Move to the left side of the screen
+            })
+            .to(dropperFlyText2.current, {
+              opacity: 0,
+              x: "500%", // Move to the right side of the screen
+            })
+            .to(dropperFlyText3.current, {
+              opacity: 0,
+              x: "-100%", // Move to the left side of the screen
+            })
+            .to(dropperAnimation.current, {
+              opacity: 0,
+              x: "500%", // Move it off-screen like the text
+            });
+        }
 
-      //title
-      //fade in
-      const fadeInTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-in-dropper",
-          start: "top center",
-          end: "bottom center",
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInTitle.to(dropperTitleRef.current, { opacity: 1 });
+        // Crane animation
+        if (
+          craneFlyText1.current &&
+          craneFlyText2.current &&
+          craneFlyText3.current &&
+          craneTitleRef.current
+        ) {
+          const text1 = craneFlyText1.current.offsetWidth;
+          const text2 = craneFlyText2.current.offsetWidth;
+          const text3 = craneFlyText3.current.offsetWidth;
 
-      //fade out
-      const fadeOutTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-out-dropper",
-          start: "top center",
-          end: "bottom center",
+          //title
+          //fade in
+          const fadeInTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-in-crane",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInTitle.to(craneTitleRef.current, { opacity: 1 });
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutTitle.to(dropperTitleRef.current, { opacity: 0 });
+          //fade out
+          const fadeOutTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-out-crane",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutTitle.to(craneTitleRef.current, { opacity: 0 });
 
-      //text
-      const fadeInText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-in-dropper",
-          start: "top center-=10%",
-          end: "bottom center",
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInText
-        .fromTo(
-          dropperFlyText1.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - -text1 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text1 / 2 },
-        )
-        .fromTo(
-          dropperFlyText2.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text2 / 2 },
-          { opacity: 1, x: (globalThis.innerWidth / 4) * 3 - text2 / 2 },
-        )
-        .fromTo(
-          dropperFlyText3.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text3 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text3 / 2 },
-          //"<" for playing with last animation
-        )
-        .fromTo(
-          dropperAnimation.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 },
-          { opacity: 1, x: (globalThis.innerWidth / 4) * 3 },
-        );
-      const fadeOutText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-out-dropper",
-          start: "top center",
-          end: "bottom center",
+          //text
+          const fadeInText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-in-crane",
+              start: "top center-=10%",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInText
+            .fromTo(
+              craneFlyText1.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "25vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              craneFlyText2.current,
+              { opacity: 0, x: "100vw" },
+              { opacity: 1, x: "75vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              craneFlyText3.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "25vw", xPercent: -50, left: 0 },
+            );
+          const fadeOutText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-out-crane",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutText
+            .to(craneFlyText1.current, {
+              opacity: 0,
+              x: "-100%", // Move to the left side of the screen
+            })
+            .to(craneFlyText2.current, {
+              opacity: 0,
+              x: "500%", // Move to the right side of the screen
+            })
+            .to(craneFlyText3.current, {
+              opacity: 0,
+              x: "-100%", // Move to the left side of the screen
+            });
+        }
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutText
-        .to(dropperFlyText1.current, {
-          opacity: 0,
-          x: -globalThis.innerWidth, // Move to the left side of the screen
-        })
-        .to(
-          dropperFlyText2.current,
-          {
-            opacity: 0,
-            x: globalThis.innerWidth, // Move to the right side of the screen
-          },
-          //"<" // Start at the same time as the previous animation
-        )
-        .to(
-          dropperFlyText3.current,
-          {
-            opacity: 0,
-            x: -globalThis.innerWidth, // Move to the left side of the screen
-          },
-          //"<" // Start at
-        )
-        .to(dropperAnimation.current, {
-          opacity: 0,
-          x: globalThis.innerWidth, // Move it off-screen like the text
-        });
-      //3d model
-    }
+        //raspberry animation
+        if (
+          raspberryTitleRef.current &&
+          raspberryFlyText1.current &&
+          raspberryFlyText2.current &&
+          raspberryFlyText3.current
+        ) {
+          const text1 = raspberryFlyText1.current.offsetWidth;
+          const text2 = raspberryFlyText2.current.offsetWidth;
+          const text3 = raspberryFlyText3.current.offsetWidth;
 
-    // Crane animation
-    if (
-      craneFlyText1.current &&
-      craneFlyText2.current &&
-      craneFlyText3.current &&
-      craneTitleRef.current
-    ) {
-      const text1 = craneFlyText1.current.offsetWidth;
-      const text2 = craneFlyText2.current.offsetWidth;
-      const text3 = craneFlyText3.current.offsetWidth;
+          //title
+          //fade in
+          const fadeInTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-in-raspberry",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInTitle.to(raspberryTitleRef.current, { opacity: 1 });
 
-      //title
-      //fade in
-      const fadeInTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-in-crane",
-          start: "top center",
-          end: "bottom center",
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInTitle.to(craneTitleRef.current, { opacity: 1 });
+          //fade out
+          const fadeOutTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-top",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutTitle.to(raspberryTitleRef.current, { opacity: 0 });
 
-      //fade out
-      const fadeOutTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-out-crane",
-          start: "top center",
-          end: "bottom center",
+          //text
+          const fadeInText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-in-raspberry",
+              start: "top center-=10%",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInText
+            .fromTo(
+              raspberryFlyText1.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "25vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              raspberryFlyText2.current,
+              { opacity: 0, x: "100vw" },
+              { opacity: 1, x: "75vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              raspberryFlyText3.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "25vw", xPercent: -50, left: 0 },
+            );
+          const fadeOutText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-top",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutText
+            .to(raspberryFlyText1.current, {
+              opacity: 0,
+              x: "-100%", // Move to the left side of the screen
+            })
+            .to(raspberryFlyText2.current, {
+              opacity: 0,
+              x: "500%", // Move to the right side of the screen
+            })
+            .to(raspberryFlyText3.current, {
+              opacity: 0,
+              x: "-100%", // Move to the left side of the screen
+            });
+        }
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutTitle.to(craneTitleRef.current, { opacity: 0 });
+        //sensor animation
+        if (
+          sensorFlyText1.current &&
+          sensorFlyText2.current &&
+          sensorFlyText3.current &&
+          sensorTitleRef.current
+        ) {
+          const text1 = sensorFlyText1.current.offsetWidth;
+          const text2 = sensorFlyText2.current.offsetWidth;
+          const text3 = sensorFlyText3.current.offsetWidth;
 
-      //text
-      const fadeInText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-in-crane",
-          start: "top center-=10%",
-          end: "bottom center",
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInText
-        .fromTo(
-          craneFlyText1.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - -text1 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text1 / 2 },
-        )
-        .fromTo(
-          craneFlyText2.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text2 / 2 },
-          { opacity: 1, x: (globalThis.innerWidth / 4) * 3 - text2 / 2 },
-        )
-        .fromTo(
-          craneFlyText3.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text3 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text3 / 2 },
-          //"<" for playing with last animation
-        );
-      const fadeOutText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-out-crane",
-          start: "top center",
-          end: "bottom center",
+          //title
+          //fade in
+          const fadeInTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-top",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInTitle.to(sensorTitleRef.current, { opacity: 1 });
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutText
-        .to(craneFlyText1.current, {
-          opacity: 0,
-          x: -globalThis.innerWidth, // Move to the left side of the screen
-        })
-        .to(
-          craneFlyText2.current,
-          {
-            opacity: 0,
-            x: globalThis.innerWidth, // Move to the right side of the screen
-          },
-          //"<" // Start at the same time as the previous animation
-        )
-        .to(
-          craneFlyText3.current,
-          {
-            opacity: 0,
-            x: -globalThis.innerWidth, // Move to the left side of the screen
-          },
-          //"<" // Start at
-        );
-    }
+          //fade out
+          const fadeOutTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-out-sensors",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutTitle.to(sensorTitleRef.current, { opacity: 0 });
 
-    //raspberry animation
-    if (
-      raspberryTitleRef.current &&
-      raspberryFlyText1.current &&
-      raspberryFlyText2.current &&
-      raspberryFlyText3.current
-    ) {
-      const text1 = raspberryFlyText1.current.offsetWidth;
-      const text2 = raspberryFlyText2.current.offsetWidth;
-      const text3 = raspberryFlyText3.current.offsetWidth;
+          //text
+          const fadeInText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-top",
+              start: "top center-=10%",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInText
+            .fromTo(
+              sensorFlyText1.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "20vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              sensorFlyText2.current,
+              { opacity: 0, x: "100vw" },
+              { opacity: 1, x: "80vw", xPercent: -50, left: 0 },
+            )
+            .fromTo(
+              sensorFlyText3.current,
+              { opacity: 0, x: "-100vw" },
+              { opacity: 1, x: "20vw", xPercent: -50, left: 0 },
+            );
+          const fadeOutText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#fade-out-sensors",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutText
+            .to(sensorFlyText1.current, {
+              opacity: 0,
+              x: "-100%", // Move to the left side of the screen
+            })
+            .to(sensorFlyText2.current, {
+              opacity: 0,
+              x: "500%", // Move to the right side of the screen
+            })
+            .to(sensorFlyText3.current, {
+              opacity: 0,
+              x: "-100%", // Move to the left side of the screen
+            });
+        }
+      },
 
-      //title
-      //fade in
-      const fadeInTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-in-raspberry",
-          start: "top center",
-          end: "bottom center",
+      // Mobile animations (under 432px)
+      "(max-width: 431px)": () => {
+        // Create a container for mobile text elements
+        const textContainer = document.createElement("div");
+        textContainer.className = "mobile-text-container";
+        textContainer.style.position = "fixed";
+        textContainer.style.bottom = "20px";
+        textContainer.style.left = "0";
+        textContainer.style.width = "100%";
+        textContainer.style.display = "flex";
+        textContainer.style.flexDirection = "column";
+        textContainer.style.alignItems = "center";
+        textContainer.style.justifyContent = "flex-end";
+        textContainer.style.padding = "20px";
+        textContainer.style.zIndex = "30";
+        textContainer.style.pointerEvents = "none";
+        document.body.appendChild(textContainer);
 
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInTitle.to(raspberryTitleRef.current, { opacity: 1 });
+        // Clean up function to remove the container when component unmounts
+        return () => {
+          if (document.body.contains(textContainer)) {
+            document.body.removeChild(textContainer);
+          }
+        };
+        // First, update the text elements to make them more visible on mobile
+        if (wheelsFlyText1.current && wheelsFlyText2.current && wheelsFlyText3.current) {
+          // Make text more visible on mobile
+          gsap.set(
+            [
+              wheelsFlyText1.current,
+              wheelsFlyText2.current,
+              wheelsFlyText3.current,
+              dropperFlyText1.current,
+              dropperFlyText2.current,
+              dropperFlyText3.current,
+              craneFlyText1.current,
+              craneFlyText2.current,
+              craneFlyText3.current,
+              raspberryFlyText1.current,
+              raspberryFlyText2.current,
+              raspberryFlyText3.current,
+              sensorFlyText1.current,
+              sensorFlyText2.current,
+              sensorFlyText3.current,
+            ],
+            {
+              fontSize: "1rem", // Smaller font size for mobile
+              maxWidth: "80vw", // Limit width to prevent overflow
+              wordWrap: "break-word", // Ensure text wraps
+              whiteSpace: "normal", // Allow text to wrap
+            },
+          );
+        }
 
-      //fade out
-      const fadeOutTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#rotate-to-top",
-          start: "top center",
-          end: "bottom center",
+        // Mobile wheels animation
+        if (
+          wheelsTitleRef.current &&
+          wheelsFlyText1.current &&
+          wheelsFlyText2.current &&
+          wheelsFlyText3.current
+        ) {
+          // Title animation remains the same
+          const fadeInTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-bottom",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
+          fadeInTitle.to(wheelsTitleRef.current, { opacity: 1 });
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutTitle.to(raspberryTitleRef.current, { opacity: 0 });
+          const fadeOutTitle = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-normal",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
+          fadeOutTitle.to(wheelsTitleRef.current, { opacity: 0 });
 
-      //text
-      const fadeInText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-in-raspberry",
-          start: "top center-=10%",
-          end: "bottom center",
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInText
-        .fromTo(
-          raspberryFlyText1.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - -text1 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text1 / 2 },
-        )
-        .fromTo(
-          raspberryFlyText2.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text2 / 2 },
-          { opacity: 1, x: (globalThis.innerWidth / 4) * 3 - text2 / 2 },
-        )
-        .fromTo(
-          raspberryFlyText3.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text3 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text3 / 2 },
-          //"<" for playing with last animation
-        );
-      const fadeOutText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#rotate-to-top",
-          start: "top center",
-          end: "bottom center",
+          // Mobile text animation - stacked at bottom with different heights
+          const fadeInText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-bottom",
+              start: "top center-=10%",
+              end: "bottom center",
+              scrub: true,
+            },
+          });
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutText
-        .to(raspberryFlyText1.current, {
-          opacity: 0,
-          x: -globalThis.innerWidth, // Move to the left side of the screen
-        })
-        .to(
-          raspberryFlyText2.current,
-          {
-            opacity: 0,
-            x: globalThis.innerWidth, // Move to the right side of the screen
-          },
-          //"<" // Start at the same time as the previous animation
-        )
-        .to(
-          raspberryFlyText3.current,
-          {
-            opacity: 0,
-            x: -globalThis.innerWidth, // Move to the left side of the screen
-          },
-          //"<" // Start at the same time as the previous animation
-        );
-    }
+          // Position text elements in the container with different heights
+          fadeInText
+            .fromTo(
+              wheelsFlyText1.current,
+              { opacity: 0, x: "-100vw", y: 0 },
+              {
+                opacity: 1,
+                x: 0,
+                y: 0,
+                position: "relative",
+                bottom: "120px", // Different height
+                width: "80%",
+                textAlign: "center",
+                margin: "0 auto 10px auto",
+                zIndex: 20,
+              },
+            )
+            .fromTo(
+              wheelsFlyText2.current,
+              { opacity: 0, x: "100vw", y: 0 },
+              {
+                opacity: 1,
+                x: 0,
+                y: 0,
+                position: "relative",
+                bottom: "80px", // Different height
+                width: "80%",
+                textAlign: "center",
+                margin: "0 auto 10px auto",
+                zIndex: 20,
+              },
+            )
+            .fromTo(
+              wheelsFlyText3.current,
+              { opacity: 0, x: "-100vw", y: 0 },
+              {
+                opacity: 1,
+                x: 0,
+                y: 0,
+                position: "relative",
+                bottom: "40px", // Different height
+                width: "80%",
+                textAlign: "center",
+                margin: "0 auto 10px auto",
+                zIndex: 20,
+              },
+            );
 
-    //sensor animation
-    if (
-      sensorFlyText1.current &&
-      sensorFlyText2.current &&
-      sensorFlyText3.current &&
-      sensorTitleRef.current
-    ) {
-      const text1 = sensorFlyText1.current.offsetWidth;
-      const text2 = sensorFlyText2.current.offsetWidth;
-      const text3 = sensorFlyText3.current.offsetWidth;
+          const fadeOutText = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#rotate-to-normal",
+              start: "top center",
+              end: "bottom center",
+              scrub: true,
+              immediateRender: false,
+            },
+          });
 
-      //title
-      //fade in
-      const fadeInTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#rotate-to-top",
-          start: "top center",
-          end: "bottom center",
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInTitle.to(sensorTitleRef.current, { opacity: 1 });
+          fadeOutText
+            .to(wheelsFlyText1.current, {
+              opacity: 0,
+              x: "-100vw", // Use viewport width
+            })
+            .to(
+              wheelsFlyText2.current,
+              {
+                opacity: 0,
+                x: "100vw", // Use viewport width
+              },
+              "-=0.2", // Slight overlap
+            )
+            .to(
+              wheelsFlyText3.current,
+              {
+                opacity: 0,
+                x: "-100vw", // Use viewport width
+              },
+              "-=0.2", // Slight overlap
+            );
 
-      //fade out
-      const fadeOutTitle = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-out-sensors",
-          start: "top center",
-          end: "bottom center",
+          // Mobile dropper animation
+          if (
+            dropperTitleRef.current &&
+            dropperFlyText1.current &&
+            dropperFlyText2.current &&
+            dropperFlyText3.current &&
+            dropperAnimation.current
+          ) {
+            // Title animation
+            const fadeInTitle = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-in-dropper",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+              },
+            });
+            fadeInTitle.to(dropperTitleRef.current, { opacity: 1 });
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutTitle.to(sensorTitleRef.current, { opacity: 0 });
+            const fadeOutTitle = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-out-dropper",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+                immediateRender: false,
+              },
+            });
+            fadeOutTitle.to(dropperTitleRef.current, { opacity: 0 });
 
-      //text
-      const fadeInText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#rotate-to-top",
-          start: "top center-=10%",
-          end: "bottom center",
-          scrub: true,
-          //markers: true,
-        },
-      });
-      fadeInText
-        .fromTo(
-          sensorFlyText1.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - -text1 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text1 / 2 },
-        )
-        .fromTo(
-          sensorFlyText2.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text2 / 2 },
-          { opacity: 1, x: (globalThis.innerWidth / 4) * 3 - text2 / 2 },
-        )
-        .fromTo(
-          sensorFlyText3.current,
-          { opacity: 0, x: globalThis.innerWidth / 2 - text3 / 2 },
-          { opacity: 1, x: globalThis.innerWidth / 4 - text3 / 2 },
-          //"<" for playing with last animation
-        );
-      const fadeOutText = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#fade-out-sensors",
-          start: "top center",
-          end: "bottom center",
+            // Position 3D canvas at bottom left with fixed size
+            gsap.set(dropperAnimation.current, {
+              position: "fixed",
+              top: "auto",
+              bottom: "10px",
+              left: "10px",
+              width: "120px",
+              height: "120px",
+              zIndex: 10,
+            });
 
-          scrub: true,
-          //markers: true,
-          immediateRender: false,
-        },
-      });
-      fadeOutText
-        .to(sensorFlyText1.current, {
-          opacity: 0,
-          x: -globalThis.innerWidth, // Move to the left side of the screen
-        })
-        .to(
-          sensorFlyText2.current,
-          {
-            opacity: 0,
-            x: globalThis.innerWidth, // Move to the right side of the screen
-          },
-          //"<" // Start at the same time as the previous animation
-        )
-        .to(
-          sensorFlyText3.current,
-          {
-            opacity: 0,
-            x: -globalThis.innerWidth, // Move to the left side of the screen
-          },
-          //"<" // Start at
-        );
-    }
+            // Mobile text animation - stacked at bottom with different heights
+            const fadeInText = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-in-dropper",
+                start: "top center-=10%",
+                end: "bottom center",
+                scrub: true,
+              },
+            });
 
-    return () => ScrollTrigger.refresh();
+            fadeInText
+              .fromTo(
+                dropperAnimation.current,
+                { opacity: 0, x: -150 },
+                {
+                  opacity: 1,
+                  x: 0,
+                },
+              )
+              .fromTo(
+                dropperFlyText1.current,
+                { opacity: 0, x: "-100vw", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "120px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20,
+                },
+              )
+              .fromTo(
+                dropperFlyText2.current,
+                { opacity: 0, x: "100vw", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "80px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20,
+                },
+              )
+              .fromTo(
+                dropperFlyText3.current,
+                { opacity: 0, x: "-100vw", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "40px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20,
+                },
+              );
+
+            const fadeOutText = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-out-dropper",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+                immediateRender: false,
+              },
+            });
+
+            fadeOutText
+              .to(dropperFlyText1.current, {
+                opacity: 0,
+                x: "-100%",
+              })
+              .to(
+                dropperFlyText2.current,
+                {
+                  opacity: 0,
+                  x: "100%",
+                },
+                "-=0.2", // Slight overlap
+              )
+              .to(
+                dropperFlyText3.current,
+                {
+                  opacity: 0,
+                  x: "-100%",
+                },
+                "-=0.2", // Slight overlap
+              )
+              .to(dropperAnimation.current, {
+                opacity: 0,
+                x: -150,
+              });
+          }
+
+          // Mobile crane animation
+          if (
+            craneFlyText1.current &&
+            craneFlyText2.current &&
+            craneFlyText3.current &&
+            craneTitleRef.current
+          ) {
+            // Title animation
+            const fadeInTitle = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-in-crane",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+              },
+            });
+            fadeInTitle.to(craneTitleRef.current, { opacity: 1 });
+
+            const fadeOutTitle = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-out-crane",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+                immediateRender: false,
+              },
+            });
+            fadeOutTitle.to(craneTitleRef.current, { opacity: 0 });
+
+            // Mobile text animation - stacked at bottom
+            const fadeInText = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-in-crane",
+                start: "top center-=10%",
+                end: "bottom center",
+                scrub: true,
+              },
+            });
+
+            fadeInText
+              .fromTo(
+                craneFlyText1.current,
+                { opacity: 0, x: "-100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "120px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              )
+              .fromTo(
+                craneFlyText2.current,
+                { opacity: 0, x: "100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "80px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              )
+              .fromTo(
+                craneFlyText3.current,
+                { opacity: 0, x: "-100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "40px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              );
+
+            const fadeOutText = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-out-crane",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+                immediateRender: false,
+              },
+            });
+
+            fadeOutText
+              .to(craneFlyText1.current, {
+                opacity: 0,
+                x: "-100%",
+              })
+              .to(
+                craneFlyText2.current,
+                {
+                  opacity: 0,
+                  x: "100%",
+                },
+                "-=0.2", // Slight overlap
+              )
+              .to(
+                craneFlyText3.current,
+                {
+                  opacity: 0,
+                  x: "-100%",
+                },
+                "-=0.2", // Slight overlap
+              );
+          }
+
+          // Mobile raspberry animation
+          if (
+            raspberryTitleRef.current &&
+            raspberryFlyText1.current &&
+            raspberryFlyText2.current &&
+            raspberryFlyText3.current
+          ) {
+            // Title animation
+            const fadeInTitle = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-in-raspberry",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+              },
+            });
+            fadeInTitle.to(raspberryTitleRef.current, { opacity: 1 });
+
+            const fadeOutTitle = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#rotate-to-top",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+                immediateRender: false,
+              },
+            });
+            fadeOutTitle.to(raspberryTitleRef.current, { opacity: 0 });
+
+            // Mobile text animation - stacked at bottom
+            const fadeInText = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-in-raspberry",
+                start: "top center-=10%",
+                end: "bottom center",
+                scrub: true,
+              },
+            });
+
+            fadeInText
+              .fromTo(
+                raspberryFlyText1.current,
+                { opacity: 0, x: "-100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "120px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              )
+              .fromTo(
+                raspberryFlyText2.current,
+                { opacity: 0, x: "100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "80px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              )
+              .fromTo(
+                raspberryFlyText3.current,
+                { opacity: 0, x: "-100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "40px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              );
+
+            const fadeOutText = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#rotate-to-top",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+                immediateRender: false,
+              },
+            });
+
+            fadeOutText
+              .to(raspberryFlyText1.current, {
+                opacity: 0,
+                x: "-100%",
+              })
+              .to(
+                raspberryFlyText2.current,
+                {
+                  opacity: 0,
+                  x: "100%",
+                },
+                "-=0.2", // Slight overlap
+              )
+              .to(
+                raspberryFlyText3.current,
+                {
+                  opacity: 0,
+                  x: "-100%",
+                },
+                "-=0.2", // Slight overlap
+              );
+          }
+
+          // Mobile sensor animation
+          if (
+            sensorFlyText1.current &&
+            sensorFlyText2.current &&
+            sensorFlyText3.current &&
+            sensorTitleRef.current
+          ) {
+            // Title animation
+            const fadeInTitle = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#rotate-to-top",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+              },
+            });
+            fadeInTitle.to(sensorTitleRef.current, { opacity: 1 });
+
+            const fadeOutTitle = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-out-sensors",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+                immediateRender: false,
+              },
+            });
+            fadeOutTitle.to(sensorTitleRef.current, { opacity: 0 });
+
+            // Mobile text animation - stacked at bottom
+            const fadeInText = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#rotate-to-top",
+                start: "top center-=10%",
+                end: "bottom center",
+                scrub: true,
+              },
+            });
+
+            fadeInText
+              .fromTo(
+                sensorFlyText1.current,
+                { opacity: 0, x: "-100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "120px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              )
+              .fromTo(
+                sensorFlyText2.current,
+                { opacity: 0, x: "100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "80px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              )
+              .fromTo(
+                sensorFlyText3.current,
+                { opacity: 0, x: "-100%", y: 0 },
+                {
+                  opacity: 1,
+                  x: 0,
+                  y: 0,
+                  position: "relative",
+                  bottom: "40px", // Different height
+                  width: "80%",
+                  textAlign: "center",
+                  margin: "0 auto 10px auto",
+                  zIndex: 20, // Ensure visibility
+                },
+              );
+
+            const fadeOutText = gsap.timeline({
+              scrollTrigger: {
+                trigger: "#fade-out-sensors",
+                start: "top center",
+                end: "bottom center",
+                scrub: true,
+                immediateRender: false,
+              },
+            });
+
+            fadeOutText
+              .to(sensorFlyText1.current, {
+                opacity: 0,
+                x: "-100%",
+              })
+              .to(
+                sensorFlyText2.current,
+                {
+                  opacity: 0,
+                  x: "100%",
+                },
+                "-=0.2", // Slight overlap
+              )
+              .to(
+                sensorFlyText3.current,
+                {
+                  opacity: 0,
+                  x: "-100%",
+                },
+                "-=0.2", // Slight overlap
+              );
+          }
+        }
+      },
+    });
   }, []);
 
   return (
@@ -648,7 +1415,7 @@ function Home() {
         <div id="pause-generel" style={{ height: "30vh" }}>
           <h2
             ref={titleRef}
-            className="opacity-0 fixed bottom-20 font-Orbitron font-bold text-5xl text-white left-1/2 -translate-x-1/2"
+            className="opacity-0 fixed bottom-20 font-Orbitron font-bold text-5xl text-white left-1/2 -translate-x-1/2  whitespace-nowrap"
           >
             Guardian of the Galaxy
           </h2>
@@ -665,25 +1432,25 @@ function Home() {
         <div id="pause-bottom" style={{ height: "50vh" }}>
           <h3
             ref={wheelsTitleRef}
-            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold"
+            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold whitespace-nowrap"
           >
             Die Reifen
           </h3>
           <p
             ref={wheelsFlyText1}
-            className="opacity-0 fixed top-3/4 left-0 translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
+            className="opacity-0 fixed md:top-3/4 left-0 md:translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
           >
             A mysterious force pulls us deeper...
           </p>
           <p
             ref={wheelsFlyText2}
-            className="opacity-0 fixed top-3/4 left-0 translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
+            className="opacity-0 fixed md:top-3/4 left-0 md:translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
           >
             The unknown awaits below...
           </p>
           <p
             ref={wheelsFlyText3}
-            className="opacity-0 fixed top-1/4 left-0 translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
+            className="opacity-0 fixed md:top-1/4 left-0 md:translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
           >
             The unknown awaits below...
           </p>
@@ -694,7 +1461,7 @@ function Home() {
         <div id="pause-dropper" style={{ height: "50vh" }}>
           <h3
             ref={dropperTitleRef}
-            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold"
+            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold whitespace-nowrap"
           >
             Der Dropper
           </h3>
@@ -736,7 +1503,7 @@ function Home() {
         <div id="pause-crane" style={{ height: "50vh" }}>
           <h3
             ref={craneTitleRef}
-            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold"
+            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold whitespace-nowrap"
           >
             Der Kran
           </h3>
@@ -765,7 +1532,7 @@ function Home() {
         <div id="pause-raspberry" style={{ height: "50vh" }}>
           <h3
             ref={raspberryTitleRef}
-            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold"
+            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold whitespace-nowrap"
           >
             Der raspberry
           </h3>
@@ -793,7 +1560,7 @@ function Home() {
         <div id="pause-sensors" style={{ height: "50vh" }}>
           <h3
             ref={sensorTitleRef}
-            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold"
+            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-3xl font-bold whitespace-nowrap"
           >
             Die Sensoren
           </h3>
@@ -819,6 +1586,11 @@ function Home() {
         <div id="fade-out-sensors" style={{ height: "50vh" }}></div>
         <div id="become-2d" style={{ height: "200vh" }}></div>
       </div>
+      {isMobile && (
+        <div className="mobile-text-container fixed bottom-0 left-0 w-full flex flex-col items-center justify-end p-5 z-30 pointer-events-none">
+          {/* Text elements will be moved here via GSAP */}
+        </div>
+      )}
     </>
   );
 }
