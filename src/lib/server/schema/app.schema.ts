@@ -7,7 +7,8 @@ import {
   boolean,
   json,
   primaryKey,
-  pgEnum
+  pgEnum,
+  index
 } from "drizzle-orm/pg-core";
 import { user } from "./auth.schema";
 
@@ -16,7 +17,9 @@ export const diaryWorkTableEntryCollaborator = pgTable("WorkTableCollaborator", 
   description: text("description").notNull(),
   workedAt: timestamp("worked_at").defaultNow(),
   workedSeconds: integer("worked_seconds").notNull(),
-  diaryEntryId: text("diary_entry_id").notNull(),
+  diaryEntryId: text("diary_entry_id")
+    .notNull()
+    .references(() => diaryEntry.id, { onDelete: "cascade" }), // ADD CASCADE
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -31,12 +34,17 @@ export const diaryEntry = pgTable("DiaryEntry", {
   contentJson: text("content_json").notNull(),
   contentHtml: text("content_html"),
   published: boolean("published").default(false).notNull(),
-  diaryCategoryId: integer("diary_category_id").notNull(),
+  diaryCategoryId: integer("diary_category_id")
+    .notNull()
+    .references(() => diaryCategory.id, { onDelete: "restrict" }), // PREVENT CATEGORY DELETION
   day: timestamp("day").defaultNow().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => ({
+  dayIdx: index("day_idx").on(table.day),
+  publishedIdx: index("published_idx").on(table.published),
+}));
 
-export const logLevelEnum = pgEnum("log_level", ["DEBUG", "INFO", "WARN", "ERROR"]);
+export const logLevelEnum = pgEnum("log_level", ["DEBUG", "INFO", "WARN", "ERROR"] as const);
 
 export const logs = pgTable("Logs", {
   id: serial("id").primaryKey(),
@@ -52,10 +60,10 @@ export const logs = pgTable("Logs", {
 export const diaryWorkTableEntryCollaborator_User = pgTable("Collaborators", {
   collaboratorId: integer("collaborator_id")
     .notNull()
-    .references(() => diaryWorkTableEntryCollaborator.id),
+    .references(() => diaryWorkTableEntryCollaborator.id, { onDelete: "cascade" }), // ADD CASCADE
   userId: text("user_id")
     .notNull()
-    .references(() => user.id)
+    .references(() => user.id, { onDelete: "cascade" }), // ADD CASCADE
 }, (t) => ({
   pk: primaryKey(t.collaboratorId, t.userId)
 }));
