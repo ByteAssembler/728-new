@@ -147,20 +147,13 @@ export const dbReadDiaryEntries = createServerFn({ method: "POST" })
 
 export const dbGetDiaryEntry = createServerFn({ method: "POST" })
   .validator(GetDiaryEntryParamsSchema)
-  .middleware([authMiddleware])
   .handler(async (req) => {
-    const user = req.context.user;
-    if (!user) {
-      throw new Error("Unauthorized");
-      return { success: false };
-    }
-
     const res = await dbGetDiaryEntry_server(req.data)
     return { success: true, data: res };
   });
 
 export const dbDiaryEntryGetWorkers = createServerFn({ method: "GET" })
-  .middleware([authMiddleware])
+  .middleware([authMiddlewareOptional])
   .handler(async (req) => {
     const user = req.context.user;
     if (!user) {
