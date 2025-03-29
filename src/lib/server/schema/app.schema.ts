@@ -64,6 +64,6 @@ export const diaryWorkTableEntryCollaborator_User = pgTable("Collaborators", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }), // ADD CASCADE
-}, (t) => ({
-  pk: primaryKey(t.collaboratorId, t.userId)
-}));
+}, (t) => [
+  primaryKey({ columns: [t.collaboratorId, t.userId] })
+]);
