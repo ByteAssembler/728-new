@@ -24,7 +24,7 @@ export const Route = createFileRoute("/(public)/diary")({
 export type ReadDiaryEntriesResult = Awaited<ReturnType<typeof dbReadDiaryEntries>>;
 type ReadDiaryEntriesResultData = NonNullable<ReadDiaryEntriesResult>["data"];
 type DiaryEntryArrayType = NonNullable<ReadDiaryEntriesResultData>["entries"];
-type DiaryEntryType = DiaryEntryArrayType[number];
+export type DiaryEntryType = DiaryEntryArrayType[number];
 
 function DiaryList() {
   const { user, diaryEntries } = Route.useLoaderData();

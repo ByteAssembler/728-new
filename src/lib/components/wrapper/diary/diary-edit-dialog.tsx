@@ -46,16 +46,16 @@ import {
   dbSaveDiaryEntryContent,
   dbSaveDiaryEntryMetadata,
   dbSaveDiaryEntryTableData,
-  DbDiaryEntry,
   DiaryWorkTableEntryCollaboratorExtended,
 } from "~/lib/server/editor.js.server";
 import { EditStatus } from "default";
 import EditorComponent from "./diary-editor";
 import { useServerFn } from "@tanstack/react-start";
+import type { DiaryEntryType } from "~/routes/(public)/diary";
 
 type OutputData = string;
 
-export function EditDiary({ diaryEntry }: { diaryEntry: DbDiaryEntry }) {
+export function EditDiary({ diaryEntry }: { diaryEntry: DiaryEntryType }) {
   const [editStatusContent, setEditStatusContent] = useState<EditStatus>(
     "saved",
   );
@@ -70,7 +70,7 @@ export function EditDiary({ diaryEntry }: { diaryEntry: DbDiaryEntry }) {
   const dbSaveDiaryEntryMetadataFn = useServerFn(dbSaveDiaryEntryMetadata);
   const dbSaveDiaryEntryTableDataFn = useServerFn(dbSaveDiaryEntryTableData);
 
-  const [content, setContent] = useState<OutputData>(diaryEntry.content);
+  const [content, setContent] = useState<OutputData>(diaryEntry.contentJson);
   const [dayDate, setDayDate] = useState<Date>(diaryEntry.day);
   const [published, setPublished] = useState<boolean>(diaryEntry.published);
 
