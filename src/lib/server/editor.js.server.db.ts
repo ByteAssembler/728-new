@@ -151,6 +151,7 @@ export async function dbCreateDiaryEntry_server() {
       id: newEntryId,
       title: "New Diary Entry " + new Date().toLocaleString(),
       contentJson: JSON.stringify([{ type: "paragraph", content: [""] }]),
+      contentHtml: "<p></p>",
       published: false,
       diaryCategoryId: unknownCategoryId,
     });
