@@ -21,6 +21,11 @@ export const Route = createFileRoute("/(public)/diary")({
   },
 });
 
+export type ReadDiaryEntriesResult = Awaited<ReturnType<typeof dbReadDiaryEntries>>;
+type ReadDiaryEntriesResultData = NonNullable<ReadDiaryEntriesResult>["data"];
+type DiaryEntryArrayType = NonNullable<ReadDiaryEntriesResultData>["entries"];
+type DiaryEntryType = DiaryEntryArrayType[number];
+
 function DiaryList() {
   const { user, diaryEntries } = Route.useLoaderData();
   const createDiary = useServerFn(dbCreateDiaryEntry);
@@ -37,7 +42,7 @@ function DiaryList() {
           <ClientOnly>
             <Button
               className="z-40"
-              onClick={createDiary}
+              onClick={() => createDiary()}
             >
               <PlusIcon size={24} />
               <span className="hidden md:inline-block">New Entry</span>
@@ -69,7 +74,7 @@ function FinalDiaryEntry({
   diaryEntry,
   isSignedIn,
 }: {
-  diaryEntry: object;
+  diaryEntry: DiaryEntryType;
   publicOnly: boolean;
   isSignedIn: boolean;
 }) {
