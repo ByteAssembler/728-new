@@ -85,6 +85,8 @@ export default function Ufo() {
   const { nodes } = useGLTF("/scene.glb");
   const ref = useRef<Group>(null);
   const [scale, setScale] = useState(0.06);
+  const [yOffset, setYOffset] = useState(-1);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -92,9 +94,11 @@ export default function Ufo() {
       if (width < 432) {
         // Mobile
         setScale(0.047);
-      } else if (width < 640) {
+        setYOffset(1);
+      } else if (width < 769) {
         // Mobile
         setScale(0.035);
+        setYOffset(1);
       } else if (width < 1024) {
         // Tablet
         setScale(0.055);
@@ -182,7 +186,7 @@ export default function Ufo() {
     // Rotate UFO, move down, and change transparency at the same time
     ufoTl
       .to(ufoRotation, { x: -Math.PI * 0.65, ease: "power2.out" }, 0) // Start at time 0
-      .to(ufoPosition, { y: -1, ease: "power2.out" }, 0)
+      .to(ufoPosition, { y: yOffset, ease: "power2.out" }, 0)
       .to(shader.uniforms.uOpacity, { value: 0.1, ease: "power2.out" }, 0);
 
     // Second animation: Restore UFO rotation on a different ScrollTrigger

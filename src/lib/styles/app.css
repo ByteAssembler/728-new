@@ -5,7 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
+  --background: oklch(0.7253 0.2136 142.96);
+
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
@@ -120,14 +121,14 @@
 
 @font-face {
   font-family: "Electrolize";
-  src: url("/Electrolize-Regular.ttf") format("ttf");
+  src: url("/Electrolize-Regular.ttf") format("truetype");
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: "Orbitron";
-  src: url("/Orbitron-VariableFont_wght.ttf") format("ttf");
+  src: url("/Orbitron-VariableFont_wght.ttf") format("truetype");
   font-style: normal;
   font-display: swap;
 }

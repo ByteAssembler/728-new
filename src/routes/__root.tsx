@@ -75,10 +75,10 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         </ScriptOnce>
 
         {children}
-
+        {/*
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <TanStackRouterDevtools position="bottom-right" />
-
+       */ }
         <Scripts />
       </body>
     </html>
