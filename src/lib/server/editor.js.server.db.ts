@@ -128,38 +128,35 @@ export async function dbSaveDiaryEntryContent_server(
 }
 
 export async function dbCreateDiaryEntry_server() {
-  const newEntryId = crypto.randomUUID();
-
-  // First check if "Unknown" category exists
-  const unknownCategory = await db
-    .select({ id: diaryCategory.id })
-    .from(diaryCategory)
-    .where(eq(diaryCategory.name, "Unknown"))
-    .limit(1);
-
-  let unknownCategoryId: number;
-
-  if (unknownCategory.length === 0) {
-    // Create it if it doesn't exist
-    const [newCategory] = await db
-      .insert(diaryCategory)
-      .values({ name: "Unknown" })
-      .returning({ id: diaryCategory.id });
-
-    unknownCategoryId = newCategory.id;
-  } else {
-    unknownCategoryId = unknownCategory[0].id;
-  }
-
-  await db.insert(diaryEntry).values({
-    id: newEntryId,
-    title: "New Diary Entry " + new Date().toLocaleString(),
-    contentJson: JSON.stringify([{ type: "paragraph", content: [""] }]), // getDefaultContent(),
-    published: false,
-    diaryCategoryId: unknownCategoryId,
+  const newEntryId = await db.transaction(async (tx) => {
+    const newEntryId = crypto.randomUUID();
+    // Retrieve or create the "Unknown" category in a single transaction
+    const unknownCategoryRows = await tx
+      .select({ id: diaryCategory.id })
+      .from(diaryCategory)
+      .where(eq(diaryCategory.name, "Unknown"))
+      .limit(1);
+    let unknownCategoryId: number;
+    if (unknownCategoryRows.length === 0) {
+      const [newCategory] = await tx
+        .insert(diaryCategory)
+        .values({ name: "Unknown" })
+        .returning({ id: diaryCategory.id });
+      unknownCategoryId = newCategory.id;
+    } else {
+      unknownCategoryId = unknownCategoryRows[0].id;
+    }
+    // Insert the new diary entry inside the transaction
+    await tx.insert(diaryEntry).values({
+      id: newEntryId,
+      title: "New Diary Entry " + new Date().toLocaleString(),
+      contentJson: JSON.stringify([{ type: "paragraph", content: [""] }]),
+      published: false,
+      diaryCategoryId: unknownCategoryId,
+    });
+    return newEntryId;
   });
-
-  revalidatePath("/diary");
+  revalidatePath("/diary"); // Perform revalidation after transaction commit
   return newEntryId;
 }
 
@@ -174,7 +171,6 @@ export async function dbDeleteDiaryEntry_server(params: z.infer<typeof DeleteDia
     ).map(item => item.id);
 
     if (workTableIds.length) {
-      // changed: use column "collaborator_id" instead of "collaboratorId"
       await tx
         .delete(collaboratorUserRelation)
         .where(inArray(collaboratorUserRelation.collaboratorId, workTableIds));
@@ -188,7 +184,7 @@ export async function dbDeleteDiaryEntry_server(params: z.infer<typeof DeleteDia
     // Delete the diary entry itself
     await tx.delete(diaryEntry).where(eq(diaryEntry.id, params.diaryEntryId));
   });
-  revalidatePath("/diary");
+  revalidatePath("/diary"); // Revalidate after transaction commit
 }
 
 export async function dbReadDiaryEntries_server(authed: boolean) {
