@@ -141,11 +141,6 @@ export const dbReadDiaryEntries = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .handler(async (req) => {
     const user = req.context.user;
-    if (!user) {
-      throw new Error("Unauthorized");
-      return { success: false };
-    }
-
     const res = await dbReadDiaryEntries_server(!!user)
     return { success: true, data: res };
   });
