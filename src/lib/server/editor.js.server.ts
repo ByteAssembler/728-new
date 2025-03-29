@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { authMiddleware } from "~/lib/middleware/auth-guard";
+import { authMiddleware, authMiddlewareOptional } from "~/lib/middleware/auth-guard";
 import { z } from "zod";
 import {
   dbSaveDiaryEntryMetadata_server,
@@ -138,7 +138,7 @@ export const dbDeleteDiaryEntry = createServerFn({ method: "POST" })
   });
 
 export const dbReadDiaryEntries = createServerFn({ method: "POST" })
-  .middleware([authMiddleware])
+  .middleware([authMiddlewareOptional])
   .handler(async (req) => {
     const user = req.context.user;
     const res = await dbReadDiaryEntries_server(!!user)

@@ -27,3 +27,18 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
 
   return next({ context: { user: session.user } });
 });
+
+export const authMiddlewareOptional = createMiddleware().server(async ({ next }) => {
+  const { headers } = getWebRequest()!;
+
+  const session = await auth.api.getSession({
+    headers,
+    query: {
+      // ensure session is fresh
+      // https://www.better-auth.com/docs/concepts/session-management#session-caching
+      disableCookieCache: true,
+    },
+  });
+
+  return next({ context: { user: session?.user } });
+});
