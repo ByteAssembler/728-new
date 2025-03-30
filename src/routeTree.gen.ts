@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SigninImport } from './routes/signin'
 import { Route as DashboardRouteImport } from './routes/dashboard/route'
 import { Route as publicRouteImport } from './routes/(public)/route'
+import { Route as protectedRouteImport } from './routes/(protected)/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as publicGuardianOfTheGalaxyImport } from './routes/(public)/guardian-of-the-galaxy'
@@ -39,6 +40,11 @@ const DashboardRouteRoute = DashboardRouteImport.update({
 
 const publicRouteRoute = publicRouteImport.update({
   id: '/(public)',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const protectedRouteRoute = protectedRouteImport.update({
+  id: '/(protected)',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -73,15 +79,15 @@ const publicAboutRoute = publicAboutImport.update({
 } as any)
 
 const protectedAdminSocketRoute = protectedAdminSocketImport.update({
-  id: '/(protected)/admin-socket',
+  id: '/admin-socket',
   path: '/admin-socket',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => protectedRouteRoute,
 } as any)
 
 const protectedAdminRoute = protectedAdminImport.update({
-  id: '/(protected)/admin',
+  id: '/admin',
   path: '/admin',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => protectedRouteRoute,
 } as any)
 
 const publicDiaryIdRoute = publicDiaryIdImport.update({
@@ -99,6 +105,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/(protected)': {
+      id: '/(protected)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof protectedRouteImport
       parentRoute: typeof rootRoute
     }
     '/(public)': {
@@ -127,14 +140,14 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof protectedAdminImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof protectedRouteImport
     }
     '/(protected)/admin-socket': {
       id: '/(protected)/admin-socket'
       path: '/admin-socket'
       fullPath: '/admin-socket'
       preLoaderRoute: typeof protectedAdminSocketImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof protectedRouteImport
     }
     '/(public)/about': {
       id: '/(public)/about'
@@ -175,6 +188,20 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
+
+interface protectedRouteRouteChildren {
+  protectedAdminRoute: typeof protectedAdminRoute
+  protectedAdminSocketRoute: typeof protectedAdminSocketRoute
+}
+
+const protectedRouteRouteChildren: protectedRouteRouteChildren = {
+  protectedAdminRoute: protectedAdminRoute,
+  protectedAdminSocketRoute: protectedAdminSocketRoute,
+}
+
+const protectedRouteRouteWithChildren = protectedRouteRoute._addFileChildren(
+  protectedRouteRouteChildren,
+)
 
 interface publicDiaryRouteChildren {
   publicDiaryIdRoute: typeof publicDiaryIdRoute
@@ -244,6 +271,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/(protected)': typeof protectedRouteRouteWithChildren
   '/(public)': typeof publicRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/signin': typeof SigninRoute
@@ -283,6 +311,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/(protected)'
     | '/(public)'
     | '/dashboard'
     | '/signin'
@@ -298,20 +327,18 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  protectedRouteRoute: typeof protectedRouteRouteWithChildren
   publicRouteRoute: typeof publicRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SigninRoute: typeof SigninRoute
-  protectedAdminRoute: typeof protectedAdminRoute
-  protectedAdminSocketRoute: typeof protectedAdminSocketRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  protectedRouteRoute: protectedRouteRouteWithChildren,
   publicRouteRoute: publicRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SigninRoute: SigninRoute,
-  protectedAdminRoute: protectedAdminRoute,
-  protectedAdminSocketRoute: protectedAdminSocketRoute,
 }
 
 export const routeTree = rootRoute
@@ -325,15 +352,21 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/(protected)",
         "/(public)",
         "/dashboard",
-        "/signin",
-        "/(protected)/admin",
-        "/(protected)/admin-socket"
+        "/signin"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/(protected)": {
+      "filePath": "(protected)/route.tsx",
+      "children": [
+        "/(protected)/admin",
+        "/(protected)/admin-socket"
+      ]
     },
     "/(public)": {
       "filePath": "(public)/route.tsx",
@@ -353,10 +386,12 @@ export const routeTree = rootRoute
       "filePath": "signin.tsx"
     },
     "/(protected)/admin": {
-      "filePath": "(protected)/admin.tsx"
+      "filePath": "(protected)/admin.tsx",
+      "parent": "/(protected)"
     },
     "/(protected)/admin-socket": {
-      "filePath": "(protected)/admin-socket.tsx"
+      "filePath": "(protected)/admin-socket.tsx",
+      "parent": "/(protected)"
     },
     "/(public)/about": {
       "filePath": "(public)/about.tsx",
