@@ -5,9 +5,7 @@ import {
   integer,
   timestamp,
   boolean,
-  json,
   primaryKey,
-  pgEnum,
   index
 } from "drizzle-orm/pg-core";
 import { user } from "./auth.schema";
@@ -44,18 +42,6 @@ export const diaryEntry = pgTable("DiaryEntry", {
   dayIdx: index("day_idx").on(table.day),
   publishedIdx: index("published_idx").on(table.published),
 }));
-
-export const logLevelEnum = pgEnum("log_level", ["DEBUG", "INFO", "WARN", "ERROR"] as const);
-
-export const logs = pgTable("Logs", {
-  id: serial("id").primaryKey(),
-  component: text("component").notNull(),
-  level: logLevelEnum("level").notNull(),
-  message: text("message").notNull(),
-  simplifiedMessage: text("simplified_message"),
-  details: json("details"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
 
 // Many‑to‑Many Relation: DiaryWorkTableEntryCollaborator <-> User
 export const diaryWorkTableEntryCollaborator_User = pgTable("Collaborators", {
