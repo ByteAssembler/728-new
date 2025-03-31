@@ -97,8 +97,8 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
           <div className="w-1/2 lg:w-3/5">
             <p
               className={`text-base md:text-1xl lg:text-2xl text-white ${isImageFirst
-                  ? "lg:translate-x-[-1rem] xl:translate-x-[-2rem] lg:pr-4"
-                  : "lg:translate-x-[1rem] xl:translate-x-[2rem] lg:pl-4"
+                ? "lg:translate-x-[-1rem] xl:translate-x-[-2rem] lg:pr-4"
+                : "lg:translate-x-[1rem] xl:translate-x-[2rem] lg:pl-4"
                 }`}
             >
               {text}
@@ -142,18 +142,16 @@ const NavigationButton: React.FC = () => {
   const dataUrl = `url("data:image/svg+xml,${svgString}")`;
 
   return (
-    <button
-      className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white"
+    <Link to="/guardian-of-the-galaxy" className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white"
       style={{
         fontSize: 30,
         backgroundImage: dataUrl,
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-      }}
-    >
-      <Link href="/guardian-of-the-galaxy">Explore</Link>
-    </button>
+      }}>
+      Explore
+    </Link>
   );
 };
 
