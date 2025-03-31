@@ -19,6 +19,7 @@ export const Route = createFileRoute("/(public)/diary")({
     const diaryEntries = await dbReadDiaryEntries();
     return { user: ctx.context.user, diaryEntries };
   },
+  ssr: false
 });
 
 export type ReadDiaryEntriesResult = Awaited<ReturnType<typeof dbReadDiaryEntries>>;
