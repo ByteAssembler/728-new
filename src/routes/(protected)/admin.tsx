@@ -170,9 +170,9 @@ function MainContent({ selectedId, onSelect }: ListProps) {
   );
 }
 
-function Card({ children, id, onSelect }: CardProps) {
+function Card({ children, id, onSelect, isSelected }: CardProps) {
   return (
-    <div className="card-content-container">
+    <div className="card-content-container" style={isSelected ? { visibility: "hidden" } : {}}>
       <motion.div className="card-content" layoutId={`card-container-${id}`}>
         {children}
         <div className="grid-cell-button-fullscreen" onClick={() => onSelect(id)}>
