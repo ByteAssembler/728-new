@@ -4,8 +4,10 @@ import { authMiddleware, authMiddlewareOptional } from "~/lib/middleware/auth-gu
 import {
   dbCreateDiaryEntry_server,
   dbDeleteDiaryEntry_server,
+  dbReadDiaryEntries_server,
   dbSaveDiaryEntryContent_server,
   dbSaveDiaryEntryMetadata_server,
+  dbSaveDiaryEntryTableData_server,
 } from "~/lib/server/editor.js.server.db";
 import { diaryEntry } from "~/lib/server/schema";
 
@@ -78,21 +80,8 @@ export const dbSaveDiaryEntryTableData = createServerFn({ method: "POST" })
   .validator(SaveDiaryEntryTableDataParamsSchema)
   .middleware([authMiddleware])
   .handler(async (req) => {
-    const user = req.context.user;
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
-
-    return await db
-      .select({
-        id: dbSchemaUser.id,
-        name: dbSchemaUser.name,
-        email: dbSchemaUser.email,
-      })
-      .from(dbSchemaUser);
+    dbSaveDiaryEntryTableData_server(req.data);
   });
-
-const dbGetDiaryEntrySchema = z.string();
 
 export const dbSaveDiaryEntryContent = createServerFn({ method: "POST" })
   .validator(SaveDiaryEntryContentParamsSchema)
@@ -123,50 +112,8 @@ export const dbReadDiaryEntries = createServerFn({ method: "POST" })
   .middleware([authMiddlewareOptional])
   .handler(async (req) => {
     const user = req.context.user;
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
-
-    const categoryId_ = await db
-      .select({
-        id: dbSchemaDiaryCategory.id,
-      })
-      .from(dbSchemaDiaryCategory)
-      .limit(1)
-      .execute();
-
-    let categoryId = categoryId_.length > 0 ? categoryId_[0].id : null;
-
-    if (!categoryId) {
-      const res = await db
-        .insert(dbSchemaDiaryCategory)
-        .values({
-          name: "Unkown",
-        })
-        .returning({
-          id: dbSchemaDiaryCategory.id,
-        })
-        .execute();
-
-      categoryId = res[0].id;
-    }
-
-    const res = await db
-      .insert(dbSchemaDiaryEntry)
-      .values({
-        id: crypto.randomUUID(), // Generate a unique ID
-        title: "New Diary Entry " + new Date().toLocaleString(),
-        content: "",
-        published: false,
-        diaryCategoryId: categoryId,
-        day: new Date(),
-      })
-      .returning({
-        id: dbSchemaDiaryEntry.id,
-      })
-      .execute();
-
-    return res[0].id;
+    const res = await dbReadDiaryEntries_server(!!user);
+    return { success: true, data: res };
   });
 
 /*
