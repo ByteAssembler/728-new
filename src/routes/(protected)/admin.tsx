@@ -95,28 +95,31 @@ interface ItemProps {
   children?: React.ReactNode;
 }
 
-export default function Admin() {
+function Admin() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  function _Outside({ id }: { id: string }) {
-    const item = defaultCells.flat().find((it) => it.id === id);
-    if (!item) return null;
-
-    return (
-      <CardOutside
-        id={id}
-        onClose={() => setSelectedId(null)}
-        closeOnContentClick={item.closeOnContentClick}
-      >
-        {item.itemChildren}
-      </CardOutside>
-    );
-  }
 
   return (
     <>
       <MainContent selectedId={selectedId} onSelect={setSelectedId} />
-      <AnimatePresence>{selectedId && <_Outside id={selectedId} />}</AnimatePresence>
+      <AnimatePresence>
+        {selectedId && <_Outside id={selectedId} setId={setSelectedId} />}
+      </AnimatePresence>
     </>
+  );
+}
+
+function _Outside({ id, setId }: { id: string; setId: (id: string | null) => void }) {
+  const item = defaultCells.flat().find((it) => it.id === id);
+  if (!item) return null;
+
+  return (
+    <CardOutside
+      id={id}
+      onClose={() => setId(null)}
+      closeOnContentClick={item.closeOnContentClick}
+    >
+      {item.itemChildren}
+    </CardOutside>
   );
 }
 
