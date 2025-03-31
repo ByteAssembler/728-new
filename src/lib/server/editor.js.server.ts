@@ -4,12 +4,8 @@ import { authMiddleware, authMiddlewareOptional } from "~/lib/middleware/auth-gu
 import {
   dbCreateDiaryEntry_server,
   dbDeleteDiaryEntry_server,
-  dbDiaryEntryGetWorkers_server,
-  dbGetDiaryEntry_server,
-  dbReadDiaryEntries_server,
   dbSaveDiaryEntryContent_server,
   dbSaveDiaryEntryMetadata_server,
-  dbSaveDiaryEntryTableData_server,
 } from "~/lib/server/editor.js.server.db";
 import { diaryEntry } from "~/lib/server/schema";
 
@@ -82,9 +78,21 @@ export const dbSaveDiaryEntryTableData = createServerFn({ method: "POST" })
   .validator(SaveDiaryEntryTableDataParamsSchema)
   .middleware([authMiddleware])
   .handler(async (req) => {
-    const res = await dbSaveDiaryEntryTableData_server(req.data);
-    return { success: true, data: res };
+    const user = req.context.user;
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    return await db
+      .select({
+        id: dbSchemaUser.id,
+        name: dbSchemaUser.name,
+        email: dbSchemaUser.email,
+      })
+      .from(dbSchemaUser);
   });
+
+const dbGetDiaryEntrySchema = z.string();
 
 export const dbSaveDiaryEntryContent = createServerFn({ method: "POST" })
   .validator(SaveDiaryEntryContentParamsSchema)
@@ -115,22 +123,76 @@ export const dbReadDiaryEntries = createServerFn({ method: "POST" })
   .middleware([authMiddlewareOptional])
   .handler(async (req) => {
     const user = req.context.user;
-    const res = await dbReadDiaryEntries_server(!!user);
-    return { success: true, data: res };
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    const categoryId_ = await db
+      .select({
+        id: dbSchemaDiaryCategory.id,
+      })
+      .from(dbSchemaDiaryCategory)
+      .limit(1)
+      .execute();
+
+    let categoryId = categoryId_.length > 0 ? categoryId_[0].id : null;
+
+    if (!categoryId) {
+      const res = await db
+        .insert(dbSchemaDiaryCategory)
+        .values({
+          name: "Unkown",
+        })
+        .returning({
+          id: dbSchemaDiaryCategory.id,
+        })
+        .execute();
+
+      categoryId = res[0].id;
+    }
+
+    const res = await db
+      .insert(dbSchemaDiaryEntry)
+      .values({
+        id: crypto.randomUUID(), // Generate a unique ID
+        title: "New Diary Entry " + new Date().toLocaleString(),
+        content: "",
+        published: false,
+        diaryCategoryId: categoryId,
+        day: new Date(),
+      })
+      .returning({
+        id: dbSchemaDiaryEntry.id,
+      })
+      .execute();
+
+    return res[0].id;
   });
 
-export const dbGetDiaryEntry = createServerFn({ method: "POST" })
-  .validator(GetDiaryEntryParamsSchema)
-  .handler(async (req) => {
-    const res = await dbGetDiaryEntry_server(req.data);
-    return { success: true, data: res };
-  });
+/*
+function getDefaultContent() {
+  const now = new Date();
 
-export const dbDiaryEntryGetWorkers = createServerFn({ method: "GET" })
-  .middleware([authMiddlewareOptional])
-  .handler(async (req) => {
-    const user = req.context.user;
-
-    const res = await dbDiaryEntryGetWorkers_server(!!user);
-    return { success: true, data: res };
-  });
+  return {
+    time: 0,
+    blocks: [
+      {
+        id: "QermI4- BWt",
+        type: "header",
+        data: {
+          text: "Diary Entry from " + now.toLocaleDateString(),
+          level: 3,
+        },
+      },
+      {
+        id: "8cD_ilZ20j",
+        type: "paragraph",
+        data: {
+          text: "Bla Bla Bla...",
+        },
+      },
+    ],
+    version: "2.30.7",
+  };
+}
+*/
