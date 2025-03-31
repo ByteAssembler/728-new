@@ -1,14 +1,20 @@
 import "@blocknote/core/fonts/inter.css";
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
-import { useDebounce } from "@uidotdev/usehooks";
+import { BlockNoteView } from "@blocknote/shadcn";
+import "@blocknote/shadcn/style.css";
+import { useDebouncedCallback } from "use-debounce";
 
-export default function EditorComponent(
-  { defaultData, onDataChange }: { defaultData?: string; onDataChange: (dataJsonString: string, dataHtmlString: string) => void },
-) {
+export default function EditorComponent({
+  defaultData,
+  onDataChange,
+}: {
+  defaultData?: string;
+  onDataChange: (dataJsonString: string, dataHtmlString: string) => void;
+}) {
   const editor = useCreateBlockNote({
-    initialContent: defaultData ? JSON.parse(defaultData) : [{ type: "paragraph", content: ["..."] }],
+    initialContent: defaultData
+      ? JSON.parse(defaultData)
+      : [{ type: "paragraph", content: ["..."] }],
   });
 
   const handleChange = async () => {
@@ -19,7 +25,9 @@ export default function EditorComponent(
     onDataChange(jsonContent, htmlContent);
   };
 
-  const debouncedSave = useDebounce(handleChange, 1000);
+  const debouncedSave = useDebouncedCallback(() => handleChange(), 500, {
+    maxWait: 2000,
+  });
 
   return <BlockNoteView editor={editor} onChange={debouncedSave} />;
 }

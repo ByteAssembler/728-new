@@ -83,6 +83,11 @@ export function EditDiary({ diaryEntry }: { diaryEntry: DiaryEntryType }) {
   const debouncedWorkTableData = useDebounce(workTableData, 500);
 
   async function saveContent(dataJsonString: string, dataHtmlString: string) {
+    if (dataJsonString === content) {
+      console.log("no changes");
+      return;
+    }
+
     setEditStatusContent("saving");
 
     const result = await dbSaveDiaryEntryContentFn({
