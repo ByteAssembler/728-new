@@ -74,7 +74,7 @@ const defaultCells = [
       closeOnContentClick: true,
     },
   ],
-];
+] as const;
 
 interface CardProps {
   id: string;
