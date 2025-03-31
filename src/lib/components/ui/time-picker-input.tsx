@@ -20,28 +20,8 @@ export interface TimePickerInputProps
   onLeftFocus?: () => void;
 }
 
-const TimePickerInput = React.forwardRef<
-  HTMLInputElement,
-  TimePickerInputProps
->(
-  (
-    {
-      className,
-      type = "tel",
-      value,
-      id,
-      name,
-      date = new Date(new Date().setHours(0, 0, 0, 0)),
-      setDate,
-      onChange,
-      onKeyDown,
-      picker,
-      period,
-      onLeftFocus,
-      onRightFocus,
-      ...props
-    },
-    ref,
+const TimePickerInput = (
+    { ref, className, type = "tel", value, id, name, date = new Date(new Date().setHours(0, 0, 0, 0)), setDate, onChange, onKeyDown, picker, period, onLeftFocus, onRightFocus, ...props }: TimePickerInputProps & { ref?: React.RefObject<HTMLInputElement | null> },
   ) => {
     const [flag, setFlag] = React.useState<boolean>(false);
     const [prevIntKey, setPrevIntKey] = React.useState<string>("0");
@@ -124,8 +104,7 @@ const TimePickerInput = React.forwardRef<
         {...props}
       />
     );
-  },
-);
+  };
 
 TimePickerInput.displayName = "TimePickerInput";
 

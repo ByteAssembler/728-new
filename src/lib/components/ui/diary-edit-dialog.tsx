@@ -14,10 +14,7 @@ const DiaryEditDialogPortal = DiaryEditDialogPrimitive.Portal;
 
 const DiaryEditDialogClose = DiaryEditDialogPrimitive.Close;
 
-const DiaryEditDialogOverlay = React.forwardRef<
-  React.ElementRef<typeof DiaryEditDialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DiaryEditDialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+const DiaryEditDialogOverlay = ({ ref, className, ...props }: React.ComponentPropsWithoutRef<typeof DiaryEditDialogPrimitive.Overlay> & { ref?: React.RefObject<React.ElementRef<typeof DiaryEditDialogPrimitive.Overlay> | null> }) => (
   <DiaryEditDialogPrimitive.Overlay
     ref={ref}
     className={cn(
@@ -26,14 +23,11 @@ const DiaryEditDialogOverlay = React.forwardRef<
     )}
     {...props}
   />
-));
+);
 DiaryEditDialogOverlay.displayName =
   DiaryEditDialogPrimitive.Overlay.displayName;
 
-const DiaryEditDialogContent = React.forwardRef<
-  React.ElementRef<typeof DiaryEditDialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DiaryEditDialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+const DiaryEditDialogContent = ({ ref, className, children, ...props }: React.ComponentPropsWithoutRef<typeof DiaryEditDialogPrimitive.Content> & { ref?: React.RefObject<React.ElementRef<typeof DiaryEditDialogPrimitive.Content> | null> }) => (
   <DiaryEditDialogPortal>
     <DiaryEditDialogOverlay />
     <DiaryEditDialogPrimitive.Content
@@ -51,7 +45,7 @@ const DiaryEditDialogContent = React.forwardRef<
       </DiaryEditDialogPrimitive.Close>
     </DiaryEditDialogPrimitive.Content>
   </DiaryEditDialogPortal>
-));
+);
 DiaryEditDialogContent.displayName =
   DiaryEditDialogPrimitive.Content.displayName;
 
@@ -83,14 +77,10 @@ const DiaryEditDialogFooter = ({
 );
 DiaryEditDialogFooter.displayName = "DiaryEditDialogFooter";
 
-const DiaryEditDialogTitle = React.forwardRef<
-  HTMLTextAreaElement,
-  // React.ComponentPropsWithoutRef<typeof DiaryEditDialogPrimitive.Title> & {
-  React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+const DiaryEditDialogTitle = ({ ref, className, onChange, onValueOnlyInput, defaultValue, children }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
     onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
     onValueOnlyInput?: (title: string) => void;
-  }
->(({ className, onChange, onValueOnlyInput, defaultValue, children }, ref) => (
+  } & { ref?: React.RefObject<HTMLTextAreaElement | null> }) => (
   <>
     <textarea
       ref={ref}
@@ -128,7 +118,7 @@ const DiaryEditDialogTitle = React.forwardRef<
       <DiaryEditDialogPrimitive.Title />
     </div>
   </>
-));
+);
 DiaryEditDialogTitle.displayName = DiaryEditDialogPrimitive.Title.displayName;
 
 export {

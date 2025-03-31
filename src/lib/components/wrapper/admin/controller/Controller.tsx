@@ -1,6 +1,6 @@
 import { useWindowSize } from "@uidotdev/usehooks";
 import { motion, useAnimation } from "motion/react";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useRef, useState } from "react";
 
 const styles: {
   [key: string]: React.CSSProperties;
@@ -32,9 +32,8 @@ export type ControllerProps = {
   onValueChange?: (x: number, y: number, executeOnCustomChanges: boolean) => void;
 };
 
-const Controller = forwardRef<ControllerRef, ControllerProps>(function Controller(
-  { onValueChange },
-  ref,
+const Controller = function Controller(
+  { ref, onValueChange }: ControllerProps & { ref?: React.RefObject<ControllerRef | null> },
 ) {
   useImperativeHandle(ref, () => ({
     setPointPosition,
@@ -209,6 +208,6 @@ const Controller = forwardRef<ControllerRef, ControllerProps>(function Controlle
       </div>
     </div>
   );
-});
+};
 
 export default Controller;
