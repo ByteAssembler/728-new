@@ -108,7 +108,7 @@ export const dbDeleteDiaryEntry = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-export const dbReadDiaryEntries = createServerFn({ method: "POST" })
+export const dbReadDiaryEntries = createServerFn({ method: "GET" })
   .middleware([authMiddlewareOptional])
   .handler(async (req) => {
     const user = req.context.user;
