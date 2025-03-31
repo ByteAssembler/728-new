@@ -2,7 +2,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { createFileRoute } from "@tanstack/react-router";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useLayoutEffect, useRef, useState } from "react";
 import { AboutSection, NavigationButton, PersonalItem } from "~/lib/components/ui/about";
 import Ufo from "~/lib/components/ui/about-ufo";
 
@@ -59,14 +59,21 @@ const features = [
 function About() {
   const [height, setHeight] = useState(300); // default for SSR
 
-  useEffect(() => {
-    const handleResize = () => {
-      setHeight(window.innerWidth >= 432 ? 450 : 300);
-    };
+  const heightRef = useRef(300); // default for SSR
 
+  const handleResize = () => {
+    const newHeight = window.innerWidth >= 432 ? 450 : 300;
+    if (heightRef.current !== newHeight) {
+      heightRef.current = newHeight;
+      setHeight(newHeight);
+    }
+  };
+
+  useLayoutEffect(() => {
     handleResize(); // Set initial value
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const resizeListener = () => handleResize();
+    window.addEventListener("resize", resizeListener);
+    return () => window.removeEventListener("resize", resizeListener);
   }, []);
 
   return (
