@@ -62,11 +62,11 @@ function RootComponent() {
 function RootDocument({ children }: { readonly children: React.ReactNode }) {
   return (
     // suppress since we're updating the "dark" class in a custom script below
-    <html suppressHydrationWarning>
+    <html className="h-full w-full" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="h-full w-full">
         <ScriptOnce>
           {`document.documentElement.classList.toggle(
             'dark',
