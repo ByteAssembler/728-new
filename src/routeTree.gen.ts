@@ -22,7 +22,7 @@ import { Route as publicDiaryImport } from './routes/(public)/diary'
 import { Route as publicAboutImport } from './routes/(public)/about'
 import { Route as protectedAdminSocketImport } from './routes/(protected)/admin-socket'
 import { Route as protectedAdminImport } from './routes/(protected)/admin'
-import { Route as publicDiaryIdImport } from './routes/(public)/diary.$id'
+import { Route as publicDiaryIdIndexImport } from './routes/(public)/diary.$id.index'
 
 // Create/Update Routes
 
@@ -90,9 +90,9 @@ const protectedAdminRoute = protectedAdminImport.update({
   getParentRoute: () => protectedRouteRoute,
 } as any)
 
-const publicDiaryIdRoute = publicDiaryIdImport.update({
-  id: '/$id',
-  path: '/$id',
+const publicDiaryIdIndexRoute = publicDiaryIdIndexImport.update({
+  id: '/$id/',
+  path: '/$id/',
   getParentRoute: () => publicDiaryRoute,
 } as any)
 
@@ -177,11 +177,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexImport
       parentRoute: typeof DashboardRouteImport
     }
-    '/(public)/diary/$id': {
-      id: '/(public)/diary/$id'
+    '/(public)/diary/$id/': {
+      id: '/(public)/diary/$id/'
       path: '/$id'
       fullPath: '/diary/$id'
-      preLoaderRoute: typeof publicDiaryIdImport
+      preLoaderRoute: typeof publicDiaryIdIndexImport
       parentRoute: typeof publicDiaryImport
     }
   }
@@ -204,11 +204,11 @@ const protectedRouteRouteWithChildren = protectedRouteRoute._addFileChildren(
 )
 
 interface publicDiaryRouteChildren {
-  publicDiaryIdRoute: typeof publicDiaryIdRoute
+  publicDiaryIdIndexRoute: typeof publicDiaryIdIndexRoute
 }
 
 const publicDiaryRouteChildren: publicDiaryRouteChildren = {
-  publicDiaryIdRoute: publicDiaryIdRoute,
+  publicDiaryIdIndexRoute: publicDiaryIdIndexRoute,
 }
 
 const publicDiaryRouteWithChildren = publicDiaryRoute._addFileChildren(
@@ -253,7 +253,7 @@ export interface FileRoutesByFullPath {
   '/diary': typeof publicDiaryRouteWithChildren
   '/guardian-of-the-galaxy': typeof publicGuardianOfTheGalaxyRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/diary/$id': typeof publicDiaryIdRoute
+  '/diary/$id': typeof publicDiaryIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -265,7 +265,7 @@ export interface FileRoutesByTo {
   '/diary': typeof publicDiaryRouteWithChildren
   '/guardian-of-the-galaxy': typeof publicGuardianOfTheGalaxyRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/diary/$id': typeof publicDiaryIdRoute
+  '/diary/$id': typeof publicDiaryIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -281,7 +281,7 @@ export interface FileRoutesById {
   '/(public)/diary': typeof publicDiaryRouteWithChildren
   '/(public)/guardian-of-the-galaxy': typeof publicGuardianOfTheGalaxyRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/(public)/diary/$id': typeof publicDiaryIdRoute
+  '/(public)/diary/$id/': typeof publicDiaryIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -321,7 +321,7 @@ export interface FileRouteTypes {
     | '/(public)/diary'
     | '/(public)/guardian-of-the-galaxy'
     | '/dashboard/'
-    | '/(public)/diary/$id'
+    | '/(public)/diary/$id/'
   fileRoutesById: FileRoutesById
 }
 
@@ -401,7 +401,7 @@ export const routeTree = rootRoute
       "filePath": "(public)/diary.tsx",
       "parent": "/(public)",
       "children": [
-        "/(public)/diary/$id"
+        "/(public)/diary/$id/"
       ]
     },
     "/(public)/guardian-of-the-galaxy": {
@@ -412,8 +412,8 @@ export const routeTree = rootRoute
       "filePath": "dashboard/index.tsx",
       "parent": "/dashboard"
     },
-    "/(public)/diary/$id": {
-      "filePath": "(public)/diary.$id.tsx",
+    "/(public)/diary/$id/": {
+      "filePath": "(public)/diary.$id.index.tsx",
       "parent": "/(public)/diary"
     }
   }
