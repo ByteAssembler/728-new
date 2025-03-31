@@ -4,6 +4,7 @@ import { authMiddleware, authMiddlewareOptional } from "~/lib/middleware/auth-gu
 import {
   dbCreateDiaryEntry_server,
   dbDeleteDiaryEntry_server,
+  dbDiaryEntryGetWorkers_server,
   dbReadDiaryEntries_server,
   dbSaveDiaryEntryContent_server,
   dbSaveDiaryEntryMetadata_server,
@@ -113,6 +114,14 @@ export const dbReadDiaryEntries = createServerFn({ method: "GET" })
   .handler(async (req) => {
     const user = req.context.user;
     const res = await dbReadDiaryEntries_server(!!user);
+    return { success: true, data: res };
+  });
+
+export const dbDiaryEntryGetWorkers = createServerFn({ method: "GET" })
+  .middleware([authMiddlewareOptional])
+  .handler(async (req) => {
+    const user = req.context.user;
+    const res = await dbDiaryEntryGetWorkers_server(!!user);
     return { success: true, data: res };
   });
 
