@@ -1,5 +1,5 @@
 const ROLES = {
-  visitor: ["list:diary", "read:diary"] as const,
+  default: ["list:diary", "read:diary"] as const,
   editor: [
     "list:diary",
     "read:diary",
@@ -30,7 +30,7 @@ export function hasPermission(
   permission: Permission,
   user?: { id: string; role: Role },
 ): boolean {
-  if ((ROLES["visitor"] as readonly Permission[]).includes(permission)) return true;
+  if ((ROLES["default"] as readonly Permission[]).includes(permission)) return true;
   if (!user) return false;
   if (user.role === "admin") return true;
   return (ROLES[user.role] as readonly Permission[]).includes(permission);
