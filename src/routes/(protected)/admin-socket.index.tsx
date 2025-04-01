@@ -12,7 +12,7 @@ import {
   useSocket,
 } from "~/lib/components/wrapper/admin/socket-provider";
 
-export const Route = createFileRoute("/(protected)/admin-socket")({
+export const Route = createFileRoute("/(protected)/admin-socket/")({
   component: SocketPageApp,
   ssr: false,
 });
