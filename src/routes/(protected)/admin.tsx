@@ -100,6 +100,15 @@ function Admin() {
 
   return (
     <>
+      <style>
+        {`
+html,
+body,
+#root,
+.control-grid {
+  touch-action: none;
+}`}
+      </style>
       <MainContent selectedId={selectedId} onSelect={setSelectedId} />
       <AnimatePresence>
         {selectedId && <_Outside id={selectedId} setId={setSelectedId} />}
