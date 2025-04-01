@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "~/lib/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "~/lib/components/ui/avatar";
+import { Role, ROLES } from "~/lib/server/permissions";
 
 interface User {
   id: string;
@@ -21,6 +22,7 @@ interface User {
   email: string;
   emailVerified: boolean;
   image: string | null;
+  role: Role;
   createdAt: string;
   updatedAt: string;
   lastLogin?: string;
@@ -39,6 +41,7 @@ const users: User[] = [
     email: "max@example.com",
     emailVerified: true,
     image: "https://example.com/avatar1.jpg",
+    role: "admin",
     createdAt: "2023-10-01T12:00:00Z",
     updatedAt: "2024-02-15T09:30:00Z",
     lastLogin: "2024-02-20T14:25:00Z",
@@ -57,6 +60,7 @@ const users: User[] = [
     email: "erika@example.com",
     emailVerified: false,
     image: null,
+    role: "editor",
     createdAt: "2023-11-05T08:15:00Z",
     updatedAt: "2024-01-30T11:20:00Z",
     lastLogin: "2024-01-30T11:20:00Z",
@@ -68,6 +72,7 @@ const users: User[] = [
     email: "john@example.com",
     emailVerified: true,
     image: "https://example.com/avatar3.jpg",
+    role: "default",
     createdAt: "2024-01-10T16:45:00Z",
     updatedAt: "2024-02-18T10:10:00Z",
     lastLogin: "2024-02-18T10:10:00Z",
@@ -101,6 +106,20 @@ function ProviderBadge({ provider }: { provider?: string }) {
 }
 */
 
+function RoleBadge({ role }: { role: Role }) {
+  const variants = {
+    default: "secondary",
+    editor: "warning",
+    admin: "destructive"
+  } as const;
+
+  return (
+    <Badge variant={variants[role]} className="rounded">
+      {role.toUpperCase()}
+    </Badge>
+  );
+}
+
 export function UserTable() {
   return (
     <Table>
@@ -113,6 +132,7 @@ export function UserTable() {
           <TableHead>Status</TableHead>
           <TableHead>Provider</TableHead>
           */}
+          <TableHead>Role</TableHead>
           <TableHead className="text-right">Last Login</TableHead>
           <TableHead className="text-right w-[65px]">Details</TableHead>
         </TableRow>
@@ -138,6 +158,9 @@ export function UserTable() {
               <ProviderBadge provider={user.provider} />
             </TableCell>
             */}
+            <TableCell>
+              <RoleBadge role={user.role} />
+            </TableCell>
             <TableCell className="text-right">
               {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : "Never"}
             </TableCell>
@@ -175,6 +198,7 @@ function UserDetailsTooltip({ user }: { user: User }) {
             <div>
               <h2 className="font-semibold">{user.name}</h2>
               <p className="text-muted-foreground text-sm">{user.email}</p>
+              <RoleBadge role={user.role} />
             </div>
           </div>
 
@@ -194,6 +218,17 @@ function UserDetailsTooltip({ user }: { user: User }) {
             <div>
               <p className="text-muted-foreground">Last Login</p>
               <p>{user.lastLogin ? new Date(user.lastLogin).toLocaleString() : "Never"}</p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="font-medium text-sm">Permissions</h3>
+            <div className="flex flex-wrap gap-1">
+              {ROLES[user.role].map((permission) => (
+                <Badge key={permission} variant="outline" className="text-xs">
+                  {permission}
+                </Badge>
+              ))}
             </div>
           </div>
 

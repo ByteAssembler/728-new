@@ -1,4 +1,4 @@
-const ROLES = {
+export const ROLES = {
   default: ["list:diary", "read:diary"] as const,
   editor: [
     "list:diary",
