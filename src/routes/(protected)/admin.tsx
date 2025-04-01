@@ -11,6 +11,7 @@ import Split from "react-split";
 import ControllerWrapper from "~/lib/components/wrapper/admin/controller";
 import LogTable from "~/lib/components/wrapper/admin/log-table";
 import ReRender from "~/lib/components/wrapper/admin/re-render";
+import { UserTable } from "~/lib/components/wrapper/admin/user-manager";
 // import ConnectionStateWidget from "~/lib/components/wrapper/admin/~ConnectionState";
 // import ControlWidget from "~/lib/components/wrapper/admin/~ControlState";
 // import BatteryWidget from "~/lib/components/wrapper/admin/~BatteryWidget";
@@ -70,7 +71,11 @@ const defaultCells = [
       id: "e",
       category: "e",
       title: "e",
-      itemChildren: <CONTENT>e</CONTENT>,
+      itemChildren: (
+        <CONTENT>
+          <UserTable />
+        </CONTENT>
+      ),
       closeOnContentClick: true,
     },
   ],
