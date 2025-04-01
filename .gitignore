@@ -18,6 +18,8 @@ dist
 /server/build
 /public/build
 
+.idea/
+
 # docker-compose db
 db
 
