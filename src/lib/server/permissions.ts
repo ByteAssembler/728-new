@@ -21,6 +21,11 @@ const ROLES = {
 export type Role = keyof typeof ROLES;
 export type Permission = (typeof ROLES)[Role][number];
 
+export const allPossiblePermissions = Object.values(
+  ROLES,
+).flat() as readonly Permission[];
+export const allPossibleRoles = Object.keys(ROLES) as readonly Role[];
+
 export function hasPermission(
   permission: Permission,
   user?: { id: string; role: Role },
