@@ -1,17 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
+import { useServerFn } from "@tanstack/react-start";
 import { PlusIcon } from "lucide-react";
+import ClientOnly from "~/lib/components/ClientOnlyComponent";
+import { Button } from "~/lib/components/ui/button";
+
 import {
   DiaryEntry,
   DiaryEntryContent,
   DiaryEntryItem,
   DiaryEntryTrigger,
 } from "~/lib/components/ui/diary-entries";
-import { Button } from "~/lib/components/ui/button";
-import { useServerFn } from "@tanstack/react-start";
+import { DeleteDiary, EditDiary } from "~/lib/components/wrapper/diary/diary-edit-dialog";
 import { dbCreateDiaryEntry, dbReadDiaryEntries } from "~/lib/server/editor.js.server";
-import { DeleteDiary, EditDiary } from '~/lib/components/wrapper/diary/diary-edit-dialog';
-import ClientOnly from "~/lib/components/ClientOnlyComponent";
+import * as React from "react";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export const Route = createFileRoute("/(public)/diary")({
   component: DiaryList,
@@ -19,7 +22,7 @@ export const Route = createFileRoute("/(public)/diary")({
     const diaryEntries = await dbReadDiaryEntries();
     return { user: ctx.context.user, diaryEntries };
   },
-  ssr: false
+  ssr: false,
 });
 
 export type ReadDiaryEntriesResult = Awaited<ReturnType<typeof dbReadDiaryEntries>>;
@@ -35,16 +38,13 @@ function DiaryList() {
     <main className="w-full">
       <div className=" py-8 p-12 flex justify-between items-center gap-4">
         <div className="space-y-2">
-          <h1 className="scroll-m-20 font-bold text-3xl text-balance tracking-tight">
+          <h1 className="scroll-m-20 mt-10 md:mt-0 font-bold text-3xl text-balance tracking-tight">
             Our Diary
           </h1>
         </div>
         {user && (
           <ClientOnly>
-            <Button
-              className="z-40"
-              onClick={() => createDiary()}
-            >
+            <Button className="z-40" onClick={() => createDiary()}>
               <PlusIcon size={24} />
               <span className="hidden md:inline-block">New Entry</span>
             </Button>
@@ -52,19 +52,17 @@ function DiaryList() {
         )}
       </div>
       <div className="space-y-4 pt-8 pb-12 ">
-        <DiaryEntry
-          type="single"
-          collapsible
-          className="w-full pr-[2vw] md:pr-[4vw] "
-        >
-          {diaryEntries.success && diaryEntries.data && diaryEntries.data.entries.map((entry) => (
-            <FinalDiaryEntry
-              key={entry.id}
-              diaryEntry={entry}
-              publicOnly={diaryEntries.data.publicOnly}
-              isSignedIn={!!user}
-            />
-          ))}
+        <DiaryEntry type="single" collapsible className="w-full pr-[1rem] md:pr-[4vw] ">
+          {diaryEntries.success &&
+            diaryEntries.data &&
+            diaryEntries.data.entries.map((entry) => (
+              <FinalDiaryEntry
+                key={entry.id}
+                diaryEntry={entry}
+                publicOnly={diaryEntries.data.publicOnly}
+                isSignedIn={!!user}
+              />
+            ))}
         </DiaryEntry>
       </div>
     </main>
@@ -84,145 +82,270 @@ function FinalDiaryEntry({
   const dayDate = new Date(diaryEntry.day);
   const day = dayDate.getDay();
   const month = dayDate.getMonth() + 1;
-  //const triangleRef = useRef <SVGSVGElement>();
-
-  /* const handleClick = (event: MouseEvent) => {
-    if (triangleRef.current) {
-      const svgElement = triangleRef.current;
-      const point = svgElement.createSVGPoint();
-      point.x = event.clientX;
-      point.y = event.clientY;
-      const ctm = svgElement.getScreenCTM();
-      if (ctm) {
-        const transformedPoint = point.matrixTransform(ctm.inverse());
-        const path = svgElement.querySelector("path");
-        if (path && path instanceof SVGGeometryElement) {
-          const isInPath = path.isPointInFill(transformedPoint);
-          if (!isInPath) {
-            setIsOpen(false);
-            disableScroll();
-          }
-        }
-      }
-    }
-  };*/
+  const isMobile = useMediaQuery("(max-width: 431px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
 
   const rand = Math.floor(Math.random() * 10) % 4;
+  const largeSvgs = [
+    { width: 1433, height: 171, d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z" },
+    {
+      width: 1433,
+      height: 183,
+      d: "M-14.5212 52.4957L1433 29L1387.12 212L-55 96.1836L-14.5212 52.4957Z",
+    },
+    {
+      width: 1433,
+      height: 186,
+      d: "M-30 52.3643L1384.5 17.5L1433 203L-30 101.5V52.3643Z",
+    },
+    { width: 1433, height: 193, d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z" },
+  ];
+
+  const selectedSvg = largeSvgs[rand];
+  const titleFontSize = diaryEntry.title.length > 23 ? "50px" : "60px";
 
   return (
     <DiaryEntryItem key={diaryEntry.id} value={diaryEntry.id}>
       <div className="relative">
-        {rand === 0 && (
+        <DiaryEntryTrigger className="relative group diary-entry">
           <svg
-            className="absolute top-0 left-0 w-full h-auto"
-            width="1433"
-            height="171"
-            viewBox="0 0 1433 171"
+            preserveAspectRatio="xMidYMid meet" // Maintain aspect ratio while scaling
+            className="w-full scale-150 xs:scale-125 md:scale-100  -translate-x-[25%] xs:-translate-x-[10%] md:translate-x-0 h-auto" // Make SVG responsive
+            viewBox="0 0 1444 218"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M-18 23.4315L1433 0L1383.09 171L-18 66.5V23.4315Z"
-              fill="#23CF51"
-            />
-          </svg>
-        )}
-        {rand === 1 && (
-          <svg
-            className="absolute top-0 left-0 w-full h-auto"
-            width="1433"
-            height="183"
-            viewBox="0 0 1433 183"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M-14.5212 23.4957L1433 0L1387.12 183L-55 67.1836L-14.5212 23.4957Z"
-              fill="#23CF51"
-            />
-          </svg>
-        )}
-        {rand === 2 && (
-          <svg
-            className="absolute top-0 left-0 w-full h-auto"
-            width="1433"
-            height="186"
-            viewBox="0 0 1433 186"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M-30 35.3643L1384.5 0.5L1433 186L-30 65.6882V35.3643Z"
-              fill="#23CF51"
-            />
-          </svg>
-        )}
-        {rand === 3 && (
-          <svg
-            className="absolute top-0 left-0 w-full h-auto"
-            width="1433"
-            height="193"
-            viewBox="0 0 1433 193"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M-24 36.3373L1413.81 0L1433 193L-24 66.6698V36.3373Z"
-              fill="#23CF51"
-            />
-          </svg>
-        )}
-
-        <DiaryEntryTrigger className="relative z-10 group ">
-          <div className="font-Orbitron flex flex-row gap-8 md:gap-[11vw] font-extrabold items-center">
-            <span className="flex z-10 gap-1 transform translate-x-2 md:translate-x-[4rem] -translate-y-[2.5rem] md:-translate-y-[2.2rem]">
-              <svg
-                className="w-16 h-auto md:w-[7.5vw]"
-                viewBox="0 0 106 74"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <g filter="url(#mainShadow)">
+              <path d={selectedSvg.d} fill="#23CF51" />
+              <text
+                x={isMobile ? "53%" : isTablet ? "41%" : "30%"}
+                y="47%"
+                fontSize={titleFontSize}
+                className="fill-white font-bold max-w-[50%] truncate"
               >
-                <path d="M0 6.5L105.5 0L102.5 74L0 69.5V6.5Z" fill="white" />
-                <text
-                  x={day.toString().includes("1") ? "36" : "29"}
-                  y="40"
-                  fontSize="60"
-                  className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
+                {diaryEntry.title}
+              </text>
+              <g className="md:translate-x-0 xs:translate-x-[15%] translate-x-[28%]">
+                <g
+                  filter="url(#dayShadow)"
+                  className="-translate-x-[5rem] md:translate-0 scale-115 md:scale-none"
                 >
-                  {day < 10 ? "0" + day : day}
-                </text>
-              </svg>
+                  <path d="M143 11.5L248.5 5L245.5 79L143 74.5V11.5Z" fill="white" />
+                  <text
+                    x={day.toString().includes("1") ? "36%" : "35%"}
+                    y="5%"
+                    fontSize="60"
+                    className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
+                  >
+                    {day < 10 ? "0" + day : day}
+                  </text>
+                </g>
 
-              <svg
-                className="w-16 h-auto md:w-[7.5vw]"
-                viewBox="0 0 104 75"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+                <g
+                  filter="url(#monthShadow)"
+                  className="-translate-x-[5rem] md:translate-0 scale-115 md:scale-none"
+                >
+                  <path d="M264.124 6L359 18.478V84L256.5 75.5L264.124 6Z" fill="white" />
+                  <text
+                    x={month.toString().includes("1") ? "44%" : "43.2%"}
+                    y="6%"
+                    fontSize="60"
+                    className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
+                  >
+                    {month < 10 ? "0" + month : month}
+                  </text>
+                </g>
+              </g>
+
+              <g
+                filter="url(#accordionhadow)"
+                className="diary-entry-arrow text-muted-foreground transition-all transition-transform duration-200 shrink-0 translate-x-[90%] translate-y-[35%]  h-auto w-[16rem] group-hover:translate-y-[25%] scale-140 md:scale-130"
+                style={{ transformOrigin: "41px 21.5px" }}
               >
                 <path
-                  d="M8.12406 0L103 12.478V78L0.5 69.5L8.12406 0Z"
-                  fill="white"
+                  d="M78 43L40.6408 23.1226L4 43V23.1226L40.6408 0L78 23.1226V43Z"
+                  fill="#191919"
                 />
-                <text
-                  x={month.toString().includes("1") ? "37" : "30"}
-                  y="40"
-                  fontSize="60"
-                  className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
-                >
-                  {month < 10 ? "0" + month : month}
-                </text>
-              </svg>
-            </span>
-
-            <div
-              className="text-left translate-x-1  md:-translate-x-[1vw] -translate-y-[1.5vw] md:translate-y-[0vw] leading-[3rem] md:leading-[4rem] truncate max-w-[55vw] md:max-w-[60vw] px-4"
-              style={{
-                fontSize: diaryEntry.title.length > 23 ? "3vw" : "4vw",
-              }}
-            >
-              {diaryEntry.title}
-            </div>
-          </div>
+              </g>
+            </g>
+            <defs>
+              <filter
+                id="accordionhadow"
+                x="0"
+                y="0"
+                width="82"
+                height="51"
+                filterUnits="userSpaceOnUse"
+                colorInterpolationFilters="sRGB"
+              >
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dy="4" />
+                <feGaussianBlur stdDeviation="2" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_115_9"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect1_dropShadow_115_9"
+                  result="shape"
+                />
+              </filter>
+              <filter
+                id="mainShadow"
+                x="-24.8"
+                y="5"
+                width="1468.6"
+                height="212.8"
+                filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB"
+              >
+                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="2" dy="9" />
+                <feGaussianBlur stdDeviation="4.4" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_115_6"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect1_dropShadow_115_6"
+                  result="shape"
+                />
+              </filter>
+              <filter
+                id="dayShadow"
+                x="143"
+                y="5"
+                width="113.5"
+                height="82"
+                filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB"
+              >
+                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="4" dy="4" />
+                <feGaussianBlur stdDeviation="2" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_115_6"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect1_dropShadow_115_6"
+                  result="shape"
+                />
+              </filter>
+              <filter
+                id="filter2_d_115_6"
+                x="252.5"
+                y="6"
+                width="111.907"
+                height="86"
+                filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB"
+              >
+                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dy="4" />
+                <feGaussianBlur stdDeviation="2" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_115_6"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect1_dropShadow_115_6"
+                  result="shape"
+                />
+              </filter>
+              <filter
+                id="monthShadow"
+                x="256.5"
+                y="6"
+                width="110.5"
+                height="86"
+                filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB"
+              >
+                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feColorMatrix
+                  in="SourceAlpha"
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha"
+                />
+                <feOffset dx="4" dy="4" />
+                <feGaussianBlur stdDeviation="2" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                  type="matrix"
+                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                  mode="normal"
+                  in2="BackgroundImageFix"
+                  result="effect1_dropShadow_115_6"
+                />
+                <feBlend
+                  mode="normal"
+                  in="SourceGraphic"
+                  in2="effect1_dropShadow_115_6"
+                  result="shape"
+                />
+              </filter>
+            </defs>
+          </svg>
         </DiaryEntryTrigger>
       </div>
       <DiaryEntryContent>
@@ -241,7 +364,8 @@ function FinalDiaryEntry({
             )}
           </div>
 
-          <div className="flex justify-between gap-4">
+          <div className="gap-4 -translate-y-3">
+            <p>{diaryEntry.contentJson} </p>
             <Link
               className="text-blue-500 hover:underline"
               to="/diary/$id"
