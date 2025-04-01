@@ -83,35 +83,48 @@ const shaderHidden = new ShaderMaterial({
 
 export default function Ufo() {
   const { nodes } = useGLTF("/scene.glb");
+
+  const [pastSecondAnimation, setPastSecondAnimation] = useState(false);
   const ref = useRef<Group>(null);
   const [scale, setScale] = useState(0.06);
   const [yOffset, setYOffset] = useState(-1);
 
+  const handleResize = () => {
+    const width = window.innerWidth;
+
+    if (width < 460) {
+      // Special case for small mobile during first two animations
+      if (!pastSecondAnimation) {
+        setScale(0.032);
+      } else {
+        // After second animation, use regular mobile scale
+        if (width < 432) {
+          setScale(0.047);
+        } else {
+          setScale(0.047);
+        }
+      }
+      setYOffset(1);
+    } else if (width < 769) {
+      // Mobile
+      setScale(0.035);
+      setYOffset(1);
+    } else if (width < 1024) {
+      // Tablet
+      setScale(0.055);
+    } else {
+      // Desktop
+      setScale(0.06);
+    }
+  };
 
   useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width < 432) {
-        // Mobile
-        setScale(0.047);
-        setYOffset(1);
-      } else if (width < 769) {
-        // Mobile
-        setScale(0.035);
-        setYOffset(1);
-      } else if (width < 1024) {
-        // Tablet
-        setScale(0.055);
-      } else {
-        // Desktop
-        setScale(0.06);
-      }
-    };
-
     handleResize(); // set on mount
     window.addEventListener("resize", handleResize); // update on resize
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(handleResize, [pastSecondAnimation]);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -168,6 +181,9 @@ export default function Ufo() {
           end: "bottom center",
           scrub: true,
           //markers: true,
+          onComplete: () => {
+            setPastSecondAnimation(true);
+          },
         },
       },
     );
@@ -185,8 +201,12 @@ export default function Ufo() {
 
     // Rotate UFO, move down, and change transparency at the same time
     ufoTl
-      .to(ufoRotation, { x: -Math.PI * 0.65, ease: "power2.out" }, 0) // Start at time 0
-      .to(ufoPosition, { y: yOffset, ease: "power2.out" }, 0)
+      .to(ufoRotation, { x: -Math.PI * 0.64, ease: "power2.out", y: -10 }, 0) // Start at time 0
+      .to(
+        ufoPosition,
+        { y: yOffset + window.innerWidth < 769 ? 1.5 : 0, ease: "power2.out" },
+        0,
+      )
       .to(shader.uniforms.uOpacity, { value: 0.1, ease: "power2.out" }, 0);
 
     // Second animation: Restore UFO rotation on a different ScrollTrigger
@@ -201,7 +221,9 @@ export default function Ufo() {
     });
 
     // rotate to normal
-    rotateToNormal.to(ufoRotation, { x: 0, ease: "power2.out" });
+    rotateToNormal
+      .to(ufoRotation, { x: 0, ease: "power2.out" })
+      .to(ufoPosition, { y: yOffset, ease: "power2.out" }, 0);
 
     //change material properties
     const changeToDropper = gsap.timeline({
@@ -236,6 +258,7 @@ export default function Ufo() {
         start: "top center",
         end: "bottom center",
         scrub: true,
+
         //markers: true,
       },
     });
@@ -245,6 +268,7 @@ export default function Ufo() {
         value: 0.2,
         ease: "power2.out",
       },
+
       0,
     );
 

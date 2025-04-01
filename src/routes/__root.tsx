@@ -9,9 +9,6 @@ import {
 import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
 
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
 import { auth } from "~/lib/server/auth";
 import appCss from "~/lib/styles/app.css?url";
 
@@ -78,7 +75,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         {/*
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <TanStackRouterDevtools position="bottom-right" />
-       */ }
+       */}
         <Scripts />
       </body>
     </html>
