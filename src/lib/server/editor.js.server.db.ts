@@ -1,26 +1,35 @@
 "use server";
 
-import { db } from "~/lib/server/db";
-import {
-  user as userDb,
-  diaryEntry,
-  diaryCategory,
-  diaryWorkTableEntryCollaborator,
-  diaryWorkTableEntryCollaborator_User as collaboratorUserRelation,
-} from "~/lib/server/schema";
-import { eq, desc, inArray } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
+import { db } from "~/lib/server/db";
 import {
   DbDiaryEntry,
   DeleteDiaryEntryParamsSchema,
   GetDiaryEntryParamsSchema,
   SaveDiaryEntryContentParamsSchema,
   SaveDiaryEntryMetadataParamsSchema,
-  SaveDiaryEntryTableDataParamsSchema
+  SaveDiaryEntryTableDataParamsSchema,
 } from "~/lib/server/editor.js.server";
+import {
+  diaryWorkTableEntryCollaborator_User as collaboratorUserRelation,
+  diaryCategory,
+  diaryEntry,
+  diaryWorkTableEntryCollaborator,
+  user as userDb,
+} from "~/lib/server/schema";
 
 function revalidatePath(_path: string) {
   // Revalidate the path
+  void _path;
+}
+
+export async function getDiaryOwner(diaryId: string) {
+  const [result] = await db
+    .select({ createdAndOwnedBy: diaryEntry.createdAndOwnedBy })
+    .from(diaryEntry)
+    .where(eq(diaryEntry.id, diaryId));
+  return result?.createdAndOwnedBy;
 }
 
 export async function dbSaveDiaryEntryMetadata_server(
@@ -48,7 +57,7 @@ export async function dbSaveDiaryEntryMetadata_server(
 }
 
 export async function dbSaveDiaryEntryTableData_server(
-  params: z.infer<typeof SaveDiaryEntryTableDataParamsSchema>
+  params: z.infer<typeof SaveDiaryEntryTableDataParamsSchema>,
 ) {
   await db.transaction(async (tx) => {
     // New deletion: First, get the existing work table entry collaborator ids.
@@ -81,7 +90,7 @@ export async function dbSaveDiaryEntryTableData_server(
             workedAt: data.workedAt ?? new Date(),
             workedSeconds: data.workedSeconds,
             description: data.description,
-          }))
+          })),
         )
         .returning({ id: diaryWorkTableEntryCollaborator.id });
 
@@ -90,8 +99,8 @@ export async function dbSaveDiaryEntryTableData_server(
           data.workers.map((worker) => ({
             collaboratorId: collaborators[index].id,
             userId: worker.id,
-          }))
-        )
+          })),
+        ),
       );
     }
   });
@@ -99,7 +108,7 @@ export async function dbSaveDiaryEntryTableData_server(
 
 export async function dbSaveDiaryEntryContent_server(
   authed: boolean,
-  params: z.infer<typeof SaveDiaryEntryContentParamsSchema>
+  params: z.infer<typeof SaveDiaryEntryContentParamsSchema>,
 ) {
   if (!authed) return { lastEditedTimestamp: 0, diaryEntry: null };
 
@@ -122,12 +131,10 @@ export async function dbSaveDiaryEntryContent_server(
 
   revalidatePath("/diary");
 
-  return result
-    ? { diaryEntry: result }
-    : { diaryEntry: null };
+  return result ? { diaryEntry: result } : { diaryEntry: null };
 }
 
-export async function dbCreateDiaryEntry_server() {
+export async function dbCreateDiaryEntry_server(userId: string) {
   const newEntryId = await db.transaction(async (tx) => {
     const newEntryId = crypto.randomUUID();
     // Retrieve or create the "Unknown" category in a single transaction
@@ -154,6 +161,7 @@ export async function dbCreateDiaryEntry_server() {
       contentHtml: "<p></p>",
       published: false,
       diaryCategoryId: unknownCategoryId,
+      createdAndOwnedBy: userId,
     });
     return newEntryId;
   });
@@ -161,7 +169,9 @@ export async function dbCreateDiaryEntry_server() {
   return newEntryId;
 }
 
-export async function dbDeleteDiaryEntry_server(params: z.infer<typeof DeleteDiaryEntryParamsSchema>) {
+export async function dbDeleteDiaryEntry_server(
+  params: z.infer<typeof DeleteDiaryEntryParamsSchema>,
+) {
   await db.transaction(async (tx) => {
     // Delete dependent collaborator rows using a subquery for Work Table Entry IDs
     const workTableIds = (
@@ -169,7 +179,7 @@ export async function dbDeleteDiaryEntry_server(params: z.infer<typeof DeleteDia
         .select({ id: diaryWorkTableEntryCollaborator.id })
         .from(diaryWorkTableEntryCollaborator)
         .where(eq(diaryWorkTableEntryCollaborator.diaryEntryId, params.diaryEntryId))
-    ).map(item => item.id);
+    ).map((item) => item.id);
 
     if (workTableIds.length) {
       await tx
@@ -188,7 +198,7 @@ export async function dbDeleteDiaryEntry_server(params: z.infer<typeof DeleteDia
   revalidatePath("/diary"); // Revalidate after transaction commit
 }
 
-export async function dbReadDiaryEntries_server(authed: boolean) {
+export async function dbReadDiaryEntries_server(publicOnly: boolean) {
   const query = db
     .select({
       entry: diaryEntry,
@@ -198,16 +208,16 @@ export async function dbReadDiaryEntries_server(authed: boolean) {
     .from(diaryEntry)
     .leftJoin(
       diaryWorkTableEntryCollaborator,
-      eq(diaryEntry.id, diaryWorkTableEntryCollaborator.diaryEntryId)
+      eq(diaryEntry.id, diaryWorkTableEntryCollaborator.diaryEntryId),
     )
     .leftJoin(
       collaboratorUserRelation,
-      eq(diaryWorkTableEntryCollaborator.id, collaboratorUserRelation.collaboratorId)
+      eq(diaryWorkTableEntryCollaborator.id, collaboratorUserRelation.collaboratorId),
     )
     .leftJoin(userDb, eq(collaboratorUserRelation.userId, userDb.id))
     .orderBy(desc(diaryEntry.day));
 
-  if (!authed) {
+  if (publicOnly) {
     const entries = await query.where(eq(diaryEntry.published, true));
     return { entries: groupEntries(entries), publicOnly: true as const };
   }
@@ -216,7 +226,9 @@ export async function dbReadDiaryEntries_server(authed: boolean) {
   return { entries: groupEntries(allEntries), publicOnly: false as const };
 }
 
-export async function dbGetDiaryEntry_server(params: z.infer<typeof GetDiaryEntryParamsSchema>) {
+export async function dbGetDiaryEntry_server(
+  params: z.infer<typeof GetDiaryEntryParamsSchema>,
+) {
   const result = await db
     .select({
       entry: diaryEntry,
@@ -226,11 +238,11 @@ export async function dbGetDiaryEntry_server(params: z.infer<typeof GetDiaryEntr
     .from(diaryEntry)
     .leftJoin(
       diaryWorkTableEntryCollaborator,
-      eq(diaryEntry.id, diaryWorkTableEntryCollaborator.diaryEntryId)
+      eq(diaryEntry.id, diaryWorkTableEntryCollaborator.diaryEntryId),
     )
     .leftJoin(
       collaboratorUserRelation,
-      eq(diaryWorkTableEntryCollaborator.id, collaboratorUserRelation.collaboratorId)
+      eq(diaryWorkTableEntryCollaborator.id, collaboratorUserRelation.collaboratorId),
     )
     .leftJoin(userDb, eq(collaboratorUserRelation.userId, userDb.id))
     .where(eq(diaryEntry.id, params.diaryEntryId));
@@ -238,7 +250,24 @@ export async function dbGetDiaryEntry_server(params: z.infer<typeof GetDiaryEntr
   return result.length > 0 ? groupEntries(result)[0] : null;
 }
 
-function groupEntries(rows: any[]): DbDiaryEntry[] {
+function groupEntries(
+  rows: Array<{
+    entry: Omit<DbDiaryEntry, "workTableEntries">;
+    collaborator: {
+      id: number;
+      description: string;
+      workedAt: Date | null;
+      workedSeconds: number;
+      diaryEntryId: string;
+      createdAt: Date;
+    } | null;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  }>,
+): DbDiaryEntry[] {
   const entriesMap = new Map<string, DbDiaryEntry>();
 
   for (const row of rows) {
@@ -252,13 +281,14 @@ function groupEntries(rows: any[]): DbDiaryEntry[] {
 
     const currentEntry = entriesMap.get(entry.id)!;
     if (row.collaborator) {
+      const collaborator = row.collaborator;
       const existingCollaborator = currentEntry.workTableEntries.find(
-        (c) => c.id === row.collaborator.id
+        (c) => c.id === collaborator.id,
       );
 
       if (!existingCollaborator) {
         currentEntry.workTableEntries.push({
-          ...row.collaborator,
+          ...collaborator,
           workers: row.user ? [row.user] : [],
         });
       } else if (row.user) {
@@ -270,9 +300,7 @@ function groupEntries(rows: any[]): DbDiaryEntry[] {
   return Array.from(entriesMap.values());
 }
 
-export async function dbDiaryEntryGetWorkers_server(authed: boolean) {
-  if (!authed) return [];
-
+export async function getAllUserInformation_server() {
   return db
     .select({
       id: userDb.id,

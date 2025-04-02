@@ -4,12 +4,14 @@ import { authMiddleware, authMiddlewareOptional } from "~/lib/middleware/auth-gu
 import {
   dbCreateDiaryEntry_server,
   dbDeleteDiaryEntry_server,
-  dbDiaryEntryGetWorkers_server,
   dbReadDiaryEntries_server,
   dbSaveDiaryEntryContent_server,
   dbSaveDiaryEntryMetadata_server,
   dbSaveDiaryEntryTableData_server,
+  getAllUserInformation_server,
+  getDiaryOwner,
 } from "~/lib/server/editor.js.server.db";
+import { hasPermission } from "~/lib/server/permissions";
 import { diaryEntry } from "~/lib/server/schema";
 
 export const SaveDiaryEntryMetadataParamsSchema = z.object({
@@ -73,15 +75,42 @@ export const dbSaveDiaryEntryMetadata = createServerFn({ method: "POST" })
   .validator(SaveDiaryEntryMetadataParamsSchema)
   .middleware([authMiddleware])
   .handler(async (req) => {
-    const res = await dbSaveDiaryEntryMetadata_server(req.data);
-    return { success: true, data: res };
+    const user = req.context.user;
+    const diaryOwner = await getDiaryOwner(req.data.diaryEntryId);
+    const hasPermEditDiary = hasPermission("edit:diary", user);
+    const hasPermEditOwnDiary =
+      hasPermission("editOwn:diary", user) && user.id === diaryOwner;
+
+    if (hasPermEditDiary || hasPermEditOwnDiary) {
+      const res = await dbSaveDiaryEntryMetadata_server(req.data);
+      return { success: true, data: res };
+    } else {
+      return {
+        success: false,
+        reason: "Permission denied",
+      };
+    }
   });
 
 export const dbSaveDiaryEntryTableData = createServerFn({ method: "POST" })
   .validator(SaveDiaryEntryTableDataParamsSchema)
   .middleware([authMiddleware])
   .handler(async (req) => {
-    dbSaveDiaryEntryTableData_server(req.data);
+    const user = req.context.user;
+    const diaryOwner = await getDiaryOwner(req.data.diaryEntryId);
+    const hasPermEditDiary = hasPermission("edit:diary", user);
+    const hasPermEditOwnDiary =
+      hasPermission("editOwn:diary", user) && user.id === diaryOwner;
+
+    if (hasPermEditDiary || hasPermEditOwnDiary) {
+      await dbSaveDiaryEntryTableData_server(req.data);
+      return { success: true };
+    } else {
+      return {
+        success: false,
+        reason: "Permission denied",
+      };
+    }
   });
 
 export const dbSaveDiaryEntryContent = createServerFn({ method: "POST" })
@@ -89,31 +118,76 @@ export const dbSaveDiaryEntryContent = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .handler(async (req) => {
     const user = req.context.user;
+    const diaryOwner = await getDiaryOwner(req.data.diaryEntryId);
+    const hasPermEditDiary = hasPermission("edit:diary", user);
+    const hasPermEditOwnDiary =
+      hasPermission("editOwn:diary", user) && user.id === diaryOwner;
 
-    const res = await dbSaveDiaryEntryContent_server(!!user, req.data);
-    return { success: true, data: res };
+    if (hasPermEditDiary || hasPermEditOwnDiary) {
+      const res = await dbSaveDiaryEntryContent_server(!!user, req.data);
+      return { success: true, data: res };
+    } else {
+      return {
+        success: false,
+        reason: "Permission denied",
+      };
+    }
   });
 
 export const dbCreateDiaryEntry = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .handler(async () => {
-    const res = await dbCreateDiaryEntry_server();
-    return { success: true, data: res };
+  .handler(async (req) => {
+    const user = req.context.user;
+    const hasPermCreateDiary = hasPermission("create:diary", user);
+
+    if (hasPermCreateDiary) {
+      const res = await dbCreateDiaryEntry_server(user.id);
+      return { success: true, data: res };
+    } else {
+      return {
+        success: false,
+        reason: "Permission denied",
+      };
+    }
   });
 
 export const dbDeleteDiaryEntry = createServerFn({ method: "POST" })
   .validator(DeleteDiaryEntryParamsSchema)
   .middleware([authMiddleware])
   .handler(async (req) => {
-    await dbDeleteDiaryEntry_server(req.data);
-    return { success: true };
+    const user = req.context.user;
+    const diaryOwner = await getDiaryOwner(req.data.diaryEntryId);
+    const hasPermDeleteDiary = hasPermission("delete:diary", user);
+    const hasPermDeleteOwnDiary =
+      hasPermission("deleteOwn:diary", user) && user.id === diaryOwner;
+
+    if (hasPermDeleteDiary || hasPermDeleteOwnDiary) {
+      await dbDeleteDiaryEntry_server(req.data);
+      return { success: true };
+    } else {
+      return {
+        success: false,
+        reason: "Permission denied",
+      };
+    }
   });
 
 export const dbReadDiaryEntries = createServerFn({ method: "GET" })
   .middleware([authMiddlewareOptional])
   .handler(async (req) => {
     const user = req.context.user;
-    const res = await dbReadDiaryEntries_server(!!user);
+
+    const hasPermListDiary = hasPermission("list:diary", user);
+    if (!hasPermListDiary) {
+      return {
+        success: false,
+        reason: "Permission denied",
+      };
+    }
+
+    const hasPermListAllEntriesFromDiary = hasPermission("listAll:diary", user);
+
+    const res = await dbReadDiaryEntries_server(!hasPermListAllEntriesFromDiary);
     return { success: true, data: res };
   });
 
@@ -121,7 +195,16 @@ export const dbDiaryEntryGetWorkers = createServerFn({ method: "GET" })
   .middleware([authMiddlewareOptional])
   .handler(async (req) => {
     const user = req.context.user;
-    const res = await dbDiaryEntryGetWorkers_server(!!user);
+
+    const hasPermGetAllUserInformation = hasPermission("list:all-users", user);
+    if (!hasPermGetAllUserInformation) {
+      return {
+        success: false,
+        reason: "Permission denied",
+      };
+    }
+
+    const res = await getAllUserInformation_server();
     return { success: true, data: res };
   });
 
