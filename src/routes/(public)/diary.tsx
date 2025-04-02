@@ -5,6 +5,7 @@ import { PlusIcon } from "lucide-react";
 import ClientOnly from "~/lib/components/ClientOnlyComponent";
 import { Button } from "~/lib/components/ui/button";
 
+import { useMediaQuery } from "@uidotdev/usehooks";
 import {
   DiaryEntry,
   DiaryEntryContent,
@@ -13,8 +14,6 @@ import {
 } from "~/lib/components/ui/diary-entries";
 import { DeleteDiary, EditDiary } from "~/lib/components/wrapper/diary/diary-edit-dialog";
 import { dbCreateDiaryEntry, dbReadDiaryEntries } from "~/lib/server/editor.js.server";
-import * as React from "react";
-import { useMediaQuery } from "@uidotdev/usehooks";
 
 export const Route = createFileRoute("/(public)/diary")({
   component: DiaryList,
@@ -102,61 +101,28 @@ function FinalDiaryEntry({
   ];
 
   const selectedSvg = largeSvgs[rand];
-  const titleFontSize = diaryEntry.title.length > 23 ? "50px" : "60px";
 
   return (
     <DiaryEntryItem key={diaryEntry.id} value={diaryEntry.id}>
       <div className="relative">
         <DiaryEntryTrigger className="relative group diary-entry">
           <svg
-            preserveAspectRatio="xMidYMid meet" // Maintain aspect ratio while scaling
-            className="w-full scale-150 xs:scale-125 md:scale-100  -translate-x-[25%] xs:-translate-x-[10%] md:translate-x-0 h-auto" // Make SVG responsive
-            viewBox="0 0 1444 218"
+            preserveAspectRatio="xMidYMin meet" // Maintain aspect ratio while scaling
+            className="w-full scale-150 xs:scale-125 md:scale-100  -translate-x-[20%] xs:-translate-x-[10%] md:translate-x-0 h-auto" // Make SVG responsive
+            viewBox={`0 ${isMobile ? "-38" : "0"} 1444 ${isMobile ? "250" : "218"}`}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <g filter="url(#mainShadow)">
               <path d={selectedSvg.d} fill="#23CF51" />
               <text
-                x={isMobile ? "53%" : isTablet ? "41%" : "30%"}
-                y="47%"
-                fontSize={titleFontSize}
-                className="fill-white font-bold max-w-[50%] truncate"
+                x={isMobile ? "35%" : isTablet ? "45%" : "36%"}
+                y={isMobile ? "50%" : "54%"}
+                fontSize={isMobile ? "80px" : isTablet ? "70px" : "80px"}
+                className="fill-white font-bold w-[10%] truncate"
               >
                 {diaryEntry.title}
               </text>
-              <g className="md:translate-x-0 xs:translate-x-[15%] translate-x-[28%]">
-                <g
-                  filter="url(#dayShadow)"
-                  className="-translate-x-[5rem] md:translate-0 scale-115 md:scale-none"
-                >
-                  <path d="M143 11.5L248.5 5L245.5 79L143 74.5V11.5Z" fill="white" />
-                  <text
-                    x={day.toString().includes("1") ? "36%" : "35%"}
-                    y="5%"
-                    fontSize="60"
-                    className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
-                  >
-                    {day < 10 ? "0" + day : day}
-                  </text>
-                </g>
-
-                <g
-                  filter="url(#monthShadow)"
-                  className="-translate-x-[5rem] md:translate-0 scale-115 md:scale-none"
-                >
-                  <path d="M264.124 6L359 18.478V84L256.5 75.5L264.124 6Z" fill="white" />
-                  <text
-                    x={month.toString().includes("1") ? "44%" : "43.2%"}
-                    y="6%"
-                    fontSize="60"
-                    className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
-                  >
-                    {month < 10 ? "0" + month : month}
-                  </text>
-                </g>
-              </g>
-
               <g
                 filter="url(#accordionhadow)"
                 className="diary-entry-arrow text-muted-foreground transition-all transition-transform duration-200 shrink-0 translate-x-[90%] translate-y-[35%]  h-auto w-[16rem] group-hover:translate-y-[25%] scale-140 md:scale-130"
@@ -166,6 +132,37 @@ function FinalDiaryEntry({
                   d="M78 43L40.6408 23.1226L4 43V23.1226L40.6408 0L78 23.1226V43Z"
                   fill="#191919"
                 />
+              </g>
+            </g>
+            <g className="md:translate-x-0 xs:translate-x-[15%] translate-x-[28%] -translate-y-[18%] xs:translate-y-0 md:translate-y-0">
+              <g
+                filter="url(#dayShadow)"
+                className="-translate-x-[5rem] md:translate-0 scale-125 xs:scale-115 md:scale-none"
+              >
+                <path d="M143 11.5L248.5 5L245.5 79L143 74.5V11.5Z" fill="white" />
+                <text
+                  x={day.toString().includes("1") ? "36%" : "35%"}
+                  y={isMobile ? "0%" : "5%"}
+                  fontSize="60"
+                  className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
+                >
+                  {day < 10 ? "0" + day : day}
+                </text>
+              </g>
+
+              <g
+                filter="url(#monthShadow)"
+                className="-translate-x-[5rem] md:translate-0 scale-125 xs:scale-115 md:scale-none"
+              >
+                <path d="M264.124 6L359 18.478V84L256.5 75.5L264.124 6Z" fill="white" />
+                <text
+                  x={month.toString().includes("1") ? "44%" : "43.2%"}
+                  y={isMobile ? "0%" : "6%"}
+                  fontSize="60"
+                  className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
+                >
+                  {month < 10 ? "0" + month : month}
+                </text>
               </g>
             </g>
             <defs>
@@ -211,9 +208,9 @@ function FinalDiaryEntry({
                 width="1468.6"
                 height="212.8"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                   in="SourceAlpha"
                   type="matrix"
@@ -246,9 +243,9 @@ function FinalDiaryEntry({
                 width="113.5"
                 height="82"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                   in="SourceAlpha"
                   type="matrix"
@@ -281,9 +278,9 @@ function FinalDiaryEntry({
                 width="111.907"
                 height="86"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                   in="SourceAlpha"
                   type="matrix"
@@ -316,9 +313,9 @@ function FinalDiaryEntry({
                 width="110.5"
                 height="86"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                   in="SourceAlpha"
                   type="matrix"
