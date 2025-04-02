@@ -5,6 +5,7 @@ import {
   dbCreateDiaryEntry_server,
   dbDeleteDiaryEntry_server,
   dbReadDiaryEntries_server,
+  dbReadDiaryEntry_server,
   dbSaveDiaryEntryContent_server,
   dbSaveDiaryEntryMetadata_server,
   dbSaveDiaryEntryTableData_server,
@@ -189,6 +190,40 @@ export const dbReadDiaryEntries = createServerFn({ method: "GET" })
 
     const res = await dbReadDiaryEntries_server(!hasPermListAllEntriesFromDiary);
     return { success: true, data: res };
+  });
+
+export const dbReadDiaryEntry = createServerFn({ method: "GET" })
+  .validator(GetDiaryEntryParamsSchema)
+  .middleware([authMiddlewareOptional])
+  .handler(async (req) => {
+    const user = req.context.user;
+
+    const hasPermReadDiary = hasPermission("read:diary", user);
+    const hasPermReadOwnDiary = hasPermission("readOwn:diary", user);
+
+    if (!hasPermReadDiary && !hasPermReadOwnDiary) {
+      return {
+        success: false,
+        reason: "Permission denied",
+      };
+    }
+
+    const checkOwnedOnly = !hasPermReadDiary && hasPermReadOwnDiary;
+
+    const diaryEntry = await dbReadDiaryEntry_server(
+      req.data.diaryEntryId,
+      checkOwnedOnly,
+      user?.id,
+    );
+
+    if (!diaryEntry) {
+      return {
+        success: false,
+        reason: "Diary entry not found or you don't own the entry",
+      };
+    }
+
+    return { success: true, data: diaryEntry };
   });
 
 export const dbDiaryEntryGetWorkers = createServerFn({ method: "GET" })

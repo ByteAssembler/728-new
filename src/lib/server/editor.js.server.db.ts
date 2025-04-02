@@ -1,6 +1,6 @@
 "use server";
 
-import { desc, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "~/lib/server/db";
 import {
@@ -224,6 +224,48 @@ export async function dbReadDiaryEntries_server(publicOnly: boolean) {
 
   const allEntries = await query;
   return { entries: groupEntries(allEntries), publicOnly: false as const };
+}
+
+export async function dbReadDiaryEntry_server(
+  diaryEntryId: string,
+  ownOnly: boolean,
+  userId?: string,
+) {
+  let condition;
+  if (ownOnly) {
+    if (!userId) {
+      return null;
+    } else {
+      condition = and(
+        eq(diaryEntry.id, diaryEntryId),
+        eq(diaryEntry.createdAndOwnedBy, userId),
+      );
+    }
+  } else {
+    condition = eq(diaryEntry.id, diaryEntryId);
+  }
+
+  const query = db
+    .select({
+      entry: diaryEntry,
+      collaborator: diaryWorkTableEntryCollaborator,
+      user: userDb,
+    })
+    .from(diaryEntry)
+    .where(condition)
+    .leftJoin(
+      diaryWorkTableEntryCollaborator,
+      eq(diaryEntry.id, diaryWorkTableEntryCollaborator.diaryEntryId),
+    )
+    .leftJoin(
+      collaboratorUserRelation,
+      eq(diaryWorkTableEntryCollaborator.id, collaboratorUserRelation.collaboratorId),
+    )
+    .leftJoin(userDb, eq(collaboratorUserRelation.userId, userDb.id))
+    .limit(1);
+
+  const result = await query;
+  return result.length > 0 ? groupEntries(result)[0] : null;
 }
 
 export async function dbGetDiaryEntry_server(
