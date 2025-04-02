@@ -361,16 +361,18 @@ function FinalDiaryEntry({
             )}
           </div>
 
-          <div className="gap-4 -translate-y-3">
-            <p>{diaryEntry.contentJson} </p>
-            <Link
-              className="text-blue-500 hover:underline"
-              to="/diary/$id"
-              params={{ id: diaryEntry.id }}
-            >
-              Read more
-            </Link>
-          </div>
+          {diaryEntry.contentHtml && (
+            <div className="gap-4 -translate-y-3">
+              <p dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}></p>
+              <Link
+                className="text-blue-500 hover:underline"
+                to="/diary/$id"
+                params={{ id: diaryEntry.id }}
+              >
+                Read more
+              </Link>
+            </div>
+          )}
         </div>
       </DiaryEntryContent>
     </DiaryEntryItem>
