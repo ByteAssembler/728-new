@@ -3,7 +3,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { motion } from "motion/react";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Ufo from "~/assets/ufo.png";
 
 function HeaderNormal() {
@@ -142,7 +142,18 @@ function HeaderNormal() {
   }, [location]); //route change
 
   function changeRouteTitle() {
-    const entry = headerEntries.find((item) => item.pathname === location.pathname);
+    const entry = headerEntries.find((item) => {
+      // Exact match (for paths like /car, /about)
+      if (item.pathname === location.pathname) {
+        return true;
+      }
+      // Check if the current path starts with the entry's pathname
+      // and has more segments (for paths like /diary/whatever)
+      if (location.pathname.startsWith(item.pathname + "/") && item.pathname !== "/") {
+        return true;
+      }
+      return false;
+    });
 
     // Ensure entry is found before setting the title
     if (entry) {
@@ -152,26 +163,29 @@ function HeaderNormal() {
     }
   }
 
-  const handleClick = useCallback((event: MouseEvent) => {
-    if (triangleRef.current) {
-      const svgElement = triangleRef.current;
-      const point = svgElement.createSVGPoint();
-      point.x = event.clientX;
-      point.y = event.clientY;
-      const ctm = svgElement.getScreenCTM();
-      if (ctm) {
-        const transformedPoint = point.matrixTransform(ctm.inverse());
-        const path = svgElement.querySelector("path");
-        if (path && path instanceof SVGGeometryElement) {
-          const isInPath = path.isPointInFill(transformedPoint);
-          if (!isInPath) {
-            setIsOpen(false);
-            disableScroll();
+  const handleClick = useCallback(
+    (event: MouseEvent) => {
+      if (triangleRef.current) {
+        const svgElement = triangleRef.current;
+        const point = svgElement.createSVGPoint();
+        point.x = event.clientX;
+        point.y = event.clientY;
+        const ctm = svgElement.getScreenCTM();
+        if (ctm) {
+          const transformedPoint = point.matrixTransform(ctm.inverse());
+          const path = svgElement.querySelector("path");
+          if (path && path instanceof SVGGeometryElement) {
+            const isInPath = path.isPointInFill(transformedPoint);
+            if (!isInPath) {
+              setIsOpen(false);
+              disableScroll();
+            }
           }
         }
       }
-    }
-  }, [disableScroll]);
+    },
+    [disableScroll],
+  );
 
   async function setUfoPos() {
     if (buttonRef.current && triangleRef.current && isOpen) {
@@ -184,8 +198,8 @@ function HeaderNormal() {
       console.log("globalthis:" + globalThis.innerWidth);
       console.log(
         "function:" +
-        (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
-        (24 + 0.015 * (globalThis.innerWidth - 361)),
+          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+            (24 + 0.015 * (globalThis.innerWidth - 361)),
       );
       console.log("triangle:" + triangle.width);
 
@@ -384,7 +398,7 @@ function HeaderNormal() {
                                   : 0
                             : 499
                           : //mobile
-                          isTablet
+                            isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -395,7 +409,7 @@ function HeaderNormal() {
                                     : 0
                               : 499
                             : //tablet
-                            index !== 0
+                              index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
@@ -601,12 +615,12 @@ function HeaderAdmin() {
       console.log(rect.left);
       const middleX = isTablet
         ? (globalThis.innerWidth / (25 + 0.02 * (globalThis.innerWidth - 600.5))) *
-        (24 + 0.02 * (globalThis.innerWidth - 600.5)) -
-        triangle.width
+            (24 + 0.02 * (globalThis.innerWidth - 600.5)) -
+          triangle.width
         : isMobile
           ? (globalThis.innerWidth / (49 + 0.015 * (globalThis.innerWidth - 361))) *
-          (47 + 0.015 * (globalThis.innerWidth - 361)) -
-          triangle.width
+              (47 + 0.015 * (globalThis.innerWidth - 361)) -
+            triangle.width
           : rect.left + (rect.width / 2) * 1.3 - triangle.width;
       const middleY = rect.top + rect.height - 25;
       setUfoPosition({ x: middleX, y: middleY });
@@ -797,7 +811,7 @@ function HeaderAdmin() {
                                     : 0
                             : 499
                           : //mobile
-                          isTablet
+                            isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -810,7 +824,7 @@ function HeaderAdmin() {
                                       : 0
                               : 499
                             : //tablet
-                            index !== 0
+                              index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
