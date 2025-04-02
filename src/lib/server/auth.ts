@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
+import { AllPossibleRoles } from "~/lib/server/permissions";
 import { db } from "./db";
 
 export const auth = betterAuth({
@@ -8,6 +9,16 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        defaultValue: "default" as AllPossibleRoles,
+        input: false,
+      },
+    },
+  },
 
   // https://www.better-auth.com/docs/concepts/session-management#session-caching
   session: {

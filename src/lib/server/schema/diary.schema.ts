@@ -38,6 +38,9 @@ export const diaryEntry = pgTable("DiaryEntry", {
     .references(() => diaryCategory.id, { onDelete: "restrict" }), // PREVENT CATEGORY DELETION
   day: timestamp("day").defaultNow().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAndOwnedBy: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }), // CASCADE On User delete
 }, (table) => ({
   dayIdx: index("day_idx").on(table.day),
   publishedIdx: index("published_idx").on(table.published),
