@@ -11,8 +11,8 @@ const Image: React.FC<ImageProps> = ({
   src,
   alt,
   fit = "cover",
-  containerStyle = {},
-  style = {},
+  containerStyle,
+  style,
   ...imgProps
 }) => {
   return (
@@ -21,7 +21,7 @@ const Image: React.FC<ImageProps> = ({
         position: "relative",
         width: "100%",
         height: "100%",
-        ...containerStyle,
+        ...(containerStyle || {}),
       }}
     >
       <img
@@ -34,7 +34,7 @@ const Image: React.FC<ImageProps> = ({
           width: "100%",
           height: "100%",
           objectFit: fit,
-          ...style,
+          ...(style || {}),
         }}
         {...imgProps}
       />
