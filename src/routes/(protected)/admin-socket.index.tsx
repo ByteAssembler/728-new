@@ -50,63 +50,31 @@ function SocketPage() {
     };
   }, []);
 
-  /*
-  useEffect(() => {
-    const handleServerMessage = (data: unknown) => {
-      console.log("Message from server:", data);
-    };
+  const sendMove = (x: number, y: number) => emitEvent("control__move", { x, y });
+  const sendRotation = (deg: number) => emitEvent("control__rotate", { deg });
+  const sendHallo = () => emitEvent("hallo", { message: "Hallo Server!" });
 
-    on("message", handleServerMessage);
-
-    return () => {
-      socket.off("message", handleServerMessage);
-    };
-  }, [on, socket]);
-  */
-
-  const sendUnreliableCommand = (x: number, y: number) => {
-    emitEvent("control__move", { x, y });
-    console.log("Unreliable command sent:", { x, y });
-  };
-
-  const sendReliableCommand = (deg: number) => {
-    emitEvent("control__rotate", { deg });
-  };
-
-  const setPointPosition = (x: number, y: number) => {
-    controllerRef.current?.setPointPosition(x, y, true, true);
-  };
-
-  const sendHallo = () => {
-    emitEvent("hallo", { message: "Hallo Server!" });
-  };
-
-  const onValueChange = (x: number, y: number, execute: boolean) => {
-    console.log(x, y, execute);
-
-    sendUnreliableCommand(x, y);
-  };
+  const setPointPosition = (x: number, y: number) => controllerRef.current?.setPointPosition(x, y, true, true);
 
   const setCustomAutomatic = (value: boolean) => {
     setAutomatic(value);
     emitEvent("control__automatic", { value });
-    console.log("Automatic:", value);
   };
 
   return (
     <div className="container p-6">
       <div className="flex flex-col gap-3">
         <div className="flex gap-2 flex-wrap">
-          <Button onClick={() => sendUnreliableCommand(0, 0)}>Stopp</Button>
-          <Button onClick={() => sendUnreliableCommand(0, -1)}>Vorwärts</Button>
-          <Button onClick={() => sendUnreliableCommand(0, 1)}>Rückwärts</Button>
-          <Button onClick={() => sendUnreliableCommand(1, 0)}>Rechts</Button>
-          <Button onClick={() => sendUnreliableCommand(-1, 0)}>Links</Button>
+          <Button onClick={() => sendMove(0, 0)}>Stopp</Button>
+          <Button onClick={() => sendMove(0, -1)}>Vorwärts</Button>
+          <Button onClick={() => sendMove(0, 1)}>Rückwärts</Button>
+          <Button onClick={() => sendMove(1, 0)}>Rechts</Button>
+          <Button onClick={() => sendMove(-1, 0)}>Links</Button>
         </div>
 
         <div className="flex gap-2 flex-wrap">
-          <Button onClick={() => sendReliableCommand(90)}>Drehen 90°</Button>
-          <Button onClick={() => sendReliableCommand(-90)}>Drehen -90°</Button>
+          <Button onClick={() => sendRotation(90)}>Drehen 90°</Button>
+          <Button onClick={() => sendRotation(-90)}>Drehen -90°</Button>
         </div>
 
         <div>
@@ -133,7 +101,7 @@ function SocketPage() {
         </div>
 
         <div className="h-[60vh] w-[60vw] bg-violet-400">
-          <Controller ref={controllerRef} onValueChange={onValueChange} />
+          <Controller ref={controllerRef} onValueChange={sendMove} />
         </div>
       </div>
     </div>
