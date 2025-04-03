@@ -77,7 +77,9 @@ function SocketPage() {
       <div className="flex flex-col gap-3">
 
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold">Socket Page</h1>
+          <h1 className="text-3xl font-bold">
+            Admin Panel
+          </h1>
           <p className="flex gap-2">
             <span className="font-bold">Connected:</span> {String(isConnected)}
             {lastError && <>
@@ -122,7 +124,7 @@ function SocketPage() {
           <Button onClick={() => sendDrop()}>Abwerfen</Button>
         </div>
 
-        <div className="h-[60vh] w-[60vw] bg-violet-400">
+        <div className="h-[50vh] w-[50vw] bg-violet-400">
           <Controller ref={controllerRef} onValueChange={sendMove} />
         </div>
       </div>

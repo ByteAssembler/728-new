@@ -125,7 +125,7 @@ function FinalDiaryEntry({
               </text>
               <g
                 filter="url(#accordionhadow)"
-                className="diary-entry-arrow text-muted-foreground transition-all transition-transform duration-200 shrink-0 translate-x-[90%] translate-y-[35%]  h-auto w-[16rem] group-hover:translate-y-[25%] scale-140 md:scale-130"
+                className="diary-entry-arrow text-muted-foreground transition-all duration-200 shrink-0 translate-x-[90%] translate-y-[35%]  h-auto w-[16rem] group-hover:translate-y-[25%] scale-140 md:scale-130"
                 style={{ transformOrigin: "41px 21.5px" }}
               >
                 <path

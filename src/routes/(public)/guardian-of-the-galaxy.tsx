@@ -88,7 +88,7 @@ function Home() {
       startBottom = 42,
       spacing = 4,
     }: {
-      elements: any[];
+      elements: unknown[];
       startBottom?: number;
       spacing?: number;
     }) => {
@@ -152,7 +152,7 @@ function Home() {
         // Get the position and dimensions of the 4th item
         const boxRect = fourthItem.getBoundingClientRect();
         const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        // const viewportHeight = window.innerHeight;
 
         // Calculate the position for the 3rd item
         // It should be positioned to the left of the 4th item

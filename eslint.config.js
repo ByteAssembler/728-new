@@ -22,6 +22,18 @@ export default tseslint.config(
       ...pluginQuery.configs["flat/recommended"],
       ...pluginRouter.configs["flat/recommended"],
     ],
+    rules: {
+      "no-unused-vars": "off",
+
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
+    }
   },
   {
     files: ["**/*.{ts,tsx}"],
@@ -55,7 +67,6 @@ export default tseslint.config(
       // "@eslint-react/prefer-read-only-props": "off",
       // "@eslint-react/no-forward-ref": "off",
       // "@eslint-react/no-context-provider": "off",
-      // "react-compiler/react-compiler": "warn",
     },
   },
 );
