@@ -61,6 +61,11 @@ function SocketPage() {
   const sendTogglePan = (value: boolean) => emitEvent("control__pan", { value });
   const sendDrop = () => emitEvent("control__drop", {});
 
+  const sendToggleMagnet = (value: boolean) => emitEvent("control__magnet", { value });
+  const sendMagnetMoveUpUntilStop = () => emitEvent("control__magnet", { direction: "up", value: null, upUntilStop: true, stop: false });
+  const sendMagnetMoveDownUntilStop = () => emitEvent("control__magnet", { direction: "down", value: null, upUntilStop: true, stop: false });
+  const sendMagnetMoveStop = () => emitEvent("control__magnet", { direction: "stop", value: null, upUntilStop: false, stop: true });
+
   const setPointPosition = (x: number, y: number) => controllerRef.current?.setPointPosition(x, y, true, true);
 
   const setCustomAutomatic = (value: boolean) => {
@@ -122,6 +127,31 @@ function SocketPage() {
 
         <div className="flex gap-2 flex-wrap">
           <Button onClick={() => sendDrop()}>Abwerfen</Button>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button onClick={() => sendToggleMagnet(true)}>Magnet an 🟢</Button>
+          <Button onClick={() => sendToggleMagnet(false)}>Magnet aus 🔴</Button>
+
+          <span className="text-muted-foreground">
+            &nbsp;|&nbsp;
+          </span>
+
+          <Button onClick={() => sendMagnetMoveUpUntilStop()}>Magnet hoch ⬆️</Button>
+          <Button onClick={() => sendMagnetMoveDownUntilStop()}>Magnet runter ⬇️</Button>
+
+          <span className="text-muted-foreground">
+            &nbsp;|&nbsp;
+          </span>
+
+          <Button onClick={() => sendMagnetMoveStop()}>Magnet-Bewegung stoppen</Button>
+
+          <span className="text-muted-foreground">
+            &nbsp;|&nbsp;
+          </span>
+
+          <Button variant="secondary" onMouseDown={() => sendMagnetMoveUpUntilStop()} onMouseUp={() => sendMagnetMoveStop()}>Magnet hoch (hold) ⬆️</Button>
+          <Button variant="secondary" onMouseDown={() => sendMagnetMoveDownUntilStop()} onMouseUp={() => sendMagnetMoveStop()}>Magnet runter (hold) ⬇️</Button>
         </div>
 
         <div className="h-[50vh] w-[50vw] bg-violet-400">
