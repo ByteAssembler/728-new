@@ -58,7 +58,7 @@ function SocketPage() {
   const sendMove = (x: number, y: number) => emitEvent("control__move", { x, y });
   const sendRotation = (deg: number) => emitEvent("control__rotate", { deg });
   const sendHallo = () => emitEvent("hallo", { message: "Hallo Server!" });
-  const sendTogglePan = (value: boolean) => emitEvent("control__pan", { value });
+  const sendTogglePan = (value: boolean) => emitEvent("control__pan", { value: value ? "open" : "close" });
   const sendDrop = () => emitEvent("control__drop", {});
 
   const sendToggleMagnet = (value: boolean) => emitEvent("control__magnet", { value });
