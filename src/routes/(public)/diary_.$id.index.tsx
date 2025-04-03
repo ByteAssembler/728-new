@@ -1,15 +1,26 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { dbReadDiaryEntry } from "~/lib/server/editor.js.server";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "~/lib/components/ui/table";
-import { Avatar, AvatarFallback } from "~/lib/components/ui/avatar";
+"use client";
 
-export const Route = createFileRoute('/(public)/diary_/$id/')({
+import { createFileRoute } from "@tanstack/react-router";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { Avatar, AvatarFallback } from "~/lib/components/ui/avatar";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/lib/components/ui/table";
+import { dbReadDiaryEntry } from "~/lib/server/editor.js.server";
+
+export const Route = createFileRoute("/(public)/diary_/$id/")({
   component: DiaryEntry,
   loader: async (ctx) => {
     const diaryEntry = await dbReadDiaryEntry({
       data: {
         diaryEntryId: ctx.params.id,
-      }
+      },
     });
 
     let html;
@@ -49,7 +60,29 @@ function DiaryEntry() {
     return <div>Diary entry not found</div>;
   }
 
-  const date = new Date(diaryEntry.data?.day);
+  const dayDate = new Date(diaryEntry.data.day);
+  const day = dayDate.getDay();
+  const month = dayDate.getMonth() + 1;
+  const isMobile = useMediaQuery("(max-width: 431px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
+
+  const rand = Math.floor(Math.random() * 10) % 4;
+  const largeSvgs = [
+    { width: 1433, height: 171, d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z" },
+    {
+      width: 1433,
+      height: 183,
+      d: "M-14.5212 52.4957L1433 29L1387.12 212L-55 96.1836L-14.5212 52.4957Z",
+    },
+    {
+      width: 1433,
+      height: 186,
+      d: "M-30 52.3643L1384.5 17.5L1433 203L-30 101.5V52.3643Z",
+    },
+    { width: 1433, height: 193, d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z" },
+  ];
+
+  const selectedSvg = largeSvgs[rand];
 
   return (
     <main className="mx-auto py-8">
@@ -57,69 +90,197 @@ function DiaryEntry() {
         <div className="space-y-2 mb-8 w-full pr-[2vw] md:pr-[4vw]">
           <div className="relative ">
             <svg
-              className="absolute top-0 left-0 w-full h-auto"
-              width="1433"
-              height="171"
-              viewBox="0 0 1433 171"
+              preserveAspectRatio="xMidYMin meet" // Maintain aspect ratio while scaling
+              className="w-full scale-150 xs:scale-125 md:scale-100  -translate-x-[20%] xs:-translate-x-[10%] md:translate-x-0 h-auto" // Make SVG responsive
+              viewBox={`0 ${isMobile ? "-38" : "0"} 1444 ${isMobile ? "250" : "218"}`}
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path
-                d="M-18 23.4315L1433 0L1383.09 171L-18 66.5V23.4315Z"
-                fill="#23CF51"
-              />
-            </svg>
-            <div className="font-Orbitron flex flex-row gap-8 md:gap-[11vw] font-extrabold items-center">
-              <span className="flex z-10 gap-1 transform translate-x-2 md:translate-x-[4rem] -translate-y-[2rem] md:-translate-y-[2.2rem]">
-                <svg
-                  className="w-16 h-auto md:w-[7.5vw]"
-                  viewBox="0 0 106 74"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+              <g filter="url(#mainShadow)">
+                <path d={selectedSvg.d} fill="#23CF51" />
+                <text
+                  x={isMobile ? "35%" : isTablet ? "45%" : "36%"}
+                  y={isMobile ? "50%" : "54%"}
+                  fontSize={isMobile ? "80px" : isTablet ? "70px" : "80px"}
+                  className="fill-white font-bold w-[10%] truncate"
                 >
-                  <path d="M0 6.5L105.5 0L102.5 74L0 69.5V6.5Z" fill="white" />
+                  {diaryEntry.data.title}
+                </text>
+              </g>
+              <g className="md:translate-x-0 xs:translate-x-[15%] translate-x-[28%] -translate-y-[18%] xs:translate-y-0 md:translate-y-0">
+                <g
+                  filter="url(#dayShadow)"
+                  className="-translate-x-[5rem] md:translate-0 scale-125 xs:scale-115 md:scale-none"
+                >
+                  <path d="M143 11.5L248.5 5L245.5 79L143 74.5V11.5Z" fill="white" />
                   <text
-                    x={date.getDay().toString().includes("1") ? "36" : "29"}
-                    y="40"
+                    x={day.toString().includes("1") ? "36%" : "35%"}
+                    y={isMobile ? "0%" : "5%"}
                     fontSize="60"
                     className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
                   >
-                    {date.getDay() < 10 ? "0" + date.getDay() : date.getDay()}
+                    {day < 10 ? "0" + day : day}
                   </text>
-                </svg>
+                </g>
 
-                <svg
-                  className="w-16 h-auto md:w-[7.5vw]"
-                  viewBox="0 0 104 75"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                <g
+                  filter="url(#monthShadow)"
+                  className="-translate-x-[5rem] md:translate-0 scale-125 xs:scale-115 md:scale-none"
                 >
-                  <path
-                    d="M8.12406 0L103 12.478V78L0.5 69.5L8.12406 0Z"
-                    fill="white"
+                  <path d="M264.124 6L359 18.478V84L256.5 75.5L264.124 6Z" fill="white" />
+                  <text
+                    x={month.toString().includes("1") ? "44%" : "43.2%"}
+                    y={isMobile ? "0%" : "6%"}
+                    fontSize="60"
+                    className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
+                  >
+                    {month < 10 ? "0" + month : month}
+                  </text>
+                </g>
+              </g>
+              <defs>
+                <filter
+                  id="mainShadow"
+                  x="-24.8"
+                  y="5"
+                  width="1468.6"
+                  height="212.8"
+                  filterUnits="userSpaceOnUse"
+                  colorInterpolationFilters="sRGB"
+                >
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                  <feColorMatrix
+                    in="SourceAlpha"
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                    result="hardAlpha"
                   />
-                  <text
-                    x={date.getMonth().toString().includes("1") ? "37" : "30"}
-                    y="40"
-                    fontSize="60"
-                    className="font-extrabold fill-[#191919] text-center align-middle -translate-x-1/4 translate-y-1/4"
-                  >
-                    {date.getMonth() < 10
-                      ? "0" + date.getMonth()
-                      : date.getMonth()}
-                  </text>
-                </svg>
-              </span>
-
-              <div
-                className="text-left translate-x-1  md:-translate-x-[1vw] -translate-y-[1.5vw] md:translate-y-[0vw] leading-[3rem] md:leading-[4rem] truncate max-w-[55vw] md:max-w-[60vw] px-4"
-                style={{
-                  fontSize: diaryEntry.data.title.length > 23 ? "3vw" : "4vw",
-                }}
-              >
-                <h1>{diaryEntry.data.title}</h1>
-              </div>
-            </div>
+                  <feOffset dx="2" dy="9" />
+                  <feGaussianBlur stdDeviation="4.4" />
+                  <feComposite in2="hardAlpha" operator="out" />
+                  <feColorMatrix
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                  />
+                  <feBlend
+                    mode="normal"
+                    in2="BackgroundImageFix"
+                    result="effect1_dropShadow_115_6"
+                  />
+                  <feBlend
+                    mode="normal"
+                    in="SourceGraphic"
+                    in2="effect1_dropShadow_115_6"
+                    result="shape"
+                  />
+                </filter>
+                <filter
+                  id="dayShadow"
+                  x="143"
+                  y="5"
+                  width="113.5"
+                  height="82"
+                  filterUnits="userSpaceOnUse"
+                  colorInterpolationFilters="sRGB"
+                >
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                  <feColorMatrix
+                    in="SourceAlpha"
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                    result="hardAlpha"
+                  />
+                  <feOffset dx="4" dy="4" />
+                  <feGaussianBlur stdDeviation="2" />
+                  <feComposite in2="hardAlpha" operator="out" />
+                  <feColorMatrix
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                  />
+                  <feBlend
+                    mode="normal"
+                    in2="BackgroundImageFix"
+                    result="effect1_dropShadow_115_6"
+                  />
+                  <feBlend
+                    mode="normal"
+                    in="SourceGraphic"
+                    in2="effect1_dropShadow_115_6"
+                    result="shape"
+                  />
+                </filter>
+                <filter
+                  id="filter2_d_115_6"
+                  x="252.5"
+                  y="6"
+                  width="111.907"
+                  height="86"
+                  filterUnits="userSpaceOnUse"
+                  colorInterpolationFilters="sRGB"
+                >
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                  <feColorMatrix
+                    in="SourceAlpha"
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                    result="hardAlpha"
+                  />
+                  <feOffset dy="4" />
+                  <feGaussianBlur stdDeviation="2" />
+                  <feComposite in2="hardAlpha" operator="out" />
+                  <feColorMatrix
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                  />
+                  <feBlend
+                    mode="normal"
+                    in2="BackgroundImageFix"
+                    result="effect1_dropShadow_115_6"
+                  />
+                  <feBlend
+                    mode="normal"
+                    in="SourceGraphic"
+                    in2="effect1_dropShadow_115_6"
+                    result="shape"
+                  />
+                </filter>
+                <filter
+                  id="monthShadow"
+                  x="256.5"
+                  y="6"
+                  width="110.5"
+                  height="86"
+                  filterUnits="userSpaceOnUse"
+                  colorInterpolationFilters="sRGB"
+                >
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                  <feColorMatrix
+                    in="SourceAlpha"
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                    result="hardAlpha"
+                  />
+                  <feOffset dx="4" dy="4" />
+                  <feGaussianBlur stdDeviation="2" />
+                  <feComposite in2="hardAlpha" operator="out" />
+                  <feColorMatrix
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                  />
+                  <feBlend
+                    mode="normal"
+                    in2="BackgroundImageFix"
+                    result="effect1_dropShadow_115_6"
+                  />
+                  <feBlend
+                    mode="normal"
+                    in="SourceGraphic"
+                    in2="effect1_dropShadow_115_6"
+                    result="shape"
+                  />
+                </filter>
+              </defs>
+            </svg>
           </div>
         </div>
         <div className="px-4">
@@ -148,9 +309,7 @@ function DiaryEntry() {
                       <div key={worker.id} className="flex items-center gap-2">
                         {worker.name && (
                           <Avatar>
-                            <AvatarFallback>
-                              {getInitials(worker.name)}
-                            </AvatarFallback>
+                            <AvatarFallback>{getInitials(worker.name)}</AvatarFallback>
                           </Avatar>
                         )}
                         <span>{worker.name}</span>
@@ -161,11 +320,9 @@ function DiaryEntry() {
                 <TableCell>
                   {`Worked at ${new Date(
                     entry.workedAt || diaryEntry.data.day,
-                  ).toLocaleDateString()
-                    } for ${secondsInHoursAndMinutes(
-                      entry.workedSeconds,
-                    )
-                    }`}
+                  ).toLocaleDateString()} for ${secondsInHoursAndMinutes(
+                    entry.workedSeconds,
+                  )}`}
                 </TableCell>
                 <TableCell>{entry.description}</TableCell>
               </TableRow>
