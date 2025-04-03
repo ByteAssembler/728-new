@@ -2,15 +2,14 @@ import { useEffect, useRef, useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Button } from "~/lib/components/ui/button";
+import { useSocketIO } from "~/lib/components/wrapper/admin/socket-provider";
+import { useDebouncedCallback } from "use-debounce";
 
 import Controller, { ControllerRef } from "~/lib/components/wrapper/admin/controller/Controller";
-import { useSocketIO } from "~/lib/components/wrapper/admin/socket-provider";
-import { Switch } from "~/lib/components/ui/switch";
-import { Label } from "~/lib/components/ui/label";
+import { Button } from "~/lib/components/ui/button";
 import { Input } from "~/lib/components/ui/input";
-
-import { useDebouncedCallback } from "use-debounce";
+import { Label } from "~/lib/components/ui/label";
+import { Switch } from "~/lib/components/ui/switch";
 
 export const Route = createFileRoute("/(protected)/admin-socket/")({
   component: SocketPage,
