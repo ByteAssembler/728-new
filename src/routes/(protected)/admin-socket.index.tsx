@@ -108,16 +108,16 @@ function SocketPage() {
         </div>
 
         <div className="flex gap-2 flex-wrap">
-          <Button onClick={() => sendMove(0, 0)}>Stopp</Button>
-          <Button onClick={() => sendMove(0, -1)}>Vorwärts</Button>
-          <Button onClick={() => sendMove(0, 1)}>Rückwärts</Button>
-          <Button onClick={() => sendMove(1, 0)}>Rechts</Button>
-          <Button onClick={() => sendMove(-1, 0)}>Links</Button>
+          <Button onClick={() => sendMove(0, 0)}>Stopp 🔴</Button>
+          <Button onClick={() => sendMove(0, -1)}>Vorwärts ⬆️</Button>
+          <Button onClick={() => sendMove(0, 1)}>Rückwärts ⬇️</Button>
+          <Button onClick={() => sendMove(1, 0)}>Rechts ⬇️</Button>
+          <Button onClick={() => sendMove(-1, 0)}>Links ⬅️</Button>
         </div>
 
         <div className="flex gap-2 flex-wrap">
-          <Button onClick={() => sendRotation(90)}>Drehen 90°</Button>
-          <Button onClick={() => sendRotation(-90)}>Drehen -90°</Button>
+          <Button onClick={() => sendRotation(-90)}>Drehen -90° ⏮️</Button>
+          <Button onClick={() => sendRotation(90)}>Drehen 90° ⏭️</Button>
         </div>
 
         <div className="flex gap-2 flex-wrap">
@@ -126,7 +126,7 @@ function SocketPage() {
         </div>
 
         <div className="flex gap-2 flex-wrap">
-          <Button onClick={() => sendDrop()}>Abwerfen</Button>
+          <Button onClick={() => sendDrop()}>Abwerfen 🔽</Button>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
@@ -144,7 +144,7 @@ function SocketPage() {
             &nbsp;|&nbsp;
           </span>
 
-          <Button onClick={() => sendMagnetMoveStop()}>Magnet-Bewegung stoppen</Button>
+          <Button onClick={() => sendMagnetMoveStop()}>Magnet-Bewegung stoppen 🔴</Button>
 
           <span className="text-muted-foreground">
             &nbsp;|&nbsp;
