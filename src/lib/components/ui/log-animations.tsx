@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { AnimatePresence, motion, useAnimation, type Variants } from "framer-motion";
+import { AnimatePresence, motion, useAnimation, type Variants } from "motion/react";
 import {
   ArrowDown,
   ChevronDown,
