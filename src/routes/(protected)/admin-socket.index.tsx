@@ -6,6 +6,8 @@ import { Button } from "~/lib/components/ui/button";
 
 import Controller, { ControllerRef } from "~/lib/components/wrapper/admin/controller/Controller";
 import { useSocketIO } from "~/lib/components/wrapper/admin/socket-provider";
+import { Switch } from "~/lib/components/ui/switch";
+import { Label } from "~/lib/components/ui/label";
 
 export const Route = createFileRoute("/(protected)/admin-socket/")({
   component: SocketPage,
@@ -13,7 +15,7 @@ export const Route = createFileRoute("/(protected)/admin-socket/")({
 });
 
 function SocketPage() {
-  const { emitEvent } = useSocketIO("http://192.168.119.229:5000");
+  const { emitEvent, isConnected, lastError } = useSocketIO("http://192.168.119.229:5000");
   const controllerRef = useRef<ControllerRef>(null);
   const [automatic, setAutomatic] = useState(false);
 
@@ -53,6 +55,8 @@ function SocketPage() {
   const sendMove = (x: number, y: number) => emitEvent("control__move", { x, y });
   const sendRotation = (deg: number) => emitEvent("control__rotate", { deg });
   const sendHallo = () => emitEvent("hallo", { message: "Hallo Server!" });
+  const sendTogglePan = (value: boolean) => emitEvent("control__pan", { value });
+  const sendDrop = () => emitEvent("control__drop", {});
 
   const setPointPosition = (x: number, y: number) => controllerRef.current?.setPointPosition(x, y, true, true);
 
@@ -64,6 +68,30 @@ function SocketPage() {
   return (
     <div className="container p-6">
       <div className="flex flex-col gap-3">
+
+        <div className="flex flex-col gap-2">
+          <h1 className="text-3xl font-bold">Socket Page</h1>
+          <p className="flex gap-2">
+            <span className="font-bold">Connected:</span> {String(isConnected)}
+            {lastError && <>
+              <span className="text-muted-foreground">
+                &nbsp;|&nbsp;
+              </span>
+              <p className="text-red-500">{String(lastError)}</p>
+            </>}
+          </p>
+        </div>
+
+        <div className="flex gap-2 flex-wrap">
+          <Button onClick={sendHallo}>Hallo</Button>
+          <div className="flex items-center space-x-2">
+            <Switch id="ele-automation-toggle" onCheckedChange={setCustomAutomatic} checked={automatic} />
+            <Label htmlFor="ele-automation-toggle">
+              Toggle Automation
+            </Label>
+          </div>
+        </div>
+
         <div className="flex gap-2 flex-wrap">
           <Button onClick={() => sendMove(0, 0)}>Stopp</Button>
           <Button onClick={() => sendMove(0, -1)}>Vorwärts</Button>
@@ -77,27 +105,13 @@ function SocketPage() {
           <Button onClick={() => sendRotation(-90)}>Drehen -90°</Button>
         </div>
 
-        <div>
-          <Button onClick={sendHallo}>Hallo</Button>
+        <div className="flex gap-2 flex-wrap">
+          <Button onClick={() => sendTogglePan(true)}>Pfanne öffnen</Button>
+          <Button onClick={() => sendTogglePan(false)}>Pfanne schliessen</Button>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
-          {/*
-          <Label>Automation</Label>
-          <Switch
-            checked={automatic}
-            onCheckedChange={setCustomAutomatic}
-          >
-          </Switch>
-          */}
-          <label>
-            Automation
-            <input
-              type="checkbox"
-              checked={automatic}
-              onChange={(e) => setCustomAutomatic(e.target.checked)}
-            />
-          </label>
+        <div className="flex gap-2 flex-wrap">
+          <Button onClick={() => sendDrop()}>Abwerfen</Button>
         </div>
 
         <div className="h-[60vh] w-[60vw] bg-violet-400">
