@@ -198,8 +198,8 @@ function HeaderNormal() {
       console.log("globalthis:" + globalThis.innerWidth);
       console.log(
         "function:" +
-          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
-            (24 + 0.015 * (globalThis.innerWidth - 361)),
+        (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+        (24 + 0.015 * (globalThis.innerWidth - 361)),
       );
       console.log("triangle:" + triangle.width);
 
@@ -236,6 +236,9 @@ function HeaderNormal() {
   useEffect(() => {
     window.addEventListener("resize", setUfoPos);
     setUfoPos();
+    return () => {
+      window.removeEventListener("resize", setUfoPos);
+    };
   }, [isOpen]);
 
   return (
@@ -398,7 +401,7 @@ function HeaderNormal() {
                                   : 0
                             : 499
                           : //mobile
-                            isTablet
+                          isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -409,7 +412,7 @@ function HeaderNormal() {
                                     : 0
                               : 499
                             : //tablet
-                              index !== 0
+                            index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
@@ -441,7 +444,8 @@ function HeaderNormal() {
                     >
                       <Link
                         className="fill-white"
-                        href={link.pathname}
+                        to={link.pathname}
+                        params={{}}
                         onClick={() => toggleDropdown()}
                       >
                         {link.title}
@@ -615,12 +619,12 @@ function HeaderAdmin() {
       console.log(rect.left);
       const middleX = isTablet
         ? (globalThis.innerWidth / (25 + 0.02 * (globalThis.innerWidth - 600.5))) *
-            (24 + 0.02 * (globalThis.innerWidth - 600.5)) -
-          triangle.width
+        (24 + 0.02 * (globalThis.innerWidth - 600.5)) -
+        triangle.width
         : isMobile
           ? (globalThis.innerWidth / (49 + 0.015 * (globalThis.innerWidth - 361))) *
-              (47 + 0.015 * (globalThis.innerWidth - 361)) -
-            triangle.width
+          (47 + 0.015 * (globalThis.innerWidth - 361)) -
+          triangle.width
           : rect.left + (rect.width / 2) * 1.3 - triangle.width;
       const middleY = rect.top + rect.height - 25;
       setUfoPosition({ x: middleX, y: middleY });
@@ -811,7 +815,7 @@ function HeaderAdmin() {
                                     : 0
                             : 499
                           : //mobile
-                            isTablet
+                          isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -824,7 +828,7 @@ function HeaderAdmin() {
                                       : 0
                               : 499
                             : //tablet
-                              index !== 0
+                            index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
@@ -858,7 +862,7 @@ function HeaderAdmin() {
                     >
                       <Link
                         className="fill-white"
-                        href={link.pathname}
+                        to={link.pathname}
                         onClick={() => toggleDropdown()}
                       >
                         {link.title}
