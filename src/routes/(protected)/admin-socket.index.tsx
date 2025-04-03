@@ -8,6 +8,9 @@ import Controller, { ControllerRef } from "~/lib/components/wrapper/admin/contro
 import { useSocketIO } from "~/lib/components/wrapper/admin/socket-provider";
 import { Switch } from "~/lib/components/ui/switch";
 import { Label } from "~/lib/components/ui/label";
+import { Input } from "~/lib/components/ui/input";
+
+import { useDebouncedCallback } from "use-debounce";
 
 export const Route = createFileRoute("/(protected)/admin-socket/")({
   component: SocketPage,
@@ -15,7 +18,8 @@ export const Route = createFileRoute("/(protected)/admin-socket/")({
 });
 
 function SocketPage() {
-  const { emitEvent, isConnected, lastError } = useSocketIO("http://192.168.119.229:5000");
+  const [socketUrl, setSocketUrl] = useState("http://192.168.119.229:5000")
+  const { emitEvent, isConnected, lastError } = useSocketIO(socketUrl);
   const controllerRef = useRef<ControllerRef>(null);
   const [automatic, setAutomatic] = useState(false);
 
@@ -65,6 +69,10 @@ function SocketPage() {
     emitEvent("control__automatic", { value });
   };
 
+  const setSocketUrlDebounce = useDebouncedCallback((url: string) => setSocketUrl(url), 300, {
+    maxWait: 1500,
+  });
+
   return (
     <div className="container p-6">
       <div className="flex flex-col gap-3">
@@ -80,6 +88,7 @@ function SocketPage() {
               <p className="text-red-500">{String(lastError)}</p>
             </>}
           </p>
+          <Input defaultValue={socketUrl} onChange={(e) => setSocketUrlDebounce(e.target.value)} placeholder="Socket URL" />
         </div>
 
         <div className="flex gap-2 flex-wrap">
