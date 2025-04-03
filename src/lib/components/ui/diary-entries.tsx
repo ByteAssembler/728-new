@@ -8,10 +8,10 @@ import { cn } from "~/lib/utils";
 const DiaryEntry = DiaryEntryPrimitive.Root;
 
 const DiaryEntryItem = ({
-                          ref,
-                          className,
-                          ...props
-                        }: React.ComponentPropsWithoutRef<typeof DiaryEntryPrimitive.Item> & {
+  ref,
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof DiaryEntryPrimitive.Item> & {
   ref?: React.RefObject<React.ElementRef<typeof DiaryEntryPrimitive.Item> | null>;
 }) => (
   <DiaryEntryPrimitive.Item
@@ -23,11 +23,11 @@ const DiaryEntryItem = ({
 DiaryEntryItem.displayName = "DiaryEntryItem";
 
 const DiaryEntryTrigger = ({
-                             ref,
-                             className,
-                             children,
-                             ...props
-                           }: React.ComponentPropsWithoutRef<typeof DiaryEntryPrimitive.Trigger> & {
+  ref,
+  className,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof DiaryEntryPrimitive.Trigger> & {
   ref?: React.RefObject<React.ElementRef<typeof DiaryEntryPrimitive.Trigger> | null>;
 }) => (
   <DiaryEntryPrimitive.Header className="flex">
@@ -46,11 +46,11 @@ const DiaryEntryTrigger = ({
 DiaryEntryTrigger.displayName = DiaryEntryPrimitive.Trigger.displayName;
 
 const DiaryEntryContent = ({
-                             ref,
-                             className,
-                             children,
-                             ...props
-                           }: React.ComponentPropsWithoutRef<typeof DiaryEntryPrimitive.Content> & {
+  ref,
+  className,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof DiaryEntryPrimitive.Content> & {
   ref?: React.RefObject<React.ElementRef<typeof DiaryEntryPrimitive.Content> | null>;
 }) => (
   <DiaryEntryPrimitive.Content
