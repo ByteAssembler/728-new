@@ -1,66 +1,88 @@
-import React, { createContext, use, useEffect, useMemo, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+import { useState, useEffect, useCallback } from 'react';
+import { io, Socket } from 'socket.io-client';
+import type { ManagerOptions, SocketOptions } from 'socket.io-client';
 
-type SocketContextType = {
-  getSocket: (url: string) => Socket;
-};
+type SocketHookOptions = Partial<ManagerOptions & SocketOptions>;
 
-const SocketContext = createContext<SocketContextType | undefined>(undefined);
+type EmitFunction = (eventName: string, data: unknown, ack?: (...args: unknown[]) => void) => boolean;
 
-const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const socketRef = useRef<Map<string, Socket>>(new Map());
+interface UseSocketIOReturn {
+  socket: Socket | null;
+  isConnected: boolean;
+  lastError: Error | null;
+  emitEvent: EmitFunction;
+}
 
-  const getSocket = (url: string) => {
-    if (!socketRef.current.has(url)) {
-      const newSocket = io(url);
-      socketRef.current.set(url, newSocket);
-
-      newSocket.on("connect", () => {
-        console.log(`Connected to ${url}`);
-      });
-
-      newSocket.on("disconnect", () => {
-        console.log(`Disconnected from ${url}`);
-      });
-    }
-
-    return socketRef.current.get(url)!;
-  };
+export function useSocketIO(uri: string, opts?: SocketHookOptions): UseSocketIOReturn {
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [lastError, setLastError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const currentSocketRef = socketRef.current;
-    return () => {
-      // Cleanup all sockets on unmount
-      currentSocketRef.forEach((socket) => socket.disconnect());
-      currentSocketRef.clear();
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    console.log(`useSocketIO: Attempting to connect to ${uri}`);
+    const connectionOptions = opts || {};
+    const newSocket = io(uri, connectionOptions);
+
+    setSocket(newSocket);
+    setIsConnected(newSocket.connected);
+    setLastError(null);
+
+    const handleConnect = () => {
+      console.log(`useSocketIO: Connected - Socket ID: ${newSocket.id}`);
+      setIsConnected(true);
+      setLastError(null);
     };
-  }, []);
 
-  const contextValue = useMemo(() => ({ getSocket }), []);
+    const handleDisconnect = (reason: Socket.DisconnectReason) => {
+      console.warn(`useSocketIO: Disconnected - Reason: ${reason}`);
+      setIsConnected(false);
+    };
 
-  return <SocketContext value={contextValue}>{children}</SocketContext>;
-};
+    const handleConnectError = (error: Error) => {
+      console.error('useSocketIO: Connection Error -', error);
+      setIsConnected(false);
+      setLastError(error);
+    };
 
-const useSocket = (url: string) => {
-  const context = use(SocketContext);
-  if (!context) {
-    throw new Error("useSocket must be used within a SocketProvider");
-  }
-  const { getSocket } = context;
-  const socket = getSocket(url);
+    newSocket.on('connect', handleConnect);
+    newSocket.on('disconnect', handleDisconnect);
+    newSocket.on('connect_error', handleConnectError);
 
-  return {
-    socket,
-    on: (event: string, callback: (..._args: unknown[]) => void) => {
-      socket.on(event, callback);
+    return () => {
+      console.log(`useSocketIO: Cleaning up socket connection to ${uri}`);
+      newSocket.off('connect', handleConnect);
+      newSocket.off('disconnect', handleDisconnect);
+      newSocket.off('connect_error', handleConnectError);
+
+      if (newSocket.active) {
+        newSocket.disconnect();
+      }
+
+      setSocket(null);
+      setIsConnected(false);
+      setLastError(null);
+    };
+  }, [uri, opts]);
+
+  const emitEvent: EmitFunction = useCallback(
+    (eventName, data, ack) => {
+      if (socket && isConnected) {
+        console.log(`useSocketIO: Emitting event "${eventName}" with data:`, data);
+        if (ack) socket.emit(eventName, data, ack); else socket.emit(eventName, data);
+        return true;
+      } else {
+        console.warn(
+          `useSocketIO: Could not emit event "${eventName}". Socket not connected.`
+        );
+        return false;
+      }
     },
-    off: (event: string, callback: (..._args: unknown[]) => void) => {
-      socket.off(event, callback);
-    },
-    emit: (event: string, payload: unknown) => {
-      socket.emit(event, payload);
-    },
-  };
-};
+    [socket, isConnected]
+  );
 
-export { SocketProvider, useSocket };
+  return { socket, isConnected, lastError, emitEvent };
+}

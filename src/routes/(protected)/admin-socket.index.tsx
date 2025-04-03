@@ -4,30 +4,16 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Button } from "~/lib/components/ui/button";
 
-import Controller, {
-  ControllerRef,
-} from "~/lib/components/wrapper/admin/controller/Controller";
-import {
-  SocketProvider,
-  useSocket,
-} from "~/lib/components/wrapper/admin/socket-provider";
+import Controller, { ControllerRef } from "~/lib/components/wrapper/admin/controller/Controller";
+import { useSocketIO } from "~/lib/components/wrapper/admin/socket-provider";
 
 export const Route = createFileRoute("/(protected)/admin-socket/")({
-  component: SocketPageApp,
+  component: SocketPage,
   ssr: false,
 });
 
-function SocketPageApp() {
-  return (
-    <SocketProvider>
-      <SocketPage />
-    </SocketProvider>
-  );
-}
-
 function SocketPage() {
-  const { socket, on, emit } = useSocket("http://192.168.160.229:5000");
-  // const { socket, on, emit } = useSocket("http://192.168.115.229:5000");
+  const { emitEvent } = useSocketIO("http://192.168.119.229:5000");
   const controllerRef = useRef<ControllerRef>(null);
   const [automatic, setAutomatic] = useState(false);
 
@@ -64,6 +50,7 @@ function SocketPage() {
     };
   }, []);
 
+  /*
   useEffect(() => {
     const handleServerMessage = (data: unknown) => {
       console.log("Message from server:", data);
@@ -75,13 +62,15 @@ function SocketPage() {
       socket.off("message", handleServerMessage);
     };
   }, [on, socket]);
+  */
 
   const sendUnreliableCommand = (x: number, y: number) => {
-    emit("control__move", { x, y });
+    emitEvent("control__move", { x, y });
+    console.log("Unreliable command sent:", { x, y });
   };
 
   const sendReliableCommand = (deg: number) => {
-    emit("control__rotate", { deg });
+    emitEvent("control__rotate", { deg });
   };
 
   const setPointPosition = (x: number, y: number) => {
@@ -89,7 +78,7 @@ function SocketPage() {
   };
 
   const sendHallo = () => {
-    emit("hallo", { message: "Hallo Server!" });
+    emitEvent("hallo", { message: "Hallo Server!" });
   };
 
   const onValueChange = (x: number, y: number, execute: boolean) => {
@@ -100,7 +89,7 @@ function SocketPage() {
 
   const setCustomAutomatic = (value: boolean) => {
     setAutomatic(value);
-    emit("control__automatic", { value });
+    emitEvent("control__automatic", { value });
     console.log("Automatic:", value);
   };
 
