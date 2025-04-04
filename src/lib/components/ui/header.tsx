@@ -860,7 +860,7 @@ function HeaderAdmin() {
                                 : index == 2
                                   ? 74
                                   : index == 3
-                                    ? 92
+                                    ? 84
                                     : index == 4
                                       ? 92
                                       : 0
@@ -898,9 +898,9 @@ function HeaderAdmin() {
                               ? index == 1
                                 ? 400
                                 : index == 2
-                                  ? 236
+                                  ? 300
                                   : index == 3
-                                    ? 110
+                                    ? 178
                                     : index == 4
                                       ? 110
                                       : 0
@@ -922,7 +922,7 @@ function HeaderAdmin() {
                         isMobile
                           ? index * 150 + 225 //mobile
                           : isTablet
-                            ? index * 190 + 225 //tablet
+                            ? index * 150 + 225 //tablet
                             : index * 150 + 240 //desktop
                       }
                       className=" text-center"
