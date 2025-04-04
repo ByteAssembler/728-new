@@ -96,10 +96,11 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
           {/* Adjust text container width and add more padding on larger screens */}
           <div className="w-1/2 lg:w-3/5">
             <p
-              className={`text-base md:text-1xl lg:text-2xl text-white ${isImageFirst
-                ? "lg:translate-x-[-1rem] xl:translate-x-[-2rem] lg:pr-4"
-                : "lg:translate-x-[1rem] xl:translate-x-[2rem] lg:pl-4"
-                }`}
+              className={`text-base md:text-1xl lg:text-2xl text-white ${
+                isImageFirst
+                  ? "lg:translate-x-[-1rem] xl:translate-x-[-2rem] lg:pr-4"
+                  : "lg:translate-x-[1rem] xl:translate-x-[2rem] lg:pl-4"
+              }`}
             >
               {text}
             </p>
@@ -135,22 +136,25 @@ const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
 const NavigationButton: React.FC = () => {
   const svgString = encodeURIComponent(
     '<svg width="334" height="117" viewBox="0 0 334 117" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
-    '<path d="M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z" fill="#23CF51"/>\n' +
-    "</svg>\n",
+      '<path d="M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z" fill="#23CF51"/>\n' +
+      "</svg>\n",
   );
 
   const dataUrl = `url("data:image/svg+xml,${svgString}")`;
 
   return (
-    <Link to="/guardian-of-the-galaxy" className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white"
+    <Link
+      to="/guardian-of-the-galaxy"
+      className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white"
       style={{
         fontSize: 30,
         backgroundImage: dataUrl,
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-      }}>
-      Explore
+      }}
+    >
+      Entdecke
     </Link>
   );
 };
