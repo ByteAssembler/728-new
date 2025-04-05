@@ -369,7 +369,7 @@ function FinalDiaryEntry({
                 to="/diary/$id"
                 params={{ id: diaryEntry.id }}
               >
-                Read more
+                Erfahre mehr
               </Link>
             </div>
           )}
