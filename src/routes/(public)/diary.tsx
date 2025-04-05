@@ -38,7 +38,7 @@ function DiaryList() {
       <div className=" py-8 p-12 flex justify-between items-center gap-4">
         <div className="space-y-2">
           <h1 className="scroll-m-20 mt-10 md:mt-0 font-bold text-3xl text-balance tracking-tight">
-            Our Diary
+            Unser Tagebuch
           </h1>
         </div>
         {user && (
