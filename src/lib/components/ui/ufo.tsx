@@ -4,7 +4,13 @@ import { Float, useGLTF } from "@react-three/drei";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
-import { AdditiveBlending, Color, Group, NormalBlending, ShaderMaterial } from "three";
+import {
+  AdditiveBlending,
+  Color,
+  type Group,
+  NormalBlending,
+  ShaderMaterial,
+} from "three";
 
 useGLTF.preload("/auto.glb");
 
@@ -269,7 +275,7 @@ export default function Ufo() {
   console.log(nodes);
   const ref = useRef<Group>(null);
   const [scale, setScale] = useState(0.06);
-  const [yOffset, setYOffset] = useState(-1);
+  const [yOffset, setYOffset] = useState(0); // Changed from -1 to 0
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -331,25 +337,26 @@ export default function Ufo() {
     // Set material properties
     // materials.kuppel.color.set(0x00ff00); // Green color
 
-    console.log(shaderHidden);
-
-    // fly-outside
-    gsap.to(ufoPosition, {
-      x: 30,
-      z: -15,
-      ease: "power2.out",
+    const start = gsap.timeline({
       scrollTrigger: {
         trigger: "#fly-outside",
         start: "top center",
         end: "bottom center",
         scrub: true,
-        //markers: true,
-        /*onLeave: () => {
-          // Teleport the object to the left side of the screen after it leaves the first section
-          gsap.set(ufoPosition, { x: -globalThis.innerWidth / 2 });
-        },*/
+        markers: true,
       },
     });
+
+    // fly-outside
+    start.fromTo(
+      ufoPosition,
+      { x: 0 },
+      {
+        x: 30,
+        z: -15,
+        ease: "power2.out",
+      },
+    );
 
     //fly-middle
     gsap.fromTo(
@@ -417,7 +424,7 @@ export default function Ufo() {
     rotateToNormal
       .to(ufoRotation, { x: 4.8, ease: "power2.out" })
       .to(ufoPosition, { y: yOffset, ease: "power2.out" }, 0)
-      .to(wheelsShader.uniforms.uOpacity, { value: 0.2, ease: "power2.out" }, 0);
+      .to(wheelsShader.uniforms.uOpacity, { value: 0.1, ease: "power2.out" }, 0);
 
     //change material properties
     const changeToDropper = gsap.timeline({
@@ -474,7 +481,7 @@ export default function Ufo() {
     });
     rotateToTop
       .to(ufoRotation, { x: -Math.PI * 1.1, ease: "power2.out" }, 0)
-      .to(ufoPosition, { y: -yOffset * 0.4, ease: "power2.out" }, 0)
+      .to(ufoPosition, { y: yOffset * 1.2, ease: "power2.out" }, 0)
       .to(sensorShader.uniforms.uOpacity, { value: 1, ease: "power2.out" }, 0)
       .to(shader.uniforms.uOpacity, { value: 1, ease: "power2.out" }, 0)
       .to(raspberryShader.uniforms.uOpacity, { value: 0, ease: "power2.out" }, 0);
@@ -497,6 +504,16 @@ export default function Ufo() {
       .to(craneShader.uniforms.uOpacity, { value: 0, ease: "power2.out" }, 0)
       .to(sensorShader.uniforms.uOpacity, { value: 0, ease: "power2.out" }, 0)
       .to(wheelsShader.uniforms.uOpacity, { value: 0, ease: "power2.out" }, 0);
+
+    // Add an initial animation to make the UFO visible from the start
+    gsap.set(ref.current, {
+      visibility: "visible",
+      opacity: 1,
+    });
+
+    // Set initial material opacities to make the UFO visible
+    shader.uniforms.uOpacity.value = 1.0;
+    upperDomeShader.uniforms.uOpacity.value = 1.0;
   });
 
   return (

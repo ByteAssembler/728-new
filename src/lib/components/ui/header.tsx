@@ -15,7 +15,7 @@ function HeaderNormal() {
   const triangleRef = useRef<SVGSVGElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 431px)");
-  const isTablet = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(max-width: 767px)");
   const [ufoPosition, setUfoPosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation(); // Get the current route
@@ -508,7 +508,7 @@ function HeaderAdmin() {
   const triangleRef = useRef<SVGSVGElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 431px)");
-  const isTablet = useMediaQuery("(max-width: 769px)");
+  const isTablet = useMediaQuery("(max-width: 767px)");
   const [ufoPosition, setUfoPosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation(); // Get the current route

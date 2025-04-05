@@ -229,10 +229,12 @@ function Home() {
       elements,
       startBottom = 42,
       spacing = 4,
+      index,
     }: {
       elements: unknown[];
       startBottom?: number;
       spacing?: number;
+      index?: number;
     }) => {
       if (!elements || !elements.every((el) => el)) return;
 
@@ -279,17 +281,31 @@ function Home() {
         const fourthItem = elements[3]; // The box with 3D model
 
         // Position the 4th item (box) at bottom right
-        gsap.set(fourthItem, {
-          position: "fixed",
-          bottom: "1vh", // Fixed position from bottom
-          paddingLeft: "1rem",
-          left: "auto", // Clear any left positioning
-          width: "45vw", // Width based on your class lg:w-[40vw]
-          height: "38vh", // Height based on your class lg:h-[45vh]
-          margin: 0,
-          x: "0%", // Reset any GSAP transforms
-          translate: "none", // Reset any CSS transforms
-        });
+        if (index === 2) {
+          gsap.set(fourthItem, {
+            position: "fixed",
+            bottom: "0.5vh", // Fixed position from bottom
+            paddingLeft: "1rem",
+            left: "auto", // Clear any left positioning
+            width: "42vw",
+            height: "30vh",
+            margin: 0,
+            x: "0%", // Reset any GSAP transforms
+            translate: "none", // Reset any CSS transforms
+          });
+        } else {
+          gsap.set(fourthItem, {
+            position: "fixed",
+            bottom: "1vh", // Fixed position from bottom
+            paddingLeft: "1rem",
+            left: "auto", // Clear any left positioning
+            width: "45vw",
+            height: "38vh",
+            margin: 0,
+            x: "0%", // Reset any GSAP transforms
+            translate: "none", // Reset any CSS transforms
+          });
+        }
 
         // Get the position and dimensions of the 4th item
         const boxRect = fourthItem.getBoundingClientRect();
@@ -1415,6 +1431,9 @@ function Home() {
                       craneFlyText3.current,
                       craneAnimation.current,
                     ],
+                    spacing: 6,
+                    startBottom: 42,
+                    index: 2,
                   });
                 },
                 onRefresh: () => {
@@ -1426,6 +1445,9 @@ function Home() {
                       craneFlyText3.current,
                       craneAnimation.current,
                     ],
+                    spacing: 6,
+                    startBottom: 42,
+                    index: 2,
                   });
                 },
               },
@@ -1481,6 +1503,9 @@ function Home() {
                       craneFlyText3.current,
                       craneAnimation.current,
                     ],
+                    spacing: 6,
+                    startBottom: 42,
+                    index: 2,
                   });
                 },
                 onRefresh: () => {
@@ -1492,6 +1517,9 @@ function Home() {
                       craneFlyText3.current,
                       craneAnimation.current,
                     ],
+                    spacing: 6,
+                    startBottom: 42,
+                    index: 2,
                   });
                 },
               },
@@ -1885,24 +1913,25 @@ function Home() {
           <Ufo />
         </Canvas>
       </div>
-
       <div className="z-10">
         {/* Sections to trigger scroll animations */}
-        <div id="start" style={{ height: "50vh" }}></div>
-
         <div id="fly-outside" style={{ height: "75vh" }}></div>
         <div id="pause-generel" style={{ height: "30vh" }}>
           <h2
             ref={titleRef}
-            className="opacity-0 fixed bottom-20 font-Orbitron font-bold text-5xl text-white left-1/2 -translate-x-1/2 text-center xs:text-left  md:whitespace-nowrap"
+            className="opacity-0 fixed bottom-20 font-Orbitron font-bold text-5xl text-white left-1/2 -translate-x-1/2 text-center md:text-left  md:whitespace-nowrap"
           >
             Guardian of the Galaxy
           </h2>
           <p
             ref={generalFlyText}
-            className="opacity-0 fixed top-1/2 left-0 translate-y-1/2 font-Electrolize font-semibold text-2xl text-white"
+            className="opacity-0 fixed  top-2/7 xs:top-2/5 md:top-1/2 left-0 translate-x-1/2 font-Electrolize font-semibold text-2xl text-white w-3/4"
           >
-            Lorem ipsum dolor sit amet,
+            Das Guardian of the Galaxy ist ein autonomes Rettungsfahrzeug, das in
+            Katastrophengebieten Überlebende scannt, sie aus Trümmern hebt und gezielt
+            Hilfspakete mit Nahrung und Medizin abwirft. Effizient, präzise und
+            vollautomatisch – entwickelt für schnelle humanitäre Einsätze in zerstörten
+            urbanen Zonen.
           </p>
         </div>
         <div id="fly-middle" style={{ height: "65vh" }}></div>
@@ -1979,14 +2008,14 @@ function Home() {
               className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Durch ihr Profil und Material ermöglichen sie eine präzise Steuerung und
-              beeinflussen Stabilität sowie Geschwindigkeit des Fahrzeugs.
+              beeinflussen Stabilität sowie Geschwindigkeit des Fahrzeugs
             </p>
             <p
               ref={wheelsFlyText3}
               className="opacity-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Ballcaster ergänzen die Reifen, sorgen für Balance und Stabilität und
-              ermöglichen gleitende Übergänge.
+              ermöglichen gleitende Übergänge
             </p>
             <div
               ref={wheelsAnimation}
@@ -1996,7 +2025,7 @@ function Home() {
                 camera={{ position: [0, 1, 2], fov: 45 }}
                 className="pt-2 w-full h-[40vh] md:h-[60vh] lg:h-[60vh]"
               >
-                <ambientLight intensity={2} />
+                <ambientLight intensity={0.5} />
                 <directionalLight position={[2, 2, 2]} />
                 <Suspense fallback={null}>
                   <WheelsAnimation />
@@ -2195,7 +2224,7 @@ function Home() {
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
-                className="pt-2 w-full h-[40vh] md:h-[60vh] lg:h-[60vh]"
+                className="pt-2 w-full h-[35vh] md:h-[60vh] lg:h-[60vh]"
               >
                 <ambientLight intensity={1} />
                 <directionalLight position={[2, 2, 2]} />
@@ -2297,7 +2326,7 @@ function Home() {
                 camera={{ position: [0, 1, 2], fov: 45 }}
                 className="pt-2 w-full h-[40vh] md:h-[60vh] lg:h-[60vh]"
               >
-                <ambientLight intensity={2} />
+                <ambientLight intensity={0.5} />
                 <directionalLight position={[2, 2, 2]} />
                 <Suspense fallback={null}>
                   <RaspberryAnimation />

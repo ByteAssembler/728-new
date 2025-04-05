@@ -3,7 +3,8 @@
 import type React from "react";
 
 import { useAnimations, useGLTF } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useMediaQuery } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
@@ -17,19 +18,21 @@ export function DropperAnimation() {
   const [modelOffset, setModelOffset] = useState({ x: 0, y: 0, z: 0 });
   const { size, viewport, gl } = useThree();
   const aspect = size.width / viewport.width;
-
-  // Update cursor style based on dragging state
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  // Update cursor style based on dragging state (only on desktop)
   useEffect(() => {
-    if (isDragging) {
-      gl.domElement.style.cursor = "grabbing";
-    } else {
-      gl.domElement.style.cursor = "grab";
+    if (!isMobile) {
+      if (isDragging) {
+        gl.domElement.style.cursor = "grabbing";
+      } else {
+        gl.domElement.style.cursor = "grab";
+      }
     }
 
     return () => {
       gl.domElement.style.cursor = "auto";
     };
-  }, [isDragging, gl.domElement]);
+  }, [isDragging, gl.domElement, isMobile]);
 
   // Play all animations
   useEffect(() => {
@@ -62,8 +65,10 @@ export function DropperAnimation() {
     }
   }, [scene]);
 
-  // Handle pointer down event
+  // Handle pointer down event (only on desktop)
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (isMobile) return;
+
     e.stopPropagation();
     setIsDragging(true);
     setPreviousMousePosition({
@@ -72,13 +77,17 @@ export function DropperAnimation() {
     });
   };
 
-  // Handle pointer up event
+  // Handle pointer up event (only on desktop)
   const handlePointerUp = () => {
+    if (isMobile) return;
+
     setIsDragging(false);
   };
 
-  // Handle pointer move event
+  // Handle pointer move event (only on desktop)
   const handlePointerMove = (e: PointerEvent) => {
+    if (isMobile) return;
+
     if (isDragging) {
       const deltaMove = {
         x: e.clientX - previousMousePosition.x,
@@ -102,16 +111,35 @@ export function DropperAnimation() {
     }
   };
 
-  // Add and remove event listeners
+  // Add and remove event listeners (only on desktop)
   useEffect(() => {
-    document.addEventListener("pointerup", handlePointerUp);
-    document.addEventListener("pointermove", handlePointerMove);
+    if (!isMobile) {
+      document.addEventListener("pointerup", handlePointerUp);
+      document.addEventListener("pointermove", handlePointerMove);
 
-    return () => {
-      document.removeEventListener("pointerup", handlePointerUp);
-      document.removeEventListener("pointermove", handlePointerMove);
-    };
-  }, [isDragging, previousMousePosition, rotation]);
+      return () => {
+        document.removeEventListener("pointerup", handlePointerUp);
+        document.removeEventListener("pointermove", handlePointerMove);
+      };
+    }
+  }, [isDragging, previousMousePosition, rotation, isMobile]);
+
+  // Continuous rotation for mobile devices
+  useFrame((_, delta) => {
+    if (isMobile && groupRef.current) {
+      // Rotate continuously on mobile
+      setRotation((prev) => ({
+        x: prev.x,
+        y: prev.y + delta * 0.5, // Adjust the rotation speed as needed
+        z: prev.z,
+      }));
+
+      // Apply the rotation directly to the group
+      groupRef.current.rotation.x = rotation.x;
+      groupRef.current.rotation.y = rotation.y;
+      groupRef.current.rotation.z = rotation.z;
+    }
+  });
 
   if (!scene) return null;
 
@@ -129,6 +157,7 @@ export function DropperAnimation() {
     </group>
   );
 }
+
 export function CraneAnimation() {
   const { scene, animations } = useGLTF("/crane.glb");
   const { actions } = useAnimations(animations, scene);
@@ -139,19 +168,21 @@ export function CraneAnimation() {
   const [modelOffset, setModelOffset] = useState({ x: 0, y: 0, z: 0 });
   const { size, viewport, gl } = useThree();
   const aspect = size.width / viewport.width;
-
-  // Update cursor style based on dragging state
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  // Update cursor style based on dragging state (only on desktop)
   useEffect(() => {
-    if (isDragging) {
-      gl.domElement.style.cursor = "grabbing";
-    } else {
-      gl.domElement.style.cursor = "grab";
+    if (!isMobile) {
+      if (isDragging) {
+        gl.domElement.style.cursor = "grabbing";
+      } else {
+        gl.domElement.style.cursor = "grab";
+      }
     }
 
     return () => {
       gl.domElement.style.cursor = "auto";
     };
-  }, [isDragging, gl.domElement]);
+  }, [isDragging, gl.domElement, isMobile]);
 
   // Play all animations
   useEffect(() => {
@@ -184,8 +215,10 @@ export function CraneAnimation() {
     }
   }, [scene]);
 
-  // Handle pointer down event
+  // Handle pointer down event (only on desktop)
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (isMobile) return;
+
     e.stopPropagation();
     setIsDragging(true);
     setPreviousMousePosition({
@@ -194,13 +227,17 @@ export function CraneAnimation() {
     });
   };
 
-  // Handle pointer up event
+  // Handle pointer up event (only on desktop)
   const handlePointerUp = () => {
+    if (isMobile) return;
+
     setIsDragging(false);
   };
 
-  // Handle pointer move event
+  // Handle pointer move event (only on desktop)
   const handlePointerMove = (e: PointerEvent) => {
+    if (isMobile) return;
+
     if (isDragging) {
       const deltaMove = {
         x: e.clientX - previousMousePosition.x,
@@ -224,16 +261,35 @@ export function CraneAnimation() {
     }
   };
 
-  // Add and remove event listeners
+  // Add and remove event listeners (only on desktop)
   useEffect(() => {
-    document.addEventListener("pointerup", handlePointerUp);
-    document.addEventListener("pointermove", handlePointerMove);
+    if (!isMobile) {
+      document.addEventListener("pointerup", handlePointerUp);
+      document.addEventListener("pointermove", handlePointerMove);
 
-    return () => {
-      document.removeEventListener("pointerup", handlePointerUp);
-      document.removeEventListener("pointermove", handlePointerMove);
-    };
-  }, [isDragging, previousMousePosition, rotation]);
+      return () => {
+        document.removeEventListener("pointerup", handlePointerUp);
+        document.removeEventListener("pointermove", handlePointerMove);
+      };
+    }
+  }, [isDragging, previousMousePosition, rotation, isMobile]);
+
+  // Continuous rotation for mobile devices
+  useFrame((_, delta) => {
+    if (isMobile && groupRef.current) {
+      // Rotate continuously on mobile
+      setRotation((prev) => ({
+        x: prev.x,
+        y: prev.y + delta * 0.5, // Adjust the rotation speed as needed
+        z: prev.z,
+      }));
+
+      // Apply the rotation directly to the group
+      groupRef.current.rotation.x = rotation.x;
+      groupRef.current.rotation.y = rotation.y;
+      groupRef.current.rotation.z = rotation.z;
+    }
+  });
 
   if (!scene) return null;
 
@@ -262,19 +318,21 @@ export function SensorAnimation() {
   const [modelOffset, setModelOffset] = useState({ x: 0, y: 0, z: 0 });
   const { size, viewport, gl } = useThree();
   const aspect = size.width / viewport.width;
-
-  // Update cursor style based on dragging state
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  // Update cursor style based on dragging state (only on desktop)
   useEffect(() => {
-    if (isDragging) {
-      gl.domElement.style.cursor = "grabbing";
-    } else {
-      gl.domElement.style.cursor = "grab";
+    if (!isMobile) {
+      if (isDragging) {
+        gl.domElement.style.cursor = "grabbing";
+      } else {
+        gl.domElement.style.cursor = "grab";
+      }
     }
 
     return () => {
       gl.domElement.style.cursor = "auto";
     };
-  }, [isDragging, gl.domElement]);
+  }, [isDragging, gl.domElement, isMobile]);
 
   // Play all animations
   useEffect(() => {
@@ -307,8 +365,10 @@ export function SensorAnimation() {
     }
   }, [scene]);
 
-  // Handle pointer down event
+  // Handle pointer down event (only on desktop)
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (isMobile) return;
+
     e.stopPropagation();
     setIsDragging(true);
     setPreviousMousePosition({
@@ -317,13 +377,17 @@ export function SensorAnimation() {
     });
   };
 
-  // Handle pointer up event
+  // Handle pointer up event (only on desktop)
   const handlePointerUp = () => {
+    if (isMobile) return;
+
     setIsDragging(false);
   };
 
-  // Handle pointer move event
+  // Handle pointer move event (only on desktop)
   const handlePointerMove = (e: PointerEvent) => {
+    if (isMobile) return;
+
     if (isDragging) {
       const deltaMove = {
         x: e.clientX - previousMousePosition.x,
@@ -347,16 +411,35 @@ export function SensorAnimation() {
     }
   };
 
-  // Add and remove event listeners
+  // Add and remove event listeners (only on desktop)
   useEffect(() => {
-    document.addEventListener("pointerup", handlePointerUp);
-    document.addEventListener("pointermove", handlePointerMove);
+    if (!isMobile) {
+      document.addEventListener("pointerup", handlePointerUp);
+      document.addEventListener("pointermove", handlePointerMove);
 
-    return () => {
-      document.removeEventListener("pointerup", handlePointerUp);
-      document.removeEventListener("pointermove", handlePointerMove);
-    };
-  }, [isDragging, previousMousePosition, rotation]);
+      return () => {
+        document.removeEventListener("pointerup", handlePointerUp);
+        document.removeEventListener("pointermove", handlePointerMove);
+      };
+    }
+  }, [isDragging, previousMousePosition, rotation, isMobile]);
+
+  // Continuous rotation for mobile devices
+  useFrame((_, delta) => {
+    if (isMobile && groupRef.current) {
+      // Rotate continuously on mobile
+      setRotation((prev) => ({
+        x: prev.x,
+        y: prev.y + delta * 0.5, // Adjust the rotation speed as needed
+        z: prev.z,
+      }));
+
+      // Apply the rotation directly to the group
+      groupRef.current.rotation.x = rotation.x;
+      groupRef.current.rotation.y = rotation.y;
+      groupRef.current.rotation.z = rotation.z;
+    }
+  });
 
   if (!scene) return null;
 
@@ -376,7 +459,7 @@ export function SensorAnimation() {
 }
 
 export function RaspberryAnimation() {
-  const { scene, animations } = useGLTF("/rasperry.glb");
+  const { scene, animations } = useGLTF("/raspberry.glb");
   const { actions } = useAnimations(animations, scene);
   const groupRef = useRef<THREE.Group>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -385,19 +468,21 @@ export function RaspberryAnimation() {
   const [modelOffset, setModelOffset] = useState({ x: 0, y: 0, z: 0 });
   const { size, viewport, gl } = useThree();
   const aspect = size.width / viewport.width;
-
-  // Update cursor style based on dragging state
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  // Update cursor style based on dragging state (only on desktop)
   useEffect(() => {
-    if (isDragging) {
-      gl.domElement.style.cursor = "grabbing";
-    } else {
-      gl.domElement.style.cursor = "grab";
+    if (!isMobile) {
+      if (isDragging) {
+        gl.domElement.style.cursor = "grabbing";
+      } else {
+        gl.domElement.style.cursor = "grab";
+      }
     }
 
     return () => {
       gl.domElement.style.cursor = "auto";
     };
-  }, [isDragging, gl.domElement]);
+  }, [isDragging, gl.domElement, isMobile]);
 
   // Play all animations
   useEffect(() => {
@@ -430,8 +515,10 @@ export function RaspberryAnimation() {
     }
   }, [scene]);
 
-  // Handle pointer down event
+  // Handle pointer down event (only on desktop)
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (isMobile) return;
+
     e.stopPropagation();
     setIsDragging(true);
     setPreviousMousePosition({
@@ -440,13 +527,17 @@ export function RaspberryAnimation() {
     });
   };
 
-  // Handle pointer up event
+  // Handle pointer up event (only on desktop)
   const handlePointerUp = () => {
+    if (isMobile) return;
+
     setIsDragging(false);
   };
 
-  // Handle pointer move event
+  // Handle pointer move event (only on desktop)
   const handlePointerMove = (e: PointerEvent) => {
+    if (isMobile) return;
+
     if (isDragging) {
       const deltaMove = {
         x: e.clientX - previousMousePosition.x,
@@ -470,16 +561,35 @@ export function RaspberryAnimation() {
     }
   };
 
-  // Add and remove event listeners
+  // Add and remove event listeners (only on desktop)
   useEffect(() => {
-    document.addEventListener("pointerup", handlePointerUp);
-    document.addEventListener("pointermove", handlePointerMove);
+    if (!isMobile) {
+      document.addEventListener("pointerup", handlePointerUp);
+      document.addEventListener("pointermove", handlePointerMove);
 
-    return () => {
-      document.removeEventListener("pointerup", handlePointerUp);
-      document.removeEventListener("pointermove", handlePointerMove);
-    };
-  }, [isDragging, previousMousePosition, rotation]);
+      return () => {
+        document.removeEventListener("pointerup", handlePointerUp);
+        document.removeEventListener("pointermove", handlePointerMove);
+      };
+    }
+  }, [isDragging, previousMousePosition, rotation, isMobile]);
+
+  // Continuous rotation for mobile devices
+  useFrame((_, delta) => {
+    if (isMobile && groupRef.current) {
+      // Rotate continuously on mobile
+      setRotation((prev) => ({
+        x: prev.x,
+        y: prev.y + delta * 0.5, // Adjust the rotation speed as needed
+        z: prev.z,
+      }));
+
+      // Apply the rotation directly to the group
+      groupRef.current.rotation.x = rotation.x;
+      groupRef.current.rotation.y = rotation.y;
+      groupRef.current.rotation.z = rotation.z;
+    }
+  });
 
   if (!scene) return null;
 
@@ -508,19 +618,21 @@ export function WheelsAnimation() {
   const [modelOffset, setModelOffset] = useState({ x: 0, y: 0, z: 0 });
   const { size, viewport, gl } = useThree();
   const aspect = size.width / viewport.width;
-
-  // Update cursor style based on dragging state
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  // Update cursor style based on dragging state (only on desktop)
   useEffect(() => {
-    if (isDragging) {
-      gl.domElement.style.cursor = "grabbing";
-    } else {
-      gl.domElement.style.cursor = "grab";
+    if (!isMobile) {
+      if (isDragging) {
+        gl.domElement.style.cursor = "grabbing";
+      } else {
+        gl.domElement.style.cursor = "grab";
+      }
     }
 
     return () => {
       gl.domElement.style.cursor = "auto";
     };
-  }, [isDragging, gl.domElement]);
+  }, [isDragging, gl.domElement, isMobile]);
 
   // Play all animations
   useEffect(() => {
@@ -553,8 +665,10 @@ export function WheelsAnimation() {
     }
   }, [scene]);
 
-  // Handle pointer down event
+  // Handle pointer down event (only on desktop)
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (isMobile) return;
+
     e.stopPropagation();
     setIsDragging(true);
     setPreviousMousePosition({
@@ -563,13 +677,17 @@ export function WheelsAnimation() {
     });
   };
 
-  // Handle pointer up event
+  // Handle pointer up event (only on desktop)
   const handlePointerUp = () => {
+    if (isMobile) return;
+
     setIsDragging(false);
   };
 
-  // Handle pointer move event
+  // Handle pointer move event (only on desktop)
   const handlePointerMove = (e: PointerEvent) => {
+    if (isMobile) return;
+
     if (isDragging) {
       const deltaMove = {
         x: e.clientX - previousMousePosition.x,
@@ -593,23 +711,42 @@ export function WheelsAnimation() {
     }
   };
 
-  // Add and remove event listeners
+  // Add and remove event listeners (only on desktop)
   useEffect(() => {
-    document.addEventListener("pointerup", handlePointerUp);
-    document.addEventListener("pointermove", handlePointerMove);
+    if (!isMobile) {
+      document.addEventListener("pointerup", handlePointerUp);
+      document.addEventListener("pointermove", handlePointerMove);
 
-    return () => {
-      document.removeEventListener("pointerup", handlePointerUp);
-      document.removeEventListener("pointermove", handlePointerMove);
-    };
-  }, [isDragging, previousMousePosition, rotation]);
+      return () => {
+        document.removeEventListener("pointerup", handlePointerUp);
+        document.removeEventListener("pointermove", handlePointerMove);
+      };
+    }
+  }, [isDragging, previousMousePosition, rotation, isMobile]);
+
+  // Continuous rotation for mobile devices
+  useFrame((_, delta) => {
+    if (isMobile && groupRef.current) {
+      // Rotate continuously on mobile
+      setRotation((prev) => ({
+        x: prev.x,
+        y: prev.y + delta * 0.5, // Adjust the rotation speed as needed
+        z: prev.z,
+      }));
+
+      // Apply the rotation directly to the group
+      groupRef.current.rotation.x = rotation.x;
+      groupRef.current.rotation.y = rotation.y;
+      groupRef.current.rotation.z = rotation.z;
+    }
+  });
 
   if (!scene) return null;
 
   return (
     <group
       ref={groupRef}
-      rotation={[rotation.x, rotation.y + 80, rotation.z]}
+      rotation={[rotation.x, rotation.y, rotation.z]}
       onPointerDown={handlePointerDown}
     >
       <primitive
