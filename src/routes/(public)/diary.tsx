@@ -365,7 +365,7 @@ function FinalDiaryEntry({
             <div className="gap-4 -translate-y-3">
               <p dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}></p>
               <Link
-                className="text-blue-500 hover:underline"
+                className="text-[#23CF51] hover:underline"
                 to="/diary/$id"
                 params={{ id: diaryEntry.id }}
               >
