@@ -15,7 +15,7 @@ function HeaderNormal() {
   const triangleRef = useRef<SVGSVGElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 431px)");
-  const isTablet = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(max-width: 767px)");
   const [ufoPosition, setUfoPosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation(); // Get the current route
@@ -79,26 +79,26 @@ function HeaderNormal() {
     } else if (screenWidth >= 431 && screenWidth < 487) {
       // Segment 5: 431px to 487px
       const m = 1.4643;
-      const b = -226.1;
+      const b = -250.1;
       return m * screenWidth + b;
     } else if (screenWidth >= 487 && screenWidth < 520) {
       // Segment 6: 487px to 520px
       const m = 1.9091;
-      const b = -442.7;
+      const b = -482.7;
       return m * screenWidth + b;
     } else if (screenWidth >= 520 && screenWidth < 576) {
       // Segment 7: 520px to 576px
-      const m = 1.6786;
-      const b = -323.9;
+      const m = 1.3286;
+      const b = -220.9;
       return m * screenWidth + b;
     } else if (screenWidth >= 576 && screenWidth < 720) {
       // Segment 8: 576px to 720px
-      const m = 1.2292;
-      const b = -64.2;
+      const m = 1.0292;
+      const b = -45.2;
       return m * screenWidth + b;
     } else if (screenWidth >= 720 && screenWidth <= 768) {
       // Segment 9: 720px to 768px
-      const m = 2.5208;
+      const m = 2.3208;
       const b = -994.0;
       return m * screenWidth + b;
     } else {
@@ -198,8 +198,8 @@ function HeaderNormal() {
       console.log("globalthis:" + globalThis.innerWidth);
       console.log(
         "function:" +
-        (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
-        (24 + 0.015 * (globalThis.innerWidth - 361)),
+          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+            (24 + 0.015 * (globalThis.innerWidth - 361)),
       );
       console.log("triangle:" + triangle.width);
 
@@ -401,7 +401,7 @@ function HeaderNormal() {
                                   : 0
                             : 499
                           : //mobile
-                          isTablet
+                            isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -412,7 +412,7 @@ function HeaderNormal() {
                                     : 0
                               : 499
                             : //tablet
-                            index !== 0
+                              index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
@@ -508,7 +508,7 @@ function HeaderAdmin() {
   const triangleRef = useRef<SVGSVGElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 431px)");
-  const isTablet = useMediaQuery("(max-width: 769px)");
+  const isTablet = useMediaQuery("(max-width: 767px)");
   const [ufoPosition, setUfoPosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const location = useLocation(); // Get the current route
@@ -580,9 +580,71 @@ function HeaderAdmin() {
     console.log("Route changed to:", location);
     changeRouteTitle();
   }, [location]); //route change
+  function calculateX(screenWidth: number) {
+    if (screenWidth < 360) {
+      // Segment 1: 350px to 360px (assuming linear continuation from Segment 2)
+      const m = 3.8;
+      const b = -930;
+      return m * screenWidth + b;
+    } else if (screenWidth >= 360 && screenWidth <= 375) {
+      // Segment 2: 360px to 375px
+      const m = 3.8;
+      const b = -1066;
+      return m * screenWidth + b;
+    } else if (screenWidth >= 375 && screenWidth < 390) {
+      // Segment 3: 375px to 390px
+      const m = -1.8;
+      const b = 1067;
+      return m * screenWidth + b;
+    } else if (screenWidth >= 390 && screenWidth < 431) {
+      // Segment 4: 390px to 431px
+      const m = 0.9756;
+      const b = -15.484;
+      return m * screenWidth + b;
+    } else if (screenWidth >= 431 && screenWidth < 487) {
+      // Segment 5: 431px to 487px
+      const m = 1.4643;
+      const b = -250.1;
+      return m * screenWidth + b;
+    } else if (screenWidth >= 487 && screenWidth < 520) {
+      // Segment 6: 487px to 520px
+      const m = 1.9091;
+      const b = -482.7;
+      return m * screenWidth + b;
+    } else if (screenWidth >= 520 && screenWidth < 576) {
+      // Segment 7: 520px to 576px
+      const m = 1.3286;
+      const b = -220.9;
+      return m * screenWidth + b;
+    } else if (screenWidth >= 576 && screenWidth < 720) {
+      // Segment 8: 576px to 720px
+      const m = 1.0292;
+      const b = -45.2;
+      return m * screenWidth + b;
+    } else if (screenWidth >= 720 && screenWidth <= 768) {
+      // Segment 9: 720px to 768px
+      const m = 2.3208;
+      const b = -994.0;
+      return m * screenWidth + b;
+    } else {
+      // Fallback for values outside the range
+      throw new Error("Screen width must be between 350px and 768px.");
+    }
+  }
 
   function changeRouteTitle() {
-    const entry = headerEntries.find((item) => item.pathname === location.pathname);
+    const entry = headerEntries.find((item) => {
+      // Exact match (for paths like /car, /about)
+      if (item.pathname === location.pathname) {
+        return true;
+      }
+      // Check if the current path starts with the entry's pathname
+      // and has more segments (for paths like /diary/whatever)
+      if (location.pathname.startsWith(item.pathname + "/") && item.pathname !== "/") {
+        return true;
+      }
+      return false;
+    });
 
     // Ensure entry is found before setting the title
     if (entry) {
@@ -612,24 +674,39 @@ function HeaderAdmin() {
       }
     }
   };
-  const setUfoPos = () => {
+  async function setUfoPos() {
     if (buttonRef.current && triangleRef.current && isOpen) {
       const rect = buttonRef.current.getBoundingClientRect();
       const triangle = triangleRef.current.getBoundingClientRect();
+
+      console.log("mobile: " + isMobile);
+      console.log("tablet: " + isTablet);
       console.log(rect.left);
-      const middleX = isTablet
-        ? (globalThis.innerWidth / (25 + 0.02 * (globalThis.innerWidth - 600.5))) *
-        (24 + 0.02 * (globalThis.innerWidth - 600.5)) -
-        triangle.width
-        : isMobile
-          ? (globalThis.innerWidth / (49 + 0.015 * (globalThis.innerWidth - 361))) *
-          (47 + 0.015 * (globalThis.innerWidth - 361)) -
-          triangle.width
+      console.log("globalthis:" + globalThis.innerWidth);
+      console.log(
+        "function:" +
+          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+            (24 + 0.015 * (globalThis.innerWidth - 361)),
+      );
+      console.log("triangle:" + triangle.width);
+
+      const middleX = isMobile
+        ? calculateX(globalThis.innerWidth) - triangle.width
+        : isTablet
+          ? calculateX(globalThis.innerWidth) - triangle.width
           : rect.left + (rect.width / 2) * 1.3 - triangle.width;
       const middleY = rect.top + rect.height - 25;
-      setUfoPosition({ x: middleX, y: middleY });
+      requestAnimationFrame(() => {
+        setUfoPosition({ x: middleX, y: middleY });
+      });
+      console.log(middleX + "," + middleY);
+
+      if (triangleRef.current) {
+        triangleRef.current.style.left = `${middleX}px`;
+        triangleRef.current.style.top = `${middleY}px`;
+      }
     }
-  };
+  }
 
   useEffect(() => {
     if (isOpen) {
@@ -660,10 +737,12 @@ function HeaderAdmin() {
           >
             {!isOpen && (
               <div
-                className="fixed md:absolute inset-0 max-h-12 md:max-h-14 max-w-[220px] md:max-w-[300px] bg-black bg-opacity-10 backdrop-filter md:transform-none md:left-0 left-1/2 md:translate-x-0 -translate-x-1/2 backdrop-blur-sm md:pl-3 pb-1 md:pr-3"
+                className="fixed md:absolute inset-0 max-h-12 md:max-h-14 max-w-[220px] md:max-w-[300px] bg-black/[0.1] bg-opacity-10 backdrop-filter md:transform-none md:left-0 left-1/2 md:translate-x-0 -translate-x-1/2 backdrop-blur-sm md:pl-3 pb-1 md:pr-3 "
                 style={{
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
                   borderRadius: "12px",
-                  zIndex: -1, // Ensure it stays behind the children
+                  zIndex: 0, // Ensure it stays behind the children
                   maskImage:
                     "linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%)",
                   WebkitMaskImage:
@@ -672,7 +751,7 @@ function HeaderAdmin() {
               />
             )}
 
-            <span className="font-Orbitron font-extrabold text-3xl text-center md:static md:transform-none fixed left-1/2 -translate-x-1/2 pt-2 md:pt-0 text-white">
+            <span className="font-Orbitron font-extrabold fixed left-1/2 -translate-1/2 md:translate-0 md:left-0 md:static text-3xl z-90 top-6 text-center md:top-0 md:pt-0 text-white">
               {pageTitle}
             </span>
 
@@ -683,7 +762,7 @@ function HeaderAdmin() {
             >
               <motion.button
                 ref={buttonRef}
-                className="pt-2 md:pr-0 pr-1 text-white font-bold translate-y-2 md:translate-y-0 p-1"
+                className="pt-1 md:pr-0 pr-1 text-white font-bold translate-y-2 md:translate-y-0 p-1"
                 onClick={toggleDropdown}
                 animate={{
                   y: [0, -4, 3, -2, 2, -3, 4, -1, 1, 0],
@@ -732,21 +811,20 @@ function HeaderAdmin() {
 
             <div
               ref={dropdownRef}
-              className="fixed top-0 left-0 w-full h-full z-[90] overflow-visible font-Orbitron font-black "
+              className="fixed top-0 left-0 w-full h-full z-[90] overflow-hidden font-Orbitron font-black "
             >
               <svg
                 ref={triangleRef}
                 viewBox={`0 0 639 885`}
-                preserveAspectRatio="xMidYMid meet"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="absolute w-[150%] md:w-full"
+                className="absolute md:w-auto w-[150%] "
+                preserveAspectRatio="xMaxYMin"
                 style={{
                   left: `${ufoPosition.x}px`,
-                  top: `min(${ufoPosition.y}px, 90vh)`,
+                  top: `${ufoPosition.y}px`,
                   //translate: "translate(-50%,0)",
                   maxHeight: "100vh",
-                  width: "auto",
                 }}
               >
                 <g filter="url(#shadow)">
@@ -782,7 +860,7 @@ function HeaderAdmin() {
                                 : index == 2
                                   ? 74
                                   : index == 3
-                                    ? 92
+                                    ? 84
                                     : index == 4
                                       ? 92
                                       : 0
@@ -793,7 +871,7 @@ function HeaderAdmin() {
                                 : index == 2
                                   ? 76
                                   : index == 3
-                                    ? 94
+                                    ? 84
                                     : index == 4
                                       ? 94
                                       : 0
@@ -815,26 +893,26 @@ function HeaderAdmin() {
                                     : 0
                             : 499
                           : //mobile
-                          isTablet
+                            isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
                                 : index == 2
-                                  ? 236
+                                  ? 300
                                   : index == 3
-                                    ? 110
+                                    ? 178
                                     : index == 4
                                       ? 110
                                       : 0
                               : 499
                             : //tablet
-                            index !== 0
+                              index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
-                                  ? 227
+                                  ? 300
                                   : index == 3
-                                    ? 100
+                                    ? 178
                                     : index == 4
                                       ? 100
                                       : 0
@@ -844,8 +922,8 @@ function HeaderAdmin() {
                         isMobile
                           ? index * 150 + 225 //mobile
                           : isTablet
-                            ? index * 190 + 225 //tablet
-                            : index * 160 + 240 //desktop
+                            ? index * 150 + 225 //tablet
+                            : index * 150 + 240 //desktop
                       }
                       className=" text-center"
                       style={{
@@ -863,6 +941,7 @@ function HeaderAdmin() {
                       <Link
                         className="fill-white"
                         to={link.pathname}
+                        params={{}}
                         onClick={() => toggleDropdown()}
                       >
                         {link.title}
