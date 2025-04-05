@@ -19,7 +19,9 @@ import Ufo from "~/lib/components/ui/ufo";
 
 export const Route = createFileRoute("/(public)/guardian-of-the-galaxy")({
   component: Home,
+  ssr: false,
 });
+
 const circleTextItems = [
   {
     text: "Raspberry Pi",
