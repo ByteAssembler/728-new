@@ -2,7 +2,6 @@
 
 import type React from "react";
 
-import { AnimatePresence, motion, useAnimation, type Variants } from "motion/react";
 import {
   ArrowDown,
   ChevronDown,
@@ -13,12 +12,13 @@ import {
   RotateCcw,
   X,
 } from "lucide-react";
+import { AnimatePresence, motion, useAnimation, type Variants } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import cow from "~/assets/cow.png";
 import triangle from "~/assets/ufoBeam.png";
 import ufo from "~/assets/ufoStraight.png";
 
-type AnimationType = "right" | "left" | "top" | "bottom" | "layered" | "drop" | "idle";
+type AnimationType = "right" | "left" | "top" | "bottom" | "drop" | "pickUp" | "idle";
 
 // Animation variants for each PN
 const mainPngVariants: Variants = {
@@ -82,7 +82,7 @@ const mainPngVariants: Variants = {
       damping: 15,
     },
   },
-  layeredStart: {
+  dropStart: {
     x: 0,
     y: -40, // Moved up to make room for the triangle
     scale: 1.1,
@@ -92,7 +92,7 @@ const mainPngVariants: Variants = {
       duration: 0.5,
     },
   },
-  layeredEnd: {
+  dropEnd: {
     x: 0,
     y: -40,
     scale: 1.1,
@@ -102,7 +102,7 @@ const mainPngVariants: Variants = {
       duration: 0.5,
     },
   },
-  dropStart: {
+  pickUpStart: {
     x: 0,
     y: -40, // Moved up to make room for the triangle
     scale: 1.05,
@@ -112,7 +112,7 @@ const mainPngVariants: Variants = {
       duration: 0.5,
     },
   },
-  dropEnd: {
+  pickUpEnd: {
     x: 0,
     y: 0,
     scale: 1.1,
@@ -136,7 +136,7 @@ const secondaryPngVariants: Variants = {
       duration: 0.3,
     },
   },
-  layeredStart: {
+  dropStart: {
     x: 0,
     y: 80, // Adjusted for larger triangle
     opacity: 1,
@@ -148,7 +148,7 @@ const secondaryPngVariants: Variants = {
       delay: 0.2,
     },
   },
-  layeredEnd: {
+  dropEnd: {
     x: 0,
     y: 50, // Adjusted for larger triangle
     opacity: 0, // Triangle disappears at the end
@@ -158,8 +158,8 @@ const secondaryPngVariants: Variants = {
       delay: 0.8,
     },
   },
-  // For drop animation - beam effect
-  dropBeamStart: {
+  // For pickUp animation - beam effect
+  pickUpBeamStart: {
     x: 0,
     y: 0,
     opacity: 0,
@@ -170,11 +170,11 @@ const secondaryPngVariants: Variants = {
       duration: 0.1,
     },
   },
-  dropBeamExtend: {
+  pickUpBeamExtend: {
     x: 0,
-    y: 80, // Position to connect UFO and cow
+    y: 125, // Position to connect UFO and cow
     opacity: 1,
-    scaleY: 1,
+    scaleY: 1.05,
     scaleX: 1,
     transformOrigin: "top",
     transition: {
@@ -182,7 +182,7 @@ const secondaryPngVariants: Variants = {
       ease: "easeOut",
     },
   },
-  dropBeamEnd: {
+  pickUpBeamEnd: {
     x: 0,
     y: 80,
     opacity: 0,
@@ -206,7 +206,7 @@ const tertiaryPngVariants: Variants = {
       duration: 0.3,
     },
   },
-  layeredStart: {
+  dropStart: {
     x: 0,
     y: 0,
     opacity: 0,
@@ -215,7 +215,7 @@ const tertiaryPngVariants: Variants = {
       duration: 0.3,
     },
   },
-  layeredMiddle: {
+  dropMiddle: {
     x: 0,
     y: 0,
     opacity: 1,
@@ -225,7 +225,7 @@ const tertiaryPngVariants: Variants = {
       delay: 0.5,
     },
   },
-  layeredMoveDown1: {
+  dropMoveDown1: {
     x: 0,
     y: 50,
     opacity: 1,
@@ -236,7 +236,7 @@ const tertiaryPngVariants: Variants = {
       delay: 0.2,
     },
   },
-  layeredMoveDown2: {
+  dropMoveDown2: {
     x: 0,
     y: 120, // Adjusted for larger triangle
     opacity: 1,
@@ -246,19 +246,19 @@ const tertiaryPngVariants: Variants = {
       ease: "easeIn",
     },
   },
-  // For drop animation - cow appears from UFO
-  dropSpawnFromUfo: {
+  // For pickUp animation - cow appears from UFO
+  pickUpSpawnFromUfo: {
     x: 0,
-    y: -20, // Start inside the UFO
+    y: 120, // Start inside the UFO
     opacity: 0,
     scale: 0.3,
     transition: {
-      duration: 0.1,
+      duration: 0.01,
     },
   },
-  dropMoveDown: {
+  pickUpMoveDown: {
     x: 0,
-    y: 160, // Move down to final position
+    y: 120, // Move down to final position
     opacity: 1,
     scale: 0.8,
     transition: {
@@ -268,7 +268,7 @@ const tertiaryPngVariants: Variants = {
       delay: 0.3,
     },
   },
-  dropFloatUp: {
+  pickUpFloatUp: {
     x: 0,
     y: -20, // Float back up into the UFO
     opacity: 1,
@@ -277,10 +277,10 @@ const tertiaryPngVariants: Variants = {
       type: "spring",
       stiffness: 100,
       damping: 10,
-      delay: 0.8,
+      delay: 1.2,
     },
   },
-  dropEnd: {
+  pickUpEnd: {
     x: 0,
     y: -20,
     opacity: 0,
@@ -388,68 +388,7 @@ export default function FramerAnimatedPngs() {
     tertiaryControls.start(tertiaryPngVariants.hidden);
   };
 
-  // Run the layered animation sequence with proper cancellation support
-  const runLayeredAnimation = async () => {
-    setIsAnimating(true);
-    setShowCancelButton(true);
-
-    // Clear any existing animation timeouts
-    animationTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
-    animationTimeoutsRef.current = [];
-
-    // Create a cancellation token
-    let isCancelled = false;
-    animationSequenceRef.current = () => {
-      isCancelled = true;
-    };
-
-    // Reset positions if coming from another animation
-    if (currentAnimation !== "idle") {
-      await Promise.all([
-        mainControls.start(mainPngVariants.idle),
-        secondaryControls.start(secondaryPngVariants.hidden),
-        tertiaryControls.start(tertiaryPngVariants.hidden),
-      ]);
-
-      // Update position state
-      setMainPosition({ x: 0, y: 0, scale: 1 });
-
-      // Check if cancelled during reset
-      if (isCancelled) return;
-    }
-
-    // Start the layered animation sequence
-    await Promise.all([
-      mainControls.start(mainPngVariants.layeredStart),
-      secondaryControls.start(secondaryPngVariants.layeredStart),
-    ]);
-
-    // Update position state
-    setMainPosition({ x: 0, y: -40, scale: 1.1 });
-
-    // Check if cancelled after first step
-    if (isCancelled) return;
-
-    await tertiaryControls.start(tertiaryPngVariants.layeredMiddle);
-    if (isCancelled) return;
-
-    await tertiaryControls.start(tertiaryPngVariants.layeredMoveDown1);
-    if (isCancelled) return;
-
-    await tertiaryControls.start(tertiaryPngVariants.layeredMoveDown2);
-    if (isCancelled) return;
-
-    // Triangle disappears at the end
-    await secondaryControls.start(secondaryPngVariants.layeredEnd);
-    if (isCancelled) return;
-
-    // Animation completed successfully
-    setIsAnimating(false);
-    setShowCancelButton(false);
-    animationSequenceRef.current = null;
-  };
-
-  // Run the drop animation sequence (opposite of layered)
+  // Run the drop animation sequence with proper cancellation support
   const runDropAnimation = async () => {
     setIsAnimating(true);
     setShowCancelButton(true);
@@ -479,39 +418,100 @@ export default function FramerAnimatedPngs() {
       if (isCancelled) return;
     }
 
+    // Start the drop animation sequence
+    await Promise.all([
+      mainControls.start(mainPngVariants.dropStart),
+      secondaryControls.start(secondaryPngVariants.dropStart),
+    ]);
+
+    // Update position state
+    setMainPosition({ x: 0, y: -40, scale: 1.1 });
+
+    // Check if cancelled after first step
+    if (isCancelled) return;
+
+    await tertiaryControls.start(tertiaryPngVariants.dropMiddle);
+    if (isCancelled) return;
+
+    await tertiaryControls.start(tertiaryPngVariants.dropMoveDown1);
+    if (isCancelled) return;
+
+    await tertiaryControls.start(tertiaryPngVariants.dropMoveDown2);
+    if (isCancelled) return;
+
+    // Triangle disappears at the end
+    await secondaryControls.start(secondaryPngVariants.dropEnd);
+    if (isCancelled) return;
+
+    // Animation completed successfully
+    setIsAnimating(false);
+    setShowCancelButton(false);
+    animationSequenceRef.current = null;
+  };
+
+  // Run the pickUp animation sequence (opposite of drop)
+  const runPickUpAnimation = async () => {
+    setIsAnimating(true);
+    setShowCancelButton(true);
+
+    // Clear any existing animation timeouts
+    animationTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
+    animationTimeoutsRef.current = [];
+
+    // Create a cancellation token
+    let isCancelled = false;
+    animationSequenceRef.current = () => {
+      isCancelled = true;
+    };
+
+    // Reset positions if coming from another animation
+    if (currentAnimation !== "idle") {
+      await Promise.all([
+        mainControls.start(mainPngVariants.idle),
+        secondaryControls.start(secondaryPngVariants.hidden),
+        tertiaryControls.start(tertiaryPngVariants.hidden),
+      ]);
+
+      // Update position state
+      setMainPosition({ x: 0, y: 0, scale: 1 });
+
+      // Check if cancelled during reset
+      if (isCancelled) return;
+    }
+
     // 1. Main UFO slightly scales up and moves up
-    await mainControls.start(mainPngVariants.dropStart);
+    await mainControls.start(mainPngVariants.pickUpStart);
     if (isCancelled) return;
 
     // 2. Cow appears from inside the UFO
-    await tertiaryControls.start(tertiaryPngVariants.dropSpawnFromUfo);
+    await tertiaryControls.start(tertiaryPngVariants.pickUpSpawnFromUfo);
     if (isCancelled) return;
 
     // 3. Cow moves down
-    await tertiaryControls.start(tertiaryPngVariants.dropMoveDown);
+    await tertiaryControls.start(tertiaryPngVariants.pickUpMoveDown);
     if (isCancelled) return;
 
     // 4. Triangle beam extends from UFO to cow
-    await secondaryControls.start(secondaryPngVariants.dropBeamStart);
+    await secondaryControls.start(secondaryPngVariants.pickUpBeamStart);
     if (isCancelled) return;
 
-    await secondaryControls.start(secondaryPngVariants.dropBeamExtend);
+    await secondaryControls.start(secondaryPngVariants.pickUpBeamExtend);
     if (isCancelled) return;
 
     // 5. Cow floats back up into the UFO
-    await tertiaryControls.start(tertiaryPngVariants.dropFloatUp);
+    await tertiaryControls.start(tertiaryPngVariants.pickUpFloatUp);
     if (isCancelled) return;
 
     // 6. Triangle beam disappears
-    await secondaryControls.start(secondaryPngVariants.dropBeamEnd);
+    await secondaryControls.start(secondaryPngVariants.pickUpBeamEnd);
     if (isCancelled) return;
 
     // 7. Cow disappears into the UFO
-    await tertiaryControls.start(tertiaryPngVariants.dropEnd);
+    await tertiaryControls.start(tertiaryPngVariants.pickUpEnd);
     if (isCancelled) return;
 
     // 8. UFO returns to normal
-    await mainControls.start(mainPngVariants.dropEnd);
+    await mainControls.start(mainPngVariants.pickUpEnd);
     if (isCancelled) return;
 
     // Animation completed successfully
@@ -543,10 +543,10 @@ export default function FramerAnimatedPngs() {
     setIsAnimating(true);
     setShowCancelButton(true);
 
-    if (animationType === "layered") {
-      await runLayeredAnimation();
-    } else if (animationType === "drop") {
+    if (animationType === "drop") {
       await runDropAnimation();
+    } else if (animationType === "pickUp") {
+      await runPickUpAnimation();
     } else if (animationType === "idle") {
       // Reset all animations
       await Promise.all([
@@ -597,7 +597,7 @@ export default function FramerAnimatedPngs() {
       <div className="absolute inset-0 flex items-center justify-center">
         {/* Main PNG (UFO) */}
         <motion.div
-          className="absolute z-10"
+          className="absolute "
           variants={mainPngVariants}
           animate={mainControls}
           initial="idle"
@@ -608,7 +608,7 @@ export default function FramerAnimatedPngs() {
           </div>
         </motion.div>
 
-        {/* Secondary PNG (Triangle) with animation - beam effect for drop */}
+        {/* Secondary PNG (Triangle) with animation - beam effect for pickUp */}
         <motion.div
           className="absolute z-0"
           variants={secondaryPngVariants}
@@ -626,7 +626,7 @@ export default function FramerAnimatedPngs() {
           variants={tertiaryPngVariants}
           animate={tertiaryControls}
           initial="hidden"
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.03 }}
         >
           <div className="w-32 h-32 flex items-center justify-center">
             <img src={cow} alt="Cow" className="w-full h-full object-contain" />
@@ -658,7 +658,7 @@ export default function FramerAnimatedPngs() {
       </AnimatePresence>
 
       {/* Animation Controls */}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 flex-wrap px-4">
+      <div className="absolute bottom-4 left-0 right-0 hidden xs:flex justify-center gap-2 flex-wrap px-4 ">
         <Button
           variant={currentAnimation === "right" ? "default" : "outline"}
           onClick={() => handleAnimationChange("right")}
@@ -692,20 +692,20 @@ export default function FramerAnimatedPngs() {
           Bottom
         </Button>
         <Button
-          variant={currentAnimation === "layered" ? "default" : "outline"}
-          onClick={() => handleAnimationChange("layered")}
-          className="flex items-center gap-1"
-        >
-          <Layers className="h-4 w-4" />
-          Layered
-        </Button>
-        <Button
           variant={currentAnimation === "drop" ? "default" : "outline"}
           onClick={() => handleAnimationChange("drop")}
           className="flex items-center gap-1"
         >
-          <ArrowDown className="h-4 w-4" />
+          <Layers className="h-4 w-4" />
           Drop
+        </Button>
+        <Button
+          variant={currentAnimation === "pickUp" ? "default" : "outline"}
+          onClick={() => handleAnimationChange("pickUp")}
+          className="flex items-center gap-1"
+        >
+          <ArrowDown className="h-4 w-4" />
+          PickUp
         </Button>
         <Button
           variant="secondary"
@@ -716,6 +716,7 @@ export default function FramerAnimatedPngs() {
           Reset
         </Button>
       </div>
+      <p>this is right now a demo for the final log that shows the logs of the car</p>
     </div>
   );
 }
