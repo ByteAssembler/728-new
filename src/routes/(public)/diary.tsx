@@ -346,7 +346,7 @@ function FinalDiaryEntry({
         </DiaryEntryTrigger>
       </div>
       <DiaryEntryContent>
-        <div className="space-y-2 py-8 p-12 -translate-y-3 font-Electrolize text-[24px]">
+        <div className="space-y-2 py-8 p-6 xs:p-12 -translate-y-3 font-Electrolize text-[18px] xs:text-[24px] md:text-[28px]">
           <div className="flex gap-2">
             <div className="flex-grow">
               {/* <EditorBlockRenderer data={diaryEntry.data.content} /> */}
