@@ -1937,7 +1937,7 @@ function Home() {
             width: "100%",
             height: "100%",
             top: 0,
-            zIndex: 0,
+            zIndex: -1,
           }}
           shadows
           dpr={[1, 1.5]}
@@ -1985,7 +1985,7 @@ function Home() {
           </p>
         </div>
         <div id="pause-generel-out" style={{ height: "30vh" }}></div>
-        <div id="pause-generel-in" style={{ height: "30vh" }}></div>
+        <div id="pause-generel-in" style={{ height: "60vh" }}></div>
         <div id="pause-generel-2" style={{ height: "30vh" }}>
           <p
             ref={generalFlyText2}
@@ -2075,14 +2075,14 @@ function Home() {
             </p>
             <p
               ref={wheelsFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Ballcaster ergänzen die Reifen, sorgen für Balance und Stabilität und
               ermöglichen gleitende Übergänge
             </p>
             <div
               ref={wheelsAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2175,7 +2175,7 @@ function Home() {
             </p>
             <p
               ref={dropperFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Konstruktion ermöglicht eine zuverlässige und kontrollierte Abgabe,
               sodass die Ablage exakt an der gewünschten Position erfolgt
@@ -2183,7 +2183,7 @@ function Home() {
 
             <div
               ref={dropperAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2276,14 +2276,14 @@ function Home() {
             </p>
             <p
               ref={craneFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Der Kran nutzt einen Magneten, um das Kärtchen anzuheben und sicher auf die
               Plattform des Autos zu legen
             </p>
             <div
               ref={craneAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2376,14 +2376,14 @@ function Home() {
             </p>
             <p
               ref={raspberryFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Der Raspberry Pi dient als zentrale Steuereinheit und verarbeitet alle
               eingehenden Sensor- und Steuerungsdaten
             </p>
             <div
               ref={raspberryAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2468,21 +2468,21 @@ function Home() {
             </p>
             <p
               ref={sensorFlyText2}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white  md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white  md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal "
             >
               Sie ermöglichen eine präzise Erfassung von Hindernissen und der Farben der
               Kärtchen, um diese korrekt zu identifizieren
             </p>
             <p
               ref={sensorFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Durch die Kombination verschiedener Sensortypen wird eine zuverlässige und
               intelligente Navigation des Fahrzeugs sichergestellt
             </p>
             <div
               ref={sensorAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}

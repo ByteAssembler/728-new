@@ -28,7 +28,7 @@ const Image: React.FC<ImageProps> = ({
         src={src}
         alt={alt}
         style={{
-          position: "absolute",
+          position: "relative",
           top: 0,
           left: 0,
           width: "100%",
