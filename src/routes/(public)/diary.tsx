@@ -34,7 +34,7 @@ function DiaryList() {
   const createDiary = useServerFn(dbCreateDiaryEntry);
 
   return (
-    <main className="w-full">
+    <main className="w-full min-h-screen">
       <div className=" py-8 p-12 flex justify-between items-center gap-4">
         <div className="space-y-2">
           <h1 className="scroll-m-20 mt-10 md:mt-0 font-bold text-3xl text-balance tracking-tight">
