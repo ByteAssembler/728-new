@@ -163,6 +163,8 @@ function HeaderNormal() {
       setPageTitle("Impressum");
     } else if (location.pathname === "/sponsor") {
       setPageTitle("Sponsor");
+    } else if (location.pathname === "/profile") {
+      setPageTitle("Profile");
     } else {
       setPageTitle("Not Found");
     }
@@ -203,8 +205,8 @@ function HeaderNormal() {
       console.log("globalthis:" + globalThis.innerWidth);
       console.log(
         "function:" +
-          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
-            (24 + 0.015 * (globalThis.innerWidth - 361)),
+        (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+        (24 + 0.015 * (globalThis.innerWidth - 361)),
       );
       console.log("triangle:" + triangle.width);
 
@@ -406,7 +408,7 @@ function HeaderNormal() {
                                   : 0
                             : 499
                           : //mobile
-                            isTablet
+                          isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -417,7 +419,7 @@ function HeaderNormal() {
                                     : 0
                               : 499
                             : //tablet
-                              index !== 0
+                            index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
@@ -658,6 +660,8 @@ function HeaderAdmin() {
       setPageTitle("Impressum");
     } else if (location.pathname === "/sponsor") {
       setPageTitle("Sponsor");
+    } else if (location.pathname === "/profile") {
+      setPageTitle("Profile");
     } else {
       setPageTitle("Not Found");
     }
@@ -694,8 +698,8 @@ function HeaderAdmin() {
       console.log("globalthis:" + globalThis.innerWidth);
       console.log(
         "function:" +
-          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
-            (24 + 0.015 * (globalThis.innerWidth - 361)),
+        (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+        (24 + 0.015 * (globalThis.innerWidth - 361)),
       );
       console.log("triangle:" + triangle.width);
 
@@ -902,7 +906,7 @@ function HeaderAdmin() {
                                     : 0
                             : 499
                           : //mobile
-                            isTablet
+                          isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -915,7 +919,7 @@ function HeaderAdmin() {
                                       : 0
                               : 499
                             : //tablet
-                              index !== 0
+                            index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
@@ -1160,6 +1164,8 @@ function HeaderNormalProgress() {
       setPageTitle("Impressum");
     } else if (location.pathname === "/sponsor") {
       setPageTitle("Sponsor");
+    } else if (location.pathname === "/profile") {
+      setPageTitle("Profile");
     } else {
       setPageTitle("Not Found");
     }
@@ -1200,8 +1206,8 @@ function HeaderNormalProgress() {
       console.log("globalthis:" + globalThis.innerWidth);
       console.log(
         "function:" +
-          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
-            (24 + 0.015 * (globalThis.innerWidth - 361)),
+        (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+        (24 + 0.015 * (globalThis.innerWidth - 361)),
       );
       console.log("triangle:" + triangle.width);
 
@@ -1403,7 +1409,7 @@ function HeaderNormalProgress() {
                                   : 0
                             : 499
                           : //mobile
-                            isTablet
+                          isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -1414,7 +1420,7 @@ function HeaderNormalProgress() {
                                     : 0
                               : 499
                             : //tablet
-                              index !== 0
+                            index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
@@ -1655,6 +1661,8 @@ function HeaderAdminProgress() {
       setPageTitle("Impressum");
     } else if (location.pathname === "/sponsor") {
       setPageTitle("Sponsor");
+    } else if (location.pathname === "/profile") {
+      setPageTitle("Profile");
     } else {
       setPageTitle("Not Found");
     }
@@ -1691,8 +1699,8 @@ function HeaderAdminProgress() {
       console.log("globalthis:" + globalThis.innerWidth);
       console.log(
         "function:" +
-          (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
-            (24 + 0.015 * (globalThis.innerWidth - 361)),
+        (globalThis.innerWidth / (25 + 0.015 * (globalThis.innerWidth - 361))) *
+        (24 + 0.015 * (globalThis.innerWidth - 361)),
       );
       console.log("triangle:" + triangle.width);
 
@@ -1899,7 +1907,7 @@ function HeaderAdminProgress() {
                                     : 0
                             : 499
                           : //mobile
-                            isTablet
+                          isTablet
                             ? index !== 0
                               ? index == 1
                                 ? 400
@@ -1912,7 +1920,7 @@ function HeaderAdminProgress() {
                                       : 0
                               : 499
                             : //tablet
-                              index !== 0
+                            index !== 0
                               ? index == 1
                                 ? 390
                                 : index == 2
