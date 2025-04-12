@@ -26,7 +26,7 @@ export function createRouter() {
       defaultPreloadStaleTime: 0,
       defaultErrorComponent: DefaultCatchBoundary,
       defaultNotFoundComponent: NotFound,
-      scrollRestoration: true,
+      scrollRestoration: false,
       defaultStructuralSharing: true,
     }),
     queryClient,
