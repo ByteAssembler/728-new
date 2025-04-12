@@ -16,7 +16,7 @@ const DiaryEntryItem = ({
 }) => (
   <DiaryEntryPrimitive.Item
     ref={ref}
-    className={cn("pb-[5vw]", "md:pb-[9vw]", className)}
+    className={cn("pb-[5vw]", "md:pb-[min(9vw,75px)]", className)}
     {...props}
   />
 );

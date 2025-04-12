@@ -50,7 +50,7 @@ function DiaryList() {
           </ClientOnly>
         )}
       </div>
-      <div className="space-y-4 pt-8 pb-12 ">
+      <div className="space-y-4 pt-8 pb-12 max-w-6xl mx-auto">
         <DiaryEntry type="single" collapsible className="w-full pr-[1rem] md:pr-[4vw] ">
           {diaryEntries.success &&
             diaryEntries.data &&
