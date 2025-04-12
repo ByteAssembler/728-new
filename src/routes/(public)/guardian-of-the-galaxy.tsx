@@ -167,6 +167,7 @@ function Home() {
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const wheelsTitleRef = useRef<HTMLHeadingElement | null>(null);
   const generalFlyText = useRef<HTMLHeadingElement | null>(null);
+  const generalFlyText2 = useRef<HTMLHeadingElement | null>(null);
   const wheelsFlyText1 = useRef<HTMLParagraphElement | null>(null);
   const wheelsFlyText2 = useRef<HTMLParagraphElement | null>(null);
   const wheelsFlyText3 = useRef<HTMLParagraphElement | null>(null);
@@ -383,6 +384,12 @@ function Home() {
         xPercent: -50,
         opacity: 0,
       });
+      gsap.set([generalFlyText2.current], {
+        x: "0%",
+        left: "50%",
+        xPercent: -50,
+        opacity: 0,
+      });
 
       // Position the three texts at center initially
       gsap.set(wheelsFlyText1.current, {
@@ -535,7 +542,7 @@ function Home() {
       // Exit: from center to right
       const flyOut = gsap.timeline({
         scrollTrigger: {
-          trigger: "#fly-middle",
+          trigger: "#pause-generel-out",
           start: "top center",
           end: "bottom center",
           scrub: true,
@@ -544,6 +551,49 @@ function Home() {
       });
 
       flyOut.to(generalFlyText.current, {
+        x: "100vw",
+        xPercent: 0,
+        opacity: 0,
+      });
+
+      const flyIn2 = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#pause-generel-in",
+          start: "top center",
+          end: "bottom center",
+          scrub: true,
+        },
+      });
+
+      flyIn2.fromTo(
+        generalFlyText2.current,
+        {
+          x: "-100vw",
+          opacity: 0,
+        },
+        {
+          x: "50vw",
+          xPercent: -50,
+          opacity: 1,
+          left: "0",
+          right: "0",
+          maxWidth: "80%",
+          textAlign: "center",
+        },
+      );
+
+      // Exit: from center to right
+      const flyOut2 = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#fly-middle",
+          start: "top center",
+          end: "bottom center",
+          scrub: true,
+          immediateRender: false, // Important to prevent overwrite
+        },
+      });
+
+      flyOut2.to(generalFlyText2.current, {
         x: "100vw",
         xPercent: 0,
         opacity: 0,
@@ -1889,7 +1939,7 @@ function Home() {
             width: "100%",
             height: "100%",
             top: 0,
-            zIndex: 0,
+            zIndex: -1,
           }}
           shadows
           dpr={[1, 1.5]}
@@ -1934,6 +1984,19 @@ function Home() {
             Hilfspakete mit Nahrung und Medizin abwirft. Effizient, präzise und
             vollautomatisch – entwickelt für schnelle humanitäre Einsätze in zerstörten
             urbanen Zonen.
+          </p>
+        </div>
+        <div id="pause-generel-out" style={{ height: "30vh" }}></div>
+        <div id="pause-generel-in" style={{ height: "60vh" }}></div>
+        <div id="pause-generel-2" style={{ height: "30vh" }}>
+          <p
+            ref={generalFlyText2}
+            className="opacity-0 fixed  top-2/7 xs:top-2/5 md:top-1/2 left-0 translate-x-1/2 font-Electrolize font-semibold text-2xl text-white w-3/4"
+          >
+            Das UFO-Auto fährt selbstständig durch ein verwinkeltes Labyrinth. Es scannt
+            kontinuierlich seine Umgebung, um Hindernissen auszuweichen. Trifft es auf ein
+            blaues Kärtchen, hebt es dieses auf. Bei einem roten Kärtchen lässt es ein
+            gelbes Kärtchen fallen. Präzise, intelligent und reaktionsschnell.
           </p>
         </div>
         <div id="fly-middle" style={{ height: "65vh" }}></div>
@@ -2014,14 +2077,14 @@ function Home() {
             </p>
             <p
               ref={wheelsFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Ballcaster ergänzen die Reifen, sorgen für Balance und Stabilität und
               ermöglichen gleitende Übergänge
             </p>
             <div
               ref={wheelsAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2114,7 +2177,7 @@ function Home() {
             </p>
             <p
               ref={dropperFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Konstruktion ermöglicht eine zuverlässige und kontrollierte Abgabe,
               sodass die Ablage exakt an der gewünschten Position erfolgt
@@ -2122,7 +2185,7 @@ function Home() {
 
             <div
               ref={dropperAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2215,14 +2278,14 @@ function Home() {
             </p>
             <p
               ref={craneFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Der Kran nutzt einen Magneten, um das Kärtchen anzuheben und sicher auf die
               Plattform des Autos zu legen
             </p>
             <div
               ref={craneAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2315,14 +2378,14 @@ function Home() {
             </p>
             <p
               ref={raspberryFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Der Raspberry Pi dient als zentrale Steuereinheit und verarbeitet alle
               eingehenden Sensor- und Steuerungsdaten
             </p>
             <div
               ref={raspberryAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2407,21 +2470,21 @@ function Home() {
             </p>
             <p
               ref={sensorFlyText2}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white  md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white  md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal "
             >
               Sie ermöglichen eine präzise Erfassung von Hindernissen und der Farben der
               Kärtchen, um diese korrekt zu identifizieren
             </p>
             <p
               ref={sensorFlyText3}
-              className="opacity-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Durch die Kombination verschiedener Sensortypen wird eine zuverlässige und
               intelligente Navigation des Fahrzeugs sichergestellt
             </p>
             <div
               ref={sensorAnimation}
-              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh]"
+              className="opacity-0 fixed md:top-[2.5%]  md:w-[35vw] md:h-[45vh] lg:w-[40vw] lg:h-[45vh] z-[-1] md:z-0"
             >
               <Canvas
                 camera={{ position: [0, 1, 2], fov: 45 }}
@@ -2437,7 +2500,7 @@ function Home() {
           </div>
         </div>
         <div id="fade-out-sensors" style={{ height: "50vh" }}></div>
-        <div id="become-2d" style={{ height: "200vh" }}>
+        <div id="become-2d" style={{ height: "100vh" }}>
           {/* 2D Circle with text that appears at this scroll point */}
           <div
             ref={circleRef}

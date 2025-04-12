@@ -126,7 +126,7 @@ const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
         <Image
           src={dogsen}
           alt="About Us"
-          className="w-full max-w-full h-auto object-contain"
+          className="md:absolute relative w-full max-w-full h-auto object-contain"
         />
       </div>
     </div>
@@ -145,7 +145,7 @@ const NavigationButton: React.FC = () => {
   return (
     <Link
       to="/guardian-of-the-galaxy"
-      className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white"
+      className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white hover:opacity-80"
       style={{
         fontSize: 30,
         backgroundImage: dataUrl,

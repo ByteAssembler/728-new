@@ -17,7 +17,9 @@ import { Route as publicRouteImport } from './routes/(public)/route'
 import { Route as protectedRouteImport } from './routes/(protected)/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
+import { Route as publicSponsorImport } from './routes/(public)/sponsor'
 import { Route as publicLogImport } from './routes/(public)/log'
+import { Route as publicImprintImport } from './routes/(public)/imprint'
 import { Route as publicGuardianOfTheGalaxyImport } from './routes/(public)/guardian-of-the-galaxy'
 import { Route as publicDiaryImport } from './routes/(public)/diary'
 import { Route as publicAboutImport } from './routes/(public)/about'
@@ -61,9 +63,21 @@ const DashboardIndexRoute = DashboardIndexImport.update({
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 
+const publicSponsorRoute = publicSponsorImport.update({
+  id: '/sponsor',
+  path: '/sponsor',
+  getParentRoute: () => publicRouteRoute,
+} as any)
+
 const publicLogRoute = publicLogImport.update({
   id: '/log',
   path: '/log',
+  getParentRoute: () => publicRouteRoute,
+} as any)
+
+const publicImprintRoute = publicImprintImport.update({
+  id: '/imprint',
+  path: '/imprint',
   getParentRoute: () => publicRouteRoute,
 } as any)
 
@@ -170,11 +184,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicGuardianOfTheGalaxyImport
       parentRoute: typeof publicRouteImport
     }
+    '/(public)/imprint': {
+      id: '/(public)/imprint'
+      path: '/imprint'
+      fullPath: '/imprint'
+      preLoaderRoute: typeof publicImprintImport
+      parentRoute: typeof publicRouteImport
+    }
     '/(public)/log': {
       id: '/(public)/log'
       path: '/log'
       fullPath: '/log'
       preLoaderRoute: typeof publicLogImport
+      parentRoute: typeof publicRouteImport
+    }
+    '/(public)/sponsor': {
+      id: '/(public)/sponsor'
+      path: '/sponsor'
+      fullPath: '/sponsor'
+      preLoaderRoute: typeof publicSponsorImport
       parentRoute: typeof publicRouteImport
     }
     '/dashboard/': {
@@ -221,7 +249,9 @@ interface publicRouteRouteChildren {
   publicAboutRoute: typeof publicAboutRoute
   publicDiaryRoute: typeof publicDiaryRoute
   publicGuardianOfTheGalaxyRoute: typeof publicGuardianOfTheGalaxyRoute
+  publicImprintRoute: typeof publicImprintRoute
   publicLogRoute: typeof publicLogRoute
+  publicSponsorRoute: typeof publicSponsorRoute
   publicDiaryIdIndexRoute: typeof publicDiaryIdIndexRoute
 }
 
@@ -229,7 +259,9 @@ const publicRouteRouteChildren: publicRouteRouteChildren = {
   publicAboutRoute: publicAboutRoute,
   publicDiaryRoute: publicDiaryRoute,
   publicGuardianOfTheGalaxyRoute: publicGuardianOfTheGalaxyRoute,
+  publicImprintRoute: publicImprintRoute,
   publicLogRoute: publicLogRoute,
+  publicSponsorRoute: publicSponsorRoute,
   publicDiaryIdIndexRoute: publicDiaryIdIndexRoute,
 }
 
@@ -257,7 +289,9 @@ export interface FileRoutesByFullPath {
   '/about': typeof publicAboutRoute
   '/diary': typeof publicDiaryRoute
   '/guardian-of-the-galaxy': typeof publicGuardianOfTheGalaxyRoute
+  '/imprint': typeof publicImprintRoute
   '/log': typeof publicLogRoute
+  '/sponsor': typeof publicSponsorRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/admin-socket': typeof protectedAdminSocketIndexRoute
   '/diary/$id': typeof publicDiaryIdIndexRoute
@@ -270,7 +304,9 @@ export interface FileRoutesByTo {
   '/about': typeof publicAboutRoute
   '/diary': typeof publicDiaryRoute
   '/guardian-of-the-galaxy': typeof publicGuardianOfTheGalaxyRoute
+  '/imprint': typeof publicImprintRoute
   '/log': typeof publicLogRoute
+  '/sponsor': typeof publicSponsorRoute
   '/dashboard': typeof DashboardIndexRoute
   '/admin-socket': typeof protectedAdminSocketIndexRoute
   '/diary/$id': typeof publicDiaryIdIndexRoute
@@ -287,7 +323,9 @@ export interface FileRoutesById {
   '/(public)/about': typeof publicAboutRoute
   '/(public)/diary': typeof publicDiaryRoute
   '/(public)/guardian-of-the-galaxy': typeof publicGuardianOfTheGalaxyRoute
+  '/(public)/imprint': typeof publicImprintRoute
   '/(public)/log': typeof publicLogRoute
+  '/(public)/sponsor': typeof publicSponsorRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/(protected)/admin-socket/': typeof protectedAdminSocketIndexRoute
   '/(public)/diary_/$id/': typeof publicDiaryIdIndexRoute
@@ -303,7 +341,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/diary'
     | '/guardian-of-the-galaxy'
+    | '/imprint'
     | '/log'
+    | '/sponsor'
     | '/dashboard/'
     | '/admin-socket'
     | '/diary/$id'
@@ -315,7 +355,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/diary'
     | '/guardian-of-the-galaxy'
+    | '/imprint'
     | '/log'
+    | '/sponsor'
     | '/dashboard'
     | '/admin-socket'
     | '/diary/$id'
@@ -330,7 +372,9 @@ export interface FileRouteTypes {
     | '/(public)/about'
     | '/(public)/diary'
     | '/(public)/guardian-of-the-galaxy'
+    | '/(public)/imprint'
     | '/(public)/log'
+    | '/(public)/sponsor'
     | '/dashboard/'
     | '/(protected)/admin-socket/'
     | '/(public)/diary_/$id/'
@@ -386,7 +430,9 @@ export const routeTree = rootRoute
         "/(public)/about",
         "/(public)/diary",
         "/(public)/guardian-of-the-galaxy",
+        "/(public)/imprint",
         "/(public)/log",
+        "/(public)/sponsor",
         "/(public)/diary_/$id/"
       ]
     },
@@ -415,8 +461,16 @@ export const routeTree = rootRoute
       "filePath": "(public)/guardian-of-the-galaxy.tsx",
       "parent": "/(public)"
     },
+    "/(public)/imprint": {
+      "filePath": "(public)/imprint.tsx",
+      "parent": "/(public)"
+    },
     "/(public)/log": {
       "filePath": "(public)/log.tsx",
+      "parent": "/(public)"
+    },
+    "/(public)/sponsor": {
+      "filePath": "(public)/sponsor.tsx",
       "parent": "/(public)"
     },
     "/dashboard/": {
