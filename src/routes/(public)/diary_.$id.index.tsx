@@ -85,9 +85,9 @@ function DiaryEntry() {
   const selectedSvg = largeSvgs[rand];
 
   return (
-    <main className="mx-auto py-8">
-      <div className="space-y-4 pt-8 pb-12">
-        <div className="space-y-2 mb-8 w-full pr-[2vw] md:pr-[4vw]">
+    <main className="mx-auto py-8 min-h-screen">
+      <div className="space-y-4 pt-8 pb-12 max-w-4xl mx-auto">
+        <div className="space-y-2 mb-8 w-full pr-[2vw] md:pr-[4vw] min-h-[calc(100vh-160px-160px-50px)]">
           <div className="relative ">
             <svg
               preserveAspectRatio="xMidYMin meet" // Maintain aspect ratio while scaling
@@ -289,46 +289,48 @@ function DiaryEntry() {
             dangerouslySetInnerHTML={{ __html: html || "" }}
           />
         </div>
-        <Table className="mt-20">
-          <TableCaption>
-            Work table entries for {diaryEntry.data.day.toLocaleDateString()}
-          </TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Workers</TableHead>
-              <TableHead>Work day and time</TableHead>
-              <TableHead>Description</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {diaryEntry.data.workTableEntries.map((entry) => (
-              <TableRow key={entry.id}>
-                <TableCell className="font-medium">
-                  <div className="flex flex-col gap-2">
-                    {entry.workers.map((worker) => (
-                      <div key={worker.id} className="flex items-center gap-2">
-                        {worker.name && (
-                          <Avatar>
-                            <AvatarFallback>{getInitials(worker.name)}</AvatarFallback>
-                          </Avatar>
-                        )}
-                        <span>{worker.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  {`Worked at ${new Date(
-                    entry.workedAt || diaryEntry.data.day,
-                  ).toLocaleDateString()} for ${secondsInHoursAndMinutes(
-                    entry.workedSeconds,
-                  )}`}
-                </TableCell>
-                <TableCell>{entry.description}</TableCell>
+        <div className="px-4">
+          <Table className="mt-20">
+            <TableCaption>
+              Work table entries for {diaryEntry.data.day.toLocaleDateString()}
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Workers</TableHead>
+                <TableHead>Work day and time</TableHead>
+                <TableHead>Description</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {diaryEntry.data.workTableEntries.map((entry) => (
+                <TableRow key={entry.id}>
+                  <TableCell className="font-medium">
+                    <div className="flex flex-col gap-2">
+                      {entry.workers.map((worker) => (
+                        <div key={worker.id} className="flex items-center gap-2">
+                          {worker.name && (
+                            <Avatar>
+                              <AvatarFallback>{getInitials(worker.name)}</AvatarFallback>
+                            </Avatar>
+                          )}
+                          <span>{worker.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {`Worked at ${new Date(
+                      entry.workedAt || diaryEntry.data.day,
+                    ).toLocaleDateString()} for ${secondsInHoursAndMinutes(
+                      entry.workedSeconds,
+                    )}`}
+                  </TableCell>
+                  <TableCell>{entry.description}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </main>
   );
