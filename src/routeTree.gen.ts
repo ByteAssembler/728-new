@@ -12,11 +12,9 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SigninImport } from './routes/signin'
-import { Route as DashboardRouteImport } from './routes/dashboard/route'
 import { Route as publicRouteImport } from './routes/(public)/route'
 import { Route as protectedRouteImport } from './routes/(protected)/route'
 import { Route as IndexImport } from './routes/index'
-import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as publicSponsorImport } from './routes/(public)/sponsor'
 import { Route as publicProfileImport } from './routes/(public)/profile'
 import { Route as publicLogImport } from './routes/(public)/log'
@@ -36,12 +34,6 @@ const SigninRoute = SigninImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardRouteRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const publicRouteRoute = publicRouteImport.update({
   id: '/(public)',
   getParentRoute: () => rootRoute,
@@ -56,12 +48,6 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardIndexRoute = DashboardIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardRouteRoute,
 } as any)
 
 const publicSponsorRoute = publicSponsorImport.update({
@@ -149,13 +135,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicRouteImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRoute
-    }
     '/signin': {
       id: '/signin'
       path: '/signin'
@@ -219,13 +198,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicSponsorImport
       parentRoute: typeof publicRouteImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexImport
-      parentRoute: typeof DashboardRouteImport
-    }
     '/(protected)/admin-socket/': {
       id: '/(protected)/admin-socket/'
       path: '/admin-socket'
@@ -285,21 +257,8 @@ const publicRouteRouteWithChildren = publicRouteRoute._addFileChildren(
   publicRouteRouteChildren,
 )
 
-interface DashboardRouteRouteChildren {
-  DashboardIndexRoute: typeof DashboardIndexRoute
-}
-
-const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardIndexRoute: DashboardIndexRoute,
-}
-
-const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
-  DashboardRouteRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
   '/': typeof publicRouteRouteWithChildren
-  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/signin': typeof SigninRoute
   '/admin': typeof protectedAdminRoute
   '/about': typeof publicAboutRoute
@@ -309,7 +268,6 @@ export interface FileRoutesByFullPath {
   '/log': typeof publicLogRoute
   '/profile': typeof publicProfileRoute
   '/sponsor': typeof publicSponsorRoute
-  '/dashboard/': typeof DashboardIndexRoute
   '/admin-socket': typeof protectedAdminSocketIndexRoute
   '/diary/$id': typeof publicDiaryIdIndexRoute
 }
@@ -325,7 +283,6 @@ export interface FileRoutesByTo {
   '/log': typeof publicLogRoute
   '/profile': typeof publicProfileRoute
   '/sponsor': typeof publicSponsorRoute
-  '/dashboard': typeof DashboardIndexRoute
   '/admin-socket': typeof protectedAdminSocketIndexRoute
   '/diary/$id': typeof publicDiaryIdIndexRoute
 }
@@ -335,7 +292,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/(protected)': typeof protectedRouteRouteWithChildren
   '/(public)': typeof publicRouteRouteWithChildren
-  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/signin': typeof SigninRoute
   '/(protected)/admin': typeof protectedAdminRoute
   '/(public)/about': typeof publicAboutRoute
@@ -345,7 +301,6 @@ export interface FileRoutesById {
   '/(public)/log': typeof publicLogRoute
   '/(public)/profile': typeof publicProfileRoute
   '/(public)/sponsor': typeof publicSponsorRoute
-  '/dashboard/': typeof DashboardIndexRoute
   '/(protected)/admin-socket/': typeof protectedAdminSocketIndexRoute
   '/(public)/diary_/$id/': typeof publicDiaryIdIndexRoute
 }
@@ -354,7 +309,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dashboard'
     | '/signin'
     | '/admin'
     | '/about'
@@ -364,7 +318,6 @@ export interface FileRouteTypes {
     | '/log'
     | '/profile'
     | '/sponsor'
-    | '/dashboard/'
     | '/admin-socket'
     | '/diary/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -379,7 +332,6 @@ export interface FileRouteTypes {
     | '/log'
     | '/profile'
     | '/sponsor'
-    | '/dashboard'
     | '/admin-socket'
     | '/diary/$id'
   id:
@@ -387,7 +339,6 @@ export interface FileRouteTypes {
     | '/'
     | '/(protected)'
     | '/(public)'
-    | '/dashboard'
     | '/signin'
     | '/(protected)/admin'
     | '/(public)/about'
@@ -397,7 +348,6 @@ export interface FileRouteTypes {
     | '/(public)/log'
     | '/(public)/profile'
     | '/(public)/sponsor'
-    | '/dashboard/'
     | '/(protected)/admin-socket/'
     | '/(public)/diary_/$id/'
   fileRoutesById: FileRoutesById
@@ -407,7 +357,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   protectedRouteRoute: typeof protectedRouteRouteWithChildren
   publicRouteRoute: typeof publicRouteRouteWithChildren
-  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   SigninRoute: typeof SigninRoute
 }
 
@@ -415,7 +364,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   protectedRouteRoute: protectedRouteRouteWithChildren,
   publicRouteRoute: publicRouteRouteWithChildren,
-  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   SigninRoute: SigninRoute,
 }
 
@@ -432,7 +380,6 @@ export const routeTree = rootRoute
         "/",
         "/(protected)",
         "/(public)",
-        "/dashboard",
         "/signin"
       ]
     },
@@ -457,12 +404,6 @@ export const routeTree = rootRoute
         "/(public)/profile",
         "/(public)/sponsor",
         "/(public)/diary_/$id/"
-      ]
-    },
-    "/dashboard": {
-      "filePath": "dashboard/route.tsx",
-      "children": [
-        "/dashboard/"
       ]
     },
     "/signin": {
@@ -499,10 +440,6 @@ export const routeTree = rootRoute
     "/(public)/sponsor": {
       "filePath": "(public)/sponsor.tsx",
       "parent": "/(public)"
-    },
-    "/dashboard/": {
-      "filePath": "dashboard/index.tsx",
-      "parent": "/dashboard"
     },
     "/(protected)/admin-socket/": {
       "filePath": "(protected)/admin-socket.index.tsx",

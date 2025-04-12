@@ -23,7 +23,7 @@ function Home() {
         <div className="flex flex-col gap-2">
           <p>Welcome back, {user.name}!</p>
           <Button type="button" asChild className="w-fit" size="lg">
-            <Link to="/dashboard">Go to Dashboard</Link>
+            <Link to="/">Go to /</Link>
           </Button>
           <div>
             More data:
