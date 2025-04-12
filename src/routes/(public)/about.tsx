@@ -113,7 +113,7 @@ function About() {
       </div>
 
       <AboutSection text="Wir sind Mission Seven To Aid (Mission72A) – ein engagiertes Team mit dem Ziel, ein autonomes Rettungsfahrzeug zu entwickeln, das in Krisensituationen Leben rettet. Unsere Vision ist es, moderne Technik einzusetzen, um Menschen und Rettungskräfte zu schützen. Mit Kreativität, Wissen und starkem Teamgeist stellen wir uns jeder Herausforderung. Unser Projekt „Guardian of the Galaxy“ soll nicht nur Innovation vorantreiben, sondern auch einen wichtigen gesellschaftlichen Beitrag leisten" />
-      <div className="flex flex-col xs:p-2 md:p-10 space-y-8 md:space-y-32">
+      <div className="flex flex-col xs:p-2 md:p-10 space-y-8 md:space-y-32" id="team">
         <h2
           className="text-white font-Orbitron font-extrabold text-center mb-10"
           style={{ fontSize: 35 }}
@@ -131,6 +131,12 @@ function About() {
           />
         ))}
       </div>
+      <style>
+        {`#team img {
+          -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+          mask-image: linear-gradient(to bottom, black 50%, transparent 90%, transparent 100%);
+        }`}
+      </style>
     </div>
   );
 }
