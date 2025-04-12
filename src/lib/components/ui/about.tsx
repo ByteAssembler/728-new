@@ -60,53 +60,80 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
 }) => {
   const titleSvg = titleSvgs[titleBackground];
   const portrait = portraits[titleBackground];
-  //console.log(buttonBackground);
-  //console.log(backgroundTitle);
 
   return (
     <div className="block pb-5 md:pb-2">
-      {/* Mobile Layout (stacked: image → title → text) */}
-      <div className="flex flex-col xs:hidden">
-        <div className="relative aspect-[3/4] w-4/5 max-w-[25rem] mx-auto mb-3">
-          <Image
-            src={portrait}
-            alt="Picture of Member"
-            className="object-cover object-top p-0"
-          />
-        </div>
-        <div className="flex justify-center mb-3">
-          <img src={titleSvg} alt="title" className="m-0" />
-        </div>
-        <p className="text-white text-base">{text}</p>
-      </div>
 
-      {/* Tablet/Desktop Layout (title at top, image and text below side by side) */}
-      <div className="hidden xs:block">
-        <div className="flex justify-center mb-4">
-          <img src={titleSvg} alt="title" className="m-0" />
-        </div>
-        <div className={`flex gap-1 ${isImageFirst ? "flex-row" : "flex-row-reverse"}`}>
-          <div className="relative aspect-[3/4] w-1/2 lg:w-2/5 h-auto md:max-h-[30rem] lg:max-h-[28rem]">
+      {/* Mobile Layout (unter md): Alles untereinander */}
+      <div className="block md:hidden">
+        {/* Bild */}
+        <div className="w-full mb-4">
+          <div className="relative w-full aspect-[3/4]">
             <Image
               src={portrait}
               alt="Picture of Member"
-              className="object-cover object-[center_20%] p-0"
+              className="w-full object-cover object-[center_20%] p-0"
             />
           </div>
-          {/* Adjust text container width and add more padding on larger screens */}
-          <div className="w-1/2 lg:w-3/5">
-            <p
-              className={`text-base md:text-1xl lg:text-2xl text-white ${
-                isImageFirst
-                  ? "lg:translate-x-[-1rem] xl:translate-x-[-2rem] lg:pr-4"
-                  : "lg:translate-x-[1rem] xl:translate-x-[2rem] lg:pl-4"
-              }`}
-            >
+        </div>
+        {/* Banner */}
+        <div className="w-full mb-4 flex justify-center">
+          <img src={titleSvg} alt="title" />
+        </div>
+        {/* Paragraph */}
+        <div className="w-full">
+          <p className="text-base md:text-xl lg:text-2xl text-white px-4">
+            {text}
+          </p>
+        </div>
+      </div>
+
+      {/* Tablet Layout (von md bis lg): Banner oben, darunter zwei Spalten */}
+      <div className="hidden md:block lg:hidden">
+        {/* Banner in voller Breite */}
+        <div className="w-full mb-4">
+          <img src={titleSvg} alt="title" className="w-full max-w-md mx-auto" />
+        </div>
+        {/* 2-Spalten-Aufteilung */}
+        <div className={`flex ${isImageFirst ? "flex-row" : "flex-row-reverse"} gap-4`}>
+          <div className="w-full md:w-1/2">
+            <Image
+              src={portrait}
+              alt="Picture of Member"
+              className="w-full object-cover"
+            />
+          </div>
+          <div className="w-full md:w-1/2 flex items-center px-4">
+            <p className="text-base md:text-xl lg:text-2xl text-white">
               {text}
             </p>
           </div>
         </div>
       </div>
+
+      {/* Desktop Layout (ab lg): Banner oben, danach 50:50 */}
+      <div className="hidden lg:block">
+        {/* Banner in voller Breite */}
+        <div className="w-full mb-4">
+          <img src={titleSvg} alt="title" className="w-full max-w-xl mx-auto" />
+        </div>
+        {/* 50:50-Aufteilung */}
+        <div className="flex">
+          <div className={`w-1/2 ${isImageFirst ? "" : "order-2"}`}>
+            <Image
+              src={portrait}
+              alt="Picture of Member"
+              className="w-full object-cover"
+            />
+          </div>
+          <div className={`w-1/2 flex items-center px-4 ${isImageFirst ? "" : "order-1"}`}>
+            <p className="text-base md:text-xl lg:text-2xl text-white">
+              {text}
+            </p>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };
@@ -136,8 +163,8 @@ const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
 const NavigationButton: React.FC = () => {
   const svgString = encodeURIComponent(
     '<svg width="334" height="117" viewBox="0 0 334 117" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
-      '<path d="M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z" fill="#23CF51"/>\n' +
-      "</svg>\n",
+    '<path d="M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z" fill="#23CF51"/>\n' +
+    "</svg>\n",
   );
 
   const dataUrl = `url("data:image/svg+xml,${svgString}")`;
