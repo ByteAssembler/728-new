@@ -133,7 +133,7 @@ function About() {
       </div>
       <style>
         {`#team img {
-          -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 90%, transparent 100%);
           mask-image: linear-gradient(to bottom, black 50%, transparent 90%, transparent 100%);
         }`}
       </style>
