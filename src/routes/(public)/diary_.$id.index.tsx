@@ -87,7 +87,7 @@ function DiaryEntry() {
   return (
     <main className="mx-auto py-8 min-h-screen">
       <div className="space-y-4 pt-8 pb-12 max-w-4xl mx-auto">
-        <div className="space-y-2 mb-8 w-full pr-[2vw] md:pr-[4vw] min-h-[calc(100vh-160px-160px-50px)]">
+        <div className="space-y-2 mb-8 w-full pr-[2vw] md:pr-[4vw]">
           <div className="relative ">
             <svg
               preserveAspectRatio="xMidYMin meet" // Maintain aspect ratio while scaling
@@ -283,7 +283,7 @@ function DiaryEntry() {
             </svg>
           </div>
         </div>
-        <div className="px-4">
+        <div className="px-4 min-h-[calc(100vh-160px-160px-160px-100px)]">
           <div
             className="prose prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: html || "" }}
