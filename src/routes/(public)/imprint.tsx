@@ -10,8 +10,8 @@ export const Route = createFileRoute("/(public)/imprint")({
 
 function Imprint() {
   return (
-    <div className="md:pl-12 xs:p-4 p-1 md:p-10 font-Electrolize">
-      <div className="flex flex-col pt-15 xs:p-2 md:p-10 ">
+    <div className="md:pl-12 xs:p-4 p-1 md:p-10 font-Electrolize mx-auto px-5">
+      <div className="flex flex-col !pt-15 xs:p-2 md:p-10 w-fit">
         <ImprintSection
           header={
             <svg
