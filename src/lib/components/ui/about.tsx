@@ -63,16 +63,15 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
 
   return (
     <div className="block pb-5 md:pb-2">
-
       {/* Mobile Layout (unter md): Alles untereinander */}
       <div className="block md:hidden">
-        {/* Bild */}
         <div className="w-full mb-4">
           <div className="relative w-full aspect-[3/4]">
             <Image
               src={portrait}
               alt="Picture of Member"
-              className="w-full object-cover object-[center_20%] p-0"
+              className="w-full object-cover object-[center_20%] p-0  mask-b-from-75% mask-b-to-98% "
+
             />
           </div>
         </div>
@@ -82,58 +81,55 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
         </div>
         {/* Paragraph */}
         <div className="w-full">
-          <p className="text-base md:text-xl lg:text-2xl text-white px-4">
-            {text}
-          </p>
+          <p className="text-base md:text-xl lg:text-2xl text-white px-4">{text}</p>
         </div>
       </div>
 
       {/* Tablet Layout (von md bis lg): Banner oben, darunter zwei Spalten */}
       <div className="hidden md:block lg:hidden">
-        {/* Banner in voller Breite */}
+
         <div className="w-full mb-4">
           <img src={titleSvg} alt="title" className="w-full max-w-md mx-auto" />
         </div>
-        {/* 2-Spalten-Aufteilung */}
+
         <div className={`flex ${isImageFirst ? "flex-row" : "flex-row-reverse"} gap-4`}>
           <div className="w-full md:w-1/2">
             <Image
               src={portrait}
               alt="Picture of Member"
-              className="w-full object-cover"
+              className="w-full object-cover  mask-b-from-65% mask-b-to-98%"
             />
           </div>
+
           <div className="w-full md:w-1/2 flex items-center px-4">
-            <p className="text-base md:text-xl lg:text-2xl text-white">
-              {text}
-            </p>
+            <p className="text-base md:text-xl lg:text-2xl text-white">{text}</p>
           </div>
         </div>
       </div>
 
       {/* Desktop Layout (ab lg): Banner oben, danach 50:50 */}
       <div className="hidden lg:block">
-        {/* Banner in voller Breite */}
+
         <div className="w-full mb-4">
           <img src={titleSvg} alt="title" className="w-full max-w-xl mx-auto" />
         </div>
-        {/* 50:50-Aufteilung */}
+
         <div className="flex">
           <div className={`w-1/2 ${isImageFirst ? "" : "order-2"}`}>
             <Image
               src={portrait}
               alt="Picture of Member"
-              className="w-full object-cover"
+              className="w-full object-cover mask-b-from-70% mask-b-to-98%"
+
             />
           </div>
-          <div className={`w-1/2 flex items-center px-4 ${isImageFirst ? "" : "order-1"}`}>
-            <p className="text-base md:text-xl lg:text-2xl text-white">
-              {text}
-            </p>
+          <div
+            className={`w-1/2 flex items-center px-4 ${isImageFirst ? "" : "order-1"}`}
+          >
+            <p className="text-base md:text-xl lg:text-2xl text-white">{text}</p>
           </div>
         </div>
       </div>
-
     </div>
   );
 };
