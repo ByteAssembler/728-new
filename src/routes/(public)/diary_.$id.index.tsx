@@ -61,7 +61,7 @@ function DiaryEntry() {
   }
 
   const dayDate = new Date(diaryEntry.data.day);
-  const day = dayDate.getDay();
+  const day = dayDate.getDate();
   const month = dayDate.getMonth() + 1;
   const isMobile = useMediaQuery("(max-width: 431px)");
   const isTablet = useMediaQuery("(max-width: 768px)");
