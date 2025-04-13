@@ -17,11 +17,13 @@ export const Route = createFileRoute("/(public)")({
   },
 });
 
+
 function PublicLayout() {
   const user = Route.useLoaderData();
   const location = useLocation();
-
   const progressMode = location.pathname === "/sponsor";
+  document.title = "Mission72Aid";
+
 
   return (
     <>
