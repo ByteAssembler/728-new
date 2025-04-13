@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
+import { AllPossibleRoles } from "~/lib/server/permissions";
 import ClientOnly from "~/lib/components/ClientOnlyComponent";
 import Background from "~/lib/components/ui/background";
 import Footer from "~/lib/components/ui/footer";
@@ -12,7 +13,7 @@ import {
 export const Route = createFileRoute("/(public)")({
   component: PublicLayout,
   loader(ctx) {
-    return !!ctx.context.user;
+    return ctx.context.user;
   },
 });
 
@@ -28,12 +29,12 @@ function PublicLayout() {
       <Outlet />
       <ClientOnly>
         {progressMode ? (
-          user ? (
+          user && user.role === ("admin" as AllPossibleRoles) ? (
             <HeaderAdminProgress />
           ) : (
             <HeaderNormalProgress />
           )
-        ) : user ? (
+        ) : user && user.role === ("admin" as AllPossibleRoles) ? (
           <HeaderAdmin />
         ) : (
           <HeaderNormal />
