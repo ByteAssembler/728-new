@@ -50,7 +50,7 @@ function DiaryList() {
           </ClientOnly>
         )}
       </div>
-      <div className="space-y-4 pt-8 pb-12 max-w-6xl mx-auto">
+      <div className="space-y-4 pt-8 pb-12  mx-auto">
         <DiaryEntry type="single" collapsible className="w-full pr-[1rem] md:pr-[4vw] ">
           {diaryEntries.success &&
             diaryEntries.data &&
@@ -79,7 +79,7 @@ function FinalDiaryEntry({
   console.log(12345678, diaryEntry);
 
   const dayDate = new Date(diaryEntry.day);
-  const day = dayDate.getDay();
+  const day = dayDate.getDate();
   const month = dayDate.getMonth() + 1;
   const isMobile = useMediaQuery("(max-width: 431px)");
   const isTablet = useMediaQuery("(max-width: 768px)");
