@@ -1968,7 +1968,7 @@ function Home() {
       <div className="z-10">
         {/* Sections to trigger scroll animations */}
         <div id="fly-outside" style={{ height: "75vh" }}></div>
-        <div id="pause-generel" style={{ height: "30vh" }}>
+        <div id="pause-generel" style={{ height: "40vh" }}>
           <h2
             ref={titleRef}
             className="opacity-0 fixed bottom-20 font-Orbitron font-bold text-5xl text-white left-1/2 -translate-x-1/2 text-center md:text-left  md:whitespace-nowrap"
@@ -1988,7 +1988,7 @@ function Home() {
         </div>
         <div id="pause-generel-out" style={{ height: "30vh" }}></div>
         <div id="pause-generel-in" style={{ height: "60vh" }}></div>
-        <div id="pause-generel-2" style={{ height: "30vh" }}>
+        <div id="pause-generel-2" style={{ height: "50vh" }}>
           <p
             ref={generalFlyText2}
             className="opacity-0 fixed  top-2/7 xs:top-2/5 md:top-1/2 left-0 translate-x-1/2 font-Electrolize font-semibold text-2xl text-white w-3/4"
