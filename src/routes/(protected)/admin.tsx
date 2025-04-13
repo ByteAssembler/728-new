@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { useState } from "react";
 
@@ -19,6 +19,9 @@ import { UserTable } from "~/lib/components/wrapper/admin/user-manager";
 export const Route = createFileRoute("/(protected)/admin")({
   component: Admin,
   ssr: false,
+  beforeLoad: async () => {
+    throw redirect({ to: "/admin-socket" });
+  },
 });
 
 const defaultCells = [
