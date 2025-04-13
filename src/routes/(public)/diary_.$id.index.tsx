@@ -61,7 +61,7 @@ function DiaryEntry() {
   }
 
   const dayDate = new Date(diaryEntry.data.day);
-  const day = dayDate.getDay();
+  const day = dayDate.getDate();
   const month = dayDate.getMonth() + 1;
   const isMobile = useMediaQuery("(max-width: 431px)");
   const isTablet = useMediaQuery("(max-width: 768px)");
@@ -85,13 +85,13 @@ function DiaryEntry() {
   const selectedSvg = largeSvgs[rand];
 
   return (
-    <main className="mx-auto py-8 min-h-screen">
-      <div className="space-y-4 pt-8 pb-12 max-w-4xl mx-auto">
+    <main className="mx-auto py-8 min-h-screen overflow-hidden">
+      <div className="space-y-4 pt-8 pb-12  mx-auto">
         <div className="space-y-2 mb-8 w-full pr-[2vw] md:pr-[4vw]">
           <div className="relative ">
             <svg
               preserveAspectRatio="xMidYMin meet" // Maintain aspect ratio while scaling
-              className="w-full scale-150 xs:scale-125 md:scale-100  -translate-x-[20%] xs:-translate-x-[10%] md:translate-x-0 h-auto" // Make SVG responsive
+              className="w-full scale-150 xs:scale-125 md:scale-100  -translate-x-[22%] xs:-translate-x-[10%] md:translate-x-0 h-auto" // Make SVG responsive
               viewBox={`0 ${isMobile ? "-38" : "0"} 1444 ${isMobile ? "250" : "218"}`}
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
