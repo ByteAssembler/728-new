@@ -199,6 +199,70 @@ function Home() {
   const circleListRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
+    let scrollTimer, animationFrame;
+    let userInteracted = false;
+    let lastScrollY = window.pageYOffset;
+
+    const handleUserIntent = () => {
+      userInteracted = true;
+      cleanupListeners();
+    };
+
+    const cleanupListeners = () => {
+      window.removeEventListener("scroll", handleUserIntent);
+      window.removeEventListener("wheel", handleUserIntent);
+      window.removeEventListener("touchstart", handleUserIntent);
+      window.removeEventListener("pointerdown", handleUserIntent);
+    };
+
+    // Listen for any user interaction
+    window.addEventListener("scroll", handleUserIntent, { passive: true });
+    window.addEventListener("wheel", handleUserIntent, { passive: true });
+    window.addEventListener("touchstart", handleUserIntent, { passive: true });
+    window.addEventListener("pointerdown", handleUserIntent, { passive: true });
+
+    // Start auto-scroll if no interaction within 100ms
+    scrollTimer = setTimeout(() => {
+      if (userInteracted) return;
+
+      const startY = window.pageYOffset;
+      const endY = startY + window.innerHeight;
+      const duration = 1000;
+      const startTime = performance.now();
+
+      const scrollStep = (currentTime) => {
+        const currentY = window.pageYOffset;
+
+        // Abort if user scrolls during animation
+        if (Math.abs(currentY - lastScrollY) > 2) {
+          userInteracted = true;
+          return;
+        }
+        lastScrollY = currentY;
+
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 0.5 * (1 - Math.cos(Math.PI * progress));
+
+        window.scrollTo(0, startY + (endY - startY) * ease);
+
+        if (progress < 1 && !userInteracted) {
+          animationFrame = requestAnimationFrame(scrollStep);
+        }
+      };
+
+      animationFrame = requestAnimationFrame(scrollStep);
+    }, 100); // wait 100ms before starting auto-scroll
+
+    // Cleanup on unmount
+    return () => {
+      clearTimeout(scrollTimer);
+      cancelAnimationFrame(animationFrame);
+      cleanupListeners();
+    };
+  }, []);
+
+  useEffect(() => {
     // Ensure smooth scrolling for better animation effects
     document.documentElement.style.scrollBehavior = "smooth";
 
@@ -222,6 +286,7 @@ function Home() {
     };
 
     handleResize(); // Set initial value
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);

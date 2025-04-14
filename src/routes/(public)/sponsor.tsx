@@ -12,7 +12,7 @@ function SponsorPage() {
         <div className="w-full max-w-4xl mb-8">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/PROGRESS_GROUP.jpg/2880px-PROGRESS_GROUP.jpg?20161208153140"
-            alt="test image"
+            alt="ProgressGroup Logo"
             style={{ width: "100%", height: "auto" }}
           />
         </div>
@@ -22,7 +22,7 @@ function SponsorPage() {
           href="https://www.progress.group/de/"
           target="_blank"
           rel="noopener noreferrer"
-          className="mb-12 hover:opacity-80 transition-opacity"
+          className="mb-12 hover:opacity-80 transition-opacity active:opacity-60"
         >
           <svg
             className="w-full h-auto md:h-150% md:w-150%"

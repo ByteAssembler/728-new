@@ -166,7 +166,7 @@ const NavigationButton: React.FC = () => {
   return (
     <Link
       to="/guardian-of-the-galaxy"
-      className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white hover:opacity-80"
+      className="p-3 pl-4 pr-4  font-Orbitron font-extrabold text-white hover:opacity-80 active:opacity-60"
       style={{
         fontSize: 30,
         backgroundImage: dataUrl,

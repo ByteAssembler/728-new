@@ -7,6 +7,7 @@ const Footer: React.FC = () => {
   const progressMode = location.pathname === "/sponsor";
 
   const hoverClass = progressMode ? "hover:text-[#008bcc]" : "hover:text-[#23CF51]";
+  const activeClass = progressMode ? "active:text-[#006290]" : "active:text-[#178634]";
 
   return (
     <footer className="w-full py-4 mt-auto z-1">
@@ -16,13 +17,14 @@ const Footer: React.FC = () => {
           className={clsx(
             "text-white text-base font-Electrolize 2xl:text-2xl transition-colors duration-200",
             hoverClass,
+            activeClass,
           )}
         >
           Impressum
         </Link>
         <Link
           to="/sponsor"
-          className="text-white text-base font-Electrolize 2xl:text-2xl transition-colors duration-200 hover:text-[#008bcc]"
+          className="text-white text-base font-Electrolize 2xl:text-2xl active:text-[#006290] transition-colors duration-200 hover:text-[#008bcc]"
         >
           Sponsor
         </Link>
