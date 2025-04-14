@@ -126,7 +126,7 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
           <div
             className={`w-1/2 flex items-center px-4 ${isImageFirst ? "" : "order-1"}`}
           >
-            <p className="text-base md:text-xl lg:text-2xl text-white">{text}</p>
+            <p className="text-base md:text-xl lg:text-2xl 2xl:text-4xl text-white">{text}</p>
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@ const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
       Über Uns
     </h2>
     <div className="flex flex-col md:flex-row gap-4 w-full justify-between md:p-10">
-      <p className="text-lg md:text-2xl md:w-1/2 text-white">{text}</p>
+      <p className="text-lg md:text-2xl md:w-1/2 2xl:text-4xl text-white">{text}</p>
       <div className="w-full md:w-1/2 flex justify-center">
         <Image
           src={dogsen}
