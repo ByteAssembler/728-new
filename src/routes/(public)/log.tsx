@@ -52,7 +52,7 @@ function Log() {
     <>
       <div className="w-full">
         <div className="min-h-screen flex items-center justify-between p-6">
-          <div className="font-Electrolize font-white absolute top-10 bg-[#E7000B] rounded-sm">
+          <div className="font-Electrolize font-white absolute top-10 bg-[#E7000B] rounded-sm p-1">
             <p>Not Connected! Changed to Show Mode</p>
           </div>
           <div className="relative flex flex-col items-start pl-3 md:pl-10 ">
