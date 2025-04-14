@@ -25,133 +25,133 @@ export const Route = createFileRoute("/(public)/guardian-of-the-galaxy")({
 const circleTextItems = [
   {
     text: "Raspberry Pi",
-    size: "text-xl xs:text-2xl md:text-3xl lg:text-3xl",
+    size: "text-xl xs:text-2xl md:text-3xl lg:text-3xl 2xl:text-5xl",
     left: "25%",
     top: "25%",
     fontWeight: "font-light xs:font-semibold md:font-black",
   },
   {
     text: "Elektromagnet",
-    size: "text-base xs:text-lg md:text-xl",
+    size: "text-base xs:text-lg md:text-xl 2xl:text-3xl",
     left: "55%",
     top: "10%",
     fontWeight: "font-thin xs:font-medium md:font-bold",
   },
   {
     text: "Lichtsensor",
-    size: "text-lg xs:text-xl md:text-2xl",
+    size: "text-lg xs:text-xl md:text-2xl 2xl:text-3xl",
     left: "50%",
     top: "40%",
     fontWeight: "font-normal xs:font-semibold md:font-extrabold",
   },
   {
     text: "Gyrosensor",
-    size: "text-base xs:text-xl md:text-2xl",
+    size: "text-base xs:text-xl md:text-2xl 2xl:text-4xl",
     left: "60%",
     top: "45%",
     fontWeight: "font-light xs:font-bold md:font-black",
   },
   {
     text: "Laserdistanzsensoren",
-    size: "text-base xs:text-lg md:text-xl",
+    size: "text-base xs:text-lg md:text-xl 2xl:text-3xl",
     left: "25%",
     top: "48%",
     fontWeight: "font-thin xs:font-normal md:font-semibold",
   },
   {
     text: "Farbsensor",
-    size: "text-lg xs:text-xl md:text-3xl",
+    size: "text-lg xs:text-xl md:text-3xl 2xl:text-5xl",
     left: "70%",
     top: "65%",
     fontWeight: "font-extralight xs:font-medium md:font-bold",
   },
   {
     text: "Stepper Motoren",
-    size: "text-xl xs:text-2xl md:text-3xl",
+    size: "text-xl xs:text-2xl md:text-3xl 2xl:text-5xl",
     left: "25%",
     top: "64%",
     fontWeight: "font-light xs:font-semibold md:font-extrabold",
   },
   {
     text: "LED-Streifen",
-    size: "text-lg xs:text-2xl md:text-3xl",
+    size: "text-lg xs:text-2xl md:text-3xl 2xl:text-5xl",
     left: "19%",
     top: "33%",
     fontWeight: "font-normal xs:font-bold md:font-black",
   },
   {
     text: "Amplifier",
-    size: "text-base xs:text-lg md:text-xl",
+    size: "text-base xs:text-lg md:text-xl 2xl:text-3xl",
     left: "55%",
     top: "30%",
     fontWeight: "font-thin xs:font-light md:font-medium",
   },
   {
     text: "Speaker",
-    size: "text-lg xs:text-xl md:text-2xl",
+    size: "text-lg xs:text-xl md:text-2xl 2xl:text-4xl",
     left: "76%",
     top: "35%",
     fontWeight: "font-light xs:font-medium md:font-bold",
   },
   {
     text: "Ballcaster",
-    size: "text-base xs:text-xl md:text-2xl",
+    size: "text-base xs:text-xl md:text-2xl 2xl:text-4xl",
     left: "28%",
     top: "58%",
     fontWeight: "font-light xs:font-semibold md:font-black",
   },
   {
     text: "Reifen",
-    size: "text-lg xs:text-xl md:text-3xl",
+    size: "text-lg xs:text-xl md:text-3xl 2xl:text-5xl",
     left: "74%",
     top: "20%",
     fontWeight: "font-normal xs:font-semibold md:font-bold",
   },
   {
     text: "DC-Motoren",
-    size: "text-base xs:text-lg md:text-xl",
+    size: "text-base xs:text-lg md:text-xl 2xl:text-3xl",
     left: "25%",
     top: "40%",
     fontWeight: "font-extralight xs:font-light md:font-semibold",
   },
   {
     text: "DC-DC Converter",
-    size: "text-base xs:text-xl md:text-2xl",
+    size: "text-base xs:text-xl md:text-2xl 2xl:text-4xl",
     left: "52%",
     top: "95%",
     fontWeight: "font-thin xs:font-medium md:font-bold",
   },
   {
     text: "Motortreiber- lm298n",
-    size: "text-lg xs:text-xl md:text-3xl",
+    size: "text-lg xs:text-xl md:text-3xl 2xl:text-5xl" ,
     left: "74%",
     top: "78%",
     fontWeight: "font-normal xs:font-bold md:font-black",
   },
   {
     text: "Batterie",
-    size: "text-lg xs:text-xl md:text-2xl",
+    size: "text-lg xs:text-xl md:text-2xl 2xl:text-4xl",
     left: "60%",
     top: "86%",
     fontWeight: "font-light xs:font-semibold md:font-bold",
   },
   {
     text: "Stromsensor",
-    size: "text-lg xs:text-xl md:text-2xl",
+    size: "text-lg xs:text-xl md:text-2xl 2xl:text-4xl",
     left: "40%",
     top: "75%",
     fontWeight: "font-extralight xs:font-medium md:font-bold",
   },
   {
     text: "Multiplexer",
-    size: "text-base xs:text-lg md:text-2xl",
+    size: "text-base xs:text-lg md:text-2xl 2xl:text-4xl",
     left: "23%",
     top: "80%",
     fontWeight: "font-light xs:font-semibold md:font-black",
   },
   {
     text: "Stepper Motor Controller ",
-    size: "text-lg xs:text-xl md:text-2xl  lg:text-3xl text-nowrap",
+    size: "text-lg xs:text-xl md:text-2xl  lg:text-3xl text-nowrap 2xl:text-5xl",
     left: "70%",
     top: "55%",
     fontWeight: "font-normal xs:font-bold md:font-extrabold",
@@ -1971,13 +1971,13 @@ function Home() {
         <div id="pause-generel" style={{ height: "40vh" }}>
           <h2
             ref={titleRef}
-            className="opacity-0 fixed bottom-20 font-Orbitron font-bold text-5xl text-white left-1/2 -translate-x-1/2 text-center md:text-left  md:whitespace-nowrap"
+            className="opacity-0 fixed bottom-20 2xl:text-6xl font-Orbitron font-bold text-5xl text-white left-1/2 -translate-x-1/2 text-center md:text-left  md:whitespace-nowrap"
           >
             Guardian of the Galaxy
           </h2>
           <p
             ref={generalFlyText}
-            className="opacity-0 fixed  top-2/7 xs:top-2/5 md:top-1/2 left-0 translate-x-1/2 font-Electrolize font-semibold text-2xl text-white w-3/4"
+            className="opacity-0 fixed  top-2/7 xs:top-2/5 md:top-1/2 left-0 translate-x-1/2 font-Electrolize font-semibold text-2xl 2xl:text-4xl text-white w-3/4 "
           >
             Das Guardian of the Galaxy ist ein autonomes Rettungsfahrzeug, das in
             Katastrophengebieten Überlebende scannt, sie aus Trümmern hebt und gezielt
@@ -1991,7 +1991,7 @@ function Home() {
         <div id="pause-generel-2" style={{ height: "50vh" }}>
           <p
             ref={generalFlyText2}
-            className="opacity-0 fixed  top-2/7 xs:top-2/5 md:top-1/2 left-0 translate-x-1/2 font-Electrolize font-semibold text-2xl text-white w-3/4"
+            className="opacity-0 fixed  top-2/7 xs:top-2/5 md:top-1/2 left-0 translate-x-1/2 font-Electrolize font-semibold text-2xl 2xl:text-4xl text-white w-3/4"
           >
             Das UFO-Auto fährt selbstständig durch ein verwinkeltes Labyrinth. Es scannt
             kontinuierlich seine Umgebung, um Hindernissen auszuweichen. Trifft es auf ein
@@ -2005,7 +2005,7 @@ function Home() {
         <div id="pause-bottom" style={{ height: "50vh" }}>
           <h3
             ref={wheelsTitleRef}
-            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-2xl xs:text-3xl font-bold whitespace-nowrap"
+            className="opacity-0 font-Orbitron fixed top-[4rem] left-1/2 -translate-x-1/2 text-white text-2xl xs:text-3xl 2xl:text-4xl font-bold whitespace-nowrap"
           >
             <svg
               width="225"
@@ -2063,21 +2063,21 @@ function Home() {
           <div className="w-full ">
             <p
               ref={wheelsFlyText1}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl 2xl:text-4xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Reifen gewährleisten den sicheren Bodenkontakt und sorgen für optimale
               Traktion auf verschiedenen Untergründen
             </p>
             <p
               ref={wheelsFlyText2}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl 2xl:text-4xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Durch ihr Profil und Material ermöglichen sie eine präzise Steuerung und
               beeinflussen Stabilität sowie Geschwindigkeit des Fahrzeugs
             </p>
             <p
               ref={wheelsFlyText3}
-              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg 2xl:text-4xl xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Ballcaster ergänzen die Reifen, sorgen für Balance und Stabilität und
               ermöglichen gleitende Übergänge
@@ -2163,21 +2163,21 @@ function Home() {
           <div className="w-full ">
             <p
               ref={dropperFlyText1}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg 2xl:text-4xl xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Der Dropper sorgt dafür, dass die magnetischen Kärtchen gezielt von der
               Plattform des Autos abgeworfen werden
             </p>
             <p
               ref={dropperFlyText2}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg 2xl:text-4xl xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Durch eine präzise gesteuerte Bewegung wird das Kärtchen aus der Halterung
               geschoben und fällt auf den Boden
             </p>
             <p
               ref={dropperFlyText3}
-              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/4 md:fixed md:left-0 md:translate-x-1/2 xs:pl-4 xs:pr-3 md:pl-0 md:pr-0 font-semibold 2xl:text-4xl text-lg xs:text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Konstruktion ermöglicht eine zuverlässige und kontrollierte Abgabe,
               sodass die Ablage exakt an der gewünschten Position erfolgt
@@ -2264,21 +2264,21 @@ function Home() {
           <div className="w-full ">
             <p
               ref={craneFlyText1}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl 2xl:text-4xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die präzise Steuerung sorgt dafür, dass der Hebevorgang effizient und
               fehlerfrei abläuft
             </p>
             <p
               ref={craneFlyText2}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl 2xl:text-4xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Durch eine geschickte Bewegung wird das Kärtchen aufgenommen und an die
               gewünschte Position transportiert
             </p>
             <p
               ref={craneFlyText3}
-              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-2xl 2xl:text-4xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Der Kran nutzt einen Magneten, um das Kärtchen anzuheben und sicher auf die
               Plattform des Autos zu legen
@@ -2364,21 +2364,21 @@ function Home() {
           <div className="w-full">
             <p
               ref={raspberryFlyText1}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] 2xl:text-4xl lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Dank seiner leistungsstarken Rechenkapazität ermöglicht er die präzise
               Steuerung der einzelnen Komponenten des Fahrzeugs
             </p>
             <p
               ref={raspberryFlyText2}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] 2xl:text-4xl lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Über die Software lassen sich Fahrverhalten, Sensorik und Mechanismen
               flexibel anpassen und optimieren
             </p>
             <p
               ref={raspberryFlyText3}
-              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl 2xl:text-4xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Der Raspberry Pi dient als zentrale Steuereinheit und verarbeitet alle
               eingehenden Sensor- und Steuerungsdaten
@@ -2463,21 +2463,21 @@ function Home() {
           <div className="w-full">
             <p
               ref={sensorFlyText1}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl 2xl:text-4xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Die Sensoren sind strategisch auf dem Auto verteilt und liefern wichtige
               Informationen zur Umgebung und Position
             </p>
             <p
               ref={sensorFlyText2}
-              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white  md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal "
+              className="opacity-0 font-Electrolize md:top-3/4 md:fixed  md:left-0 md:translate-x-1/2 font-semibold text-xl 2xl:text-4xl md:text-[1.375rem] lg:text-2xl text-white  md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal "
             >
               Sie ermöglichen eine präzise Erfassung von Hindernissen und der Farben der
               Kärtchen, um diese korrekt zu identifizieren
             </p>
             <p
               ref={sensorFlyText3}
-              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
+              className="opacity-0 z-[-1] md:z-0 font-Electrolize md:top-1/5 md:fixed md:left-0 md:translate-x-1/2 font-semibold 2xl:text-4xl text-xl md:text-[1.375rem] lg:text-2xl text-white md:max-w-[40vw] lg:max-w-[33vw] mx-auto md:mx-0 whitespace-normal"
             >
               Durch die Kombination verschiedener Sensortypen wird eine zuverlässige und
               intelligente Navigation des Fahrzeugs sichergestellt
@@ -2506,7 +2506,7 @@ function Home() {
             ref={circleRef}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] xs:w-[90vw] xs:h-[90vw] md:w-[70vw] md:h-[70vw] lg:w-[50vw] lg:h-[50vw] rounded-full bg-[#23cf51] opacity-0"
           >
-            <h3 className=" absolute left-[35%] xs:left-[36%] md:left-[37%] lg:left-[38%] top-1/7 text- text-black text-2xl xs:text-3xl lg:text-4xl font-bold font-Orbitron">
+            <h3 className=" absolute left-[35%] xs:left-[36%] md:left-[37%] lg:left-[38%] top-1/7 text- text-black text-2xl xs:text-3xl lg:text-4xl 2xl:text-6xl font-bold font-Orbitron">
               Bauteile
             </h3>
 
