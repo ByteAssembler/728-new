@@ -22,10 +22,7 @@ const Footer: React.FC = () => {
         </Link>
         <Link
           to="/sponsor"
-          className={clsx(
-            "text-white text-base font-Electrolize transition-colors duration-200",
-            hoverClass,
-          )}
+          className="text-white text-base font-Electrolize transition-colors duration-200 hover:text-[#008bcc]"
         >
           Sponsor
         </Link>
