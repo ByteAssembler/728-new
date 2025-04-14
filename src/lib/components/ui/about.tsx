@@ -71,7 +71,6 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
               src={portrait}
               alt="Picture of Member"
               className="w-full object-cover object-[center_20%] p-0  mask-b-from-75% mask-b-to-98% "
-
             />
           </div>
         </div>
@@ -87,7 +86,6 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
 
       {/* Tablet Layout (von md bis lg): Banner oben, darunter zwei Spalten */}
       <div className="hidden md:block lg:hidden">
-
         <div className="w-full mb-4">
           <img src={titleSvg} alt="title" className="w-full max-w-md mx-auto" />
         </div>
@@ -109,7 +107,6 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
 
       {/* Desktop Layout (ab lg): Banner oben, danach 50:50 */}
       <div className="hidden lg:block">
-
         <div className="w-full mb-4">
           <img src={titleSvg} alt="title" className="w-full max-w-xl mx-auto" />
         </div>
@@ -120,13 +117,14 @@ const PersonalItem: React.FC<FeatureSectionProps> = ({
               src={portrait}
               alt="Picture of Member"
               className="w-full object-cover mask-b-from-70% mask-b-to-98%"
-
             />
           </div>
           <div
             className={`w-1/2 flex items-center px-4 ${isImageFirst ? "" : "order-1"}`}
           >
-            <p className="text-base md:text-xl lg:text-2xl 2xl:text-4xl text-white">{text}</p>
+            <p className="text-base md:text-xl lg:text-2xl 2xl:text-4xl text-white">
+              {text}
+            </p>
           </div>
         </div>
       </div>
@@ -159,8 +157,8 @@ const AboutSection: React.FC<AboutSectionProp> = ({ text }) => (
 const NavigationButton: React.FC = () => {
   const svgString = encodeURIComponent(
     '<svg width="334" height="117" viewBox="0 0 334 117" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
-    '<path d="M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z" fill="#23CF51"/>\n' +
-    "</svg>\n",
+      '<path d="M26.3152 10.9933L334 0L317.806 98.1544L0 117L26.3152 10.9933Z" fill="#23CF51"/>\n' +
+      "</svg>\n",
   );
 
   const dataUrl = `url("data:image/svg+xml,${svgString}")`;

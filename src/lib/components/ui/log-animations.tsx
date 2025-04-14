@@ -333,8 +333,14 @@ const Button = ({
     </button>
   );
 };
+// Add this to your props type
+interface FramerAnimatedPngsProps {
+  onAnimationChange?: (animationType: string) => void;
+}
 
-export default function FramerAnimatedPngs() {
+export default function FramerAnimatedPngs({
+  onAnimationChange,
+}: FramerAnimatedPngsProps) {
   const [currentAnimation, setCurrentAnimation] = useState<AnimationType>("idle");
   const [isAnimating, setIsAnimating] = useState(false);
   const [showCancelButton, setShowCancelButton] = useState(false);
@@ -522,6 +528,9 @@ export default function FramerAnimatedPngs() {
 
   // Handle animation changes with cancellation support
   const handleAnimationChange = async (animationType: AnimationType) => {
+    if (onAnimationChange) {
+      onAnimationChange(animationType);
+    }
     // If already animating, cancel current animation first
     if (isAnimating) {
       cancelAnimations();
@@ -716,7 +725,6 @@ export default function FramerAnimatedPngs() {
           Reset
         </Button>
       </div>
-      <p>this is right now a demo for the final log that shows the logs of the car</p>
     </div>
   );
 }

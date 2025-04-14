@@ -2,7 +2,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { createFileRoute } from "@tanstack/react-router";
-import React, { Suspense, useLayoutEffect, useRef, useState } from "react";
+import { Suspense, useLayoutEffect, useRef, useState } from "react";
 import { AboutSection, NavigationButton, PersonalItem } from "~/lib/components/ui/about";
 import Ufo from "~/lib/components/ui/about-ufo";
 
@@ -78,7 +78,7 @@ function About() {
 
   return (
     <div className="md:pl-12 p-4 md:p-10 font-Electrolize max-w-7xl mx-auto">
-      <div style={{width: "100%", height: height}}>
+      <div style={{ width: "100%", height: height }}>
         <Canvas
           style={{
             left: 0,
@@ -87,17 +87,17 @@ function About() {
             top: 0,
             zIndex: 0,
           }}
-          camera={{position: [0, 3, 4], fov: 45}}
+          camera={{ position: [0, 3, 4], fov: 45 }}
           className="pt-10 w-full h-[40vh] md:h-[60vh] lg:h-[70vh]"
           dpr={[1, 1.5]}
           gl={{
             antialias: true,
           }}
         >
-          <ambientLight intensity={0.5}/>
-          <directionalLight position={[2, 4, 4]}/>
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[2, 4, 4]} />
           <Suspense fallback={null}>
-            <Ufo/>
+            <Ufo />
           </Suspense>
           <OrbitControls
             enableZoom={false}
@@ -109,15 +109,14 @@ function About() {
       </div>
 
       <div className="flex justify-center pb-7">
-        <NavigationButton/>
+        <NavigationButton />
       </div>
 
-      <AboutSection
-        text="Wir sind Mission Seven To Aid (Mission72A) – ein engagiertes Team mit dem Ziel, ein autonomes Rettungsfahrzeug zu entwickeln, das in Krisensituationen Leben rettet. Unsere Vision ist es, moderne Technik einzusetzen, um Menschen und Rettungskräfte zu schützen. Mit Kreativität, Wissen und starkem Teamgeist stellen wir uns jeder Herausforderung. Unser Projekt „Guardian of the Galaxy“ soll nicht nur Innovation vorantreiben, sondern auch einen wichtigen gesellschaftlichen Beitrag leisten"/>
+      <AboutSection text="Wir sind Mission Seven To Aid (Mission72A) – ein engagiertes Team mit dem Ziel, ein autonomes Rettungsfahrzeug zu entwickeln, das in Krisensituationen Leben rettet. Unsere Vision ist es, moderne Technik einzusetzen, um Menschen und Rettungskräfte zu schützen. Mit Kreativität, Wissen und starkem Teamgeist stellen wir uns jeder Herausforderung. Unser Projekt „Guardian of the Galaxy“ soll nicht nur Innovation vorantreiben, sondern auch einen wichtigen gesellschaftlichen Beitrag leisten" />
       <div className="flex flex-col xs:p-2 md:p-10 space-y-8 md:space-y-32">
         <h2
           className="text-white font-Orbitron font-extrabold text-center mb-10"
-          style={{fontSize: 35}}
+          style={{ fontSize: 35 }}
         >
           Über das Team
         </h2>
@@ -132,7 +131,6 @@ function About() {
           />
         ))}
       </div>
-
     </div>
   );
 }

@@ -123,7 +123,7 @@ const circleTextItems = [
   },
   {
     text: "Motortreiber- lm298n",
-    size: "text-lg xs:text-xl md:text-3xl 2xl:text-5xl" ,
+    size: "text-lg xs:text-xl md:text-3xl 2xl:text-5xl",
     left: "74%",
     top: "78%",
     fontWeight: "font-normal xs:font-bold md:font-black",
