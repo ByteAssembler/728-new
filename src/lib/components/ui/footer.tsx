@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
         <Link
           to="/imprint"
           className={clsx(
-            "text-white text-base font-Electrolize transition-colors duration-200",
+            "text-white text-base font-Electrolize 2xl:text-2xl transition-colors duration-200",
             hoverClass,
           )}
         >
@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
         </Link>
         <Link
           to="/sponsor"
-          className="text-white text-base font-Electrolize transition-colors duration-200 hover:text-[#008bcc]"
+          className="text-white text-base font-Electrolize 2xl:text-2xl transition-colors duration-200 hover:text-[#008bcc]"
         >
           Sponsor
         </Link>
