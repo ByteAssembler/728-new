@@ -83,6 +83,10 @@ function DiaryEntry() {
   ];
 
   const selectedSvg = largeSvgs[rand];
+  let fontSize = 80;
+  if(diaryEntry.data.title.length >3){
+    fontSize = 80 - (diaryEntry.data.title.length - 3) * 1;
+  }
 
   return (
     <main className="mx-auto py-8 min-h-screen overflow-hidden">
@@ -101,7 +105,7 @@ function DiaryEntry() {
                 <text
                   x={isMobile ? "35%" : isTablet ? "45%" : "36%"}
                   y={isMobile ? "50%" : "54%"}
-                  fontSize={isMobile ? "80px" : isTablet ? "70px" : "80px"}
+                  fontSize={fontSize}
                   className="fill-white font-bold w-[10%] truncate"
                 >
                   {diaryEntry.data.title}
