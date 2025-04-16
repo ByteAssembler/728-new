@@ -17,10 +17,25 @@ export const Route = createFileRoute("/(protected)/admin-socket/")({
 });
 
 function SocketPage() {
-  const [socketUrl, setSocketUrl] = useState("http://192.168.119.229:5000")
+  const defaultUrl = "http://192.168.119.229:5000";
+  const getInitialSocketUrl = () => {
+    const stored = localStorage.getItem("socketUrl");
+    if (!stored) {
+      localStorage.setItem("socketUrl", defaultUrl);
+      return defaultUrl;
+    }
+    return stored;
+  };
+  const [socketUrl, setSocketUrl] = useState(getInitialSocketUrl);
   const { emitEvent, isConnected, lastError } = useSocketIO(socketUrl);
   const controllerRef = useRef<ControllerRef>(null);
   const [automatic, setAutomatic] = useState(false);
+
+  useEffect(() => {
+    if (socketUrl) {
+      localStorage.setItem("socketUrl", socketUrl);
+    }
+  }, [socketUrl]);
 
   useEffect(() => {
     let previousX = 0,
