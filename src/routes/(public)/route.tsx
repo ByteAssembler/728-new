@@ -16,6 +16,7 @@ export const Route = createFileRoute("/(public)")({
   loader(ctx) {
     return ctx.context.user;
   },
+  ssr: false,
 });
 
 function PublicLayout() {
