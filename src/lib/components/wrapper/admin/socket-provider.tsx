@@ -25,7 +25,10 @@ export function useSocketIO(uri: string, opts?: SocketHookOptions): UseSocketIOR
 
     console.log(`useSocketIO: Attempting to connect to ${uri}`);
     const connectionOptions = opts || {};
-    const newSocket = io(uri, connectionOptions);
+    const newSocket = io(uri, {
+      ...connectionOptions,
+      transports: ['websocket'],
+    });
 
     setSocket(newSocket);
     setIsConnected(newSocket.connected);
