@@ -126,7 +126,7 @@ function SocketPage() {
           <Button onClick={() => sendMove(0, 0)}>Stopp 🔴</Button>
           <Button onClick={() => sendMove(0, -1)}>Vorwärts ⬆️</Button>
           <Button onClick={() => sendMove(0, 1)}>Rückwärts ⬇️</Button>
-          <Button onClick={() => sendMove(1, 0)}>Rechts ⬇️</Button>
+          <Button onClick={() => sendMove(1, 0)}>Rechts ➡️</Button>
           <Button onClick={() => sendMove(-1, 0)}>Links ⬅️</Button>
         </div>
 
