@@ -49,7 +49,7 @@ import {
   DiaryWorkTableEntryCollaboratorExtended,
 } from "~/lib/server/editor.js.server";
 import { EditStatus } from "default";
-import EditorComponent from "./diary-editor";
+import { EditorComponent } from "./diary-editor";
 import { useServerFn } from "@tanstack/react-start";
 import type { DiaryEntryType } from "~/routes/(public)/diary";
 
