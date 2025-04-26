@@ -351,13 +351,13 @@ function FinalDiaryEntry({
       </div>
       <DiaryEntryContent>
         <div className="space-y-2 py-8 p-6 xs:p-12 -translate-y-3 font-Electrolize text-[18px] xs:text-[24px] md:text-[28px]">
-          <div className="flex">
-            <div className="flex-grow">
+          <div className="flex w-full">
+            <div className="flex-grow w-full">
               {diaryEntry.contentHtml && (
                 <div className="-translate-y-3">
                   <p dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}></p>
                   <Link
-                    className="text-[#23CF51] hover:underline"
+                    className="text-[#23CF51] hover:underline mt-2"
                     to="/diary/$id"
                     params={{ id: diaryEntry.id }}
                   >
