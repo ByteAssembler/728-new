@@ -63,7 +63,7 @@ export default function DiaryWorkTableEntryEditor({
       if (workersData.success && workersData.data) {
         const options = workersData.data.map((worker) => ({
           value: worker.id,
-          label: `${worker.name ?? "Unknown"} (${worker.email})`,
+          label: `${worker.name ?? "Unknown"}`,
         }));
         setWorkersOptions(options);
       }
@@ -139,7 +139,7 @@ export default function DiaryWorkTableEntryEditor({
       </TableHeader>
       <TableBody>
         {rows.map((row, index) => (
-          <TableRow key={index}>
+          <TableRow key={row.id}>
             <TableCell>
               <div className="flex flex-col items-center gap-2">
                 <MultipleSelector
