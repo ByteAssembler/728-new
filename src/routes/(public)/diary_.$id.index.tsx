@@ -68,7 +68,11 @@ function DiaryEntry() {
 
   const rand = Math.floor(Math.random() * 10) % 4;
   const largeSvgs = [
-    { width: 1433, height: 171, d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z" },
+    {
+      width: 1433,
+      height: 171,
+      d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z",
+    },
     {
       width: 1433,
       height: 183,
@@ -79,7 +83,11 @@ function DiaryEntry() {
       height: 186,
       d: "M-30 52.3643L1384.5 17.5L1433 203L-30 101.5V52.3643Z",
     },
-    { width: 1433, height: 193, d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z" },
+    {
+      width: 1433,
+      height: 193,
+      d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z",
+    },
   ];
 
   const selectedSvg = largeSvgs[rand];
@@ -96,7 +104,8 @@ function DiaryEntry() {
             <svg
               preserveAspectRatio="xMidYMin meet" // Maintain aspect ratio while scaling
               className="w-full scale-150 xs:scale-125 md:scale-100  -translate-x-[22%] xs:-translate-x-[10%] md:translate-x-0 h-auto" // Make SVG responsive
-              viewBox={`0 ${isMobile ? "-38" : "0"} 1444 ${isMobile ? "250" : "218"}`}
+              viewBox={`0 ${isMobile ? "-38" : "0"} 1444 ${isMobile ? "250" : "218"
+                }`}
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -116,7 +125,10 @@ function DiaryEntry() {
                   filter="url(#dayShadow)"
                   className="-translate-x-[5rem] md:translate-0 scale-125 xs:scale-115 md:scale-none"
                 >
-                  <path d="M143 11.5L248.5 5L245.5 79L143 74.5V11.5Z" fill="white" />
+                  <path
+                    d="M143 11.5L248.5 5L245.5 79L143 74.5V11.5Z"
+                    fill="white"
+                  />
                   <text
                     x={day.toString().includes("1") ? "36%" : "35%"}
                     y={isMobile ? "0%" : "5%"}
@@ -131,7 +143,10 @@ function DiaryEntry() {
                   filter="url(#monthShadow)"
                   className="-translate-x-[5rem] md:translate-0 scale-125 xs:scale-115 md:scale-none"
                 >
-                  <path d="M264.124 6L359 18.478V84L256.5 75.5L264.124 6Z" fill="white" />
+                  <path
+                    d="M264.124 6L359 18.478V84L256.5 75.5L264.124 6Z"
+                    fill="white"
+                  />
                   <text
                     x={month.toString().includes("1") ? "44%" : "43.2%"}
                     y={isMobile ? "0%" : "6%"}
@@ -293,48 +308,59 @@ function DiaryEntry() {
             dangerouslySetInnerHTML={{ __html: html || "" }}
           />
         </div>
-        <div className="px-4">
-          <Table className="mt-20">
-            <TableCaption>
-              Work table entries for {diaryEntry.data.day.toLocaleDateString()}
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Workers</TableHead>
-                <TableHead>Work day and time</TableHead>
-                <TableHead>Description</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {diaryEntry.data.workTableEntries.map((entry) => (
-                <TableRow key={entry.id}>
-                  <TableCell className="font-medium">
-                    <div className="flex flex-col gap-2">
-                      {entry.workers.map((worker) => (
-                        <div key={worker.id} className="flex items-center gap-2">
-                          {worker.name && (
-                            <Avatar>
-                              <AvatarFallback>{getInitials(worker.name)}</AvatarFallback>
-                            </Avatar>
-                          )}
-                          <span>{worker.name}</span>
+        {diaryEntry.data.workTableEntries.length > 0 &&
+          (
+            <div className="px-4">
+              <Table className="mt-20">
+                <TableCaption>
+                  Work table entries for{" "}
+                  {diaryEntry.data.day.toLocaleDateString()}
+                </TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Workers</TableHead>
+                    <TableHead>Work day and time</TableHead>
+                    <TableHead>Description</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {diaryEntry.data.workTableEntries.map((entry) => (
+                    <TableRow key={entry.id}>
+                      <TableCell className="font-medium">
+                        <div className="flex flex-col gap-2">
+                          {entry.workers.map((worker) => (
+                            <div
+                              key={worker.id}
+                              className="flex items-center gap-2"
+                            >
+                              {worker.name && (
+                                <Avatar>
+                                  <AvatarFallback>
+                                    {getInitials(worker.name)}
+                                  </AvatarFallback>
+                                </Avatar>
+                              )}
+                              <span>{worker.name}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {`Worked at ${new Date(
-                      entry.workedAt || diaryEntry.data.day,
-                    ).toLocaleDateString()} for ${secondsInHoursAndMinutes(
-                      entry.workedSeconds,
-                    )}`}
-                  </TableCell>
-                  <TableCell>{entry.description}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+                      </TableCell>
+                      <TableCell>
+                        {`Worked at ${new Date(
+                          entry.workedAt || diaryEntry.data.day,
+                        ).toLocaleDateString()
+                          } for ${secondsInHoursAndMinutes(
+                            entry.workedSeconds,
+                          )
+                          }`}
+                      </TableCell>
+                      <TableCell>{entry.description}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
       </div>
     </main>
   );
