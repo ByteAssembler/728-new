@@ -52,10 +52,12 @@ import { EditStatus } from "default";
 import { EditorComponent } from "./diary-editor";
 import { useServerFn } from "@tanstack/react-start";
 import type { DiaryEntryType } from "~/routes/(public)/diary";
+import { useRouter } from "@tanstack/react-router";
 
 type OutputData = string;
 
 export function EditDiary({ diaryEntry }: { diaryEntry: DiaryEntryType }) {
+  const router = useRouter();
   const [editStatusContent, setEditStatusContent] = useState<EditStatus>(
     "saved",
   );
@@ -103,6 +105,7 @@ export function EditDiary({ diaryEntry }: { diaryEntry: DiaryEntryType }) {
 
     if (result.success) { // data.time === result.lastEditedTimestamp
       setEditStatusContent("saved");
+      router.invalidate();
     } else {
       setEditStatusContent("error");
     }
@@ -128,6 +131,7 @@ export function EditDiary({ diaryEntry }: { diaryEntry: DiaryEntryType }) {
 
     if (result) {
       setEditStatusMetadata("saved");
+      router.invalidate();
     } else {
       setEditStatusMetadata("error");
     }
@@ -146,6 +150,7 @@ export function EditDiary({ diaryEntry }: { diaryEntry: DiaryEntryType }) {
     });
 
     setEditStatusWorkTable("saved");
+    router.invalidate();
   }
 
   useEffect(() => {
@@ -315,6 +320,7 @@ function StatusIndicator({ status }: { status: EditStatus }) {
 export function DeleteDiary({ diaryTitle, diaryId }: { diaryTitle: string, diaryId: string }) {
   const dbDeleteDiaryEntryFn = useServerFn(dbDeleteDiaryEntry);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   return (
     <AlertDialog>
@@ -346,6 +352,7 @@ export function DeleteDiary({ diaryTitle, diaryId }: { diaryTitle: string, diary
                 }
               });
               // setLoading(false);
+              router.invalidate();
             }}
           >
             {loading && <Loader2Icon className="animate-spin" />}
