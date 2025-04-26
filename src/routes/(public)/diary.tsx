@@ -354,7 +354,7 @@ function FinalDiaryEntry({
           <div className="flex">
             <div className="flex-grow">
               {diaryEntry.contentHtml && (
-                <div className="gap-4 -translate-y-3">
+                <div className="-translate-y-3">
                   <p dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}></p>
                   <Link
                     className="text-[#23CF51] hover:underline"
