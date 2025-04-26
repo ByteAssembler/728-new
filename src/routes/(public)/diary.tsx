@@ -351,12 +351,23 @@ function FinalDiaryEntry({
       </div>
       <DiaryEntryContent>
         <div className="space-y-2 py-8 p-6 xs:p-12 -translate-y-3 font-Electrolize text-[18px] xs:text-[24px] md:text-[28px]">
-          <div className="flex gap-2">
+          <div className="flex">
             <div className="flex-grow">
-              {/* <EditorBlockRenderer data={diaryEntry.data.content} /> */}
+              {diaryEntry.contentHtml && (
+                <div className="gap-4 -translate-y-3">
+                  <p dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}></p>
+                  <Link
+                    className="text-[#23CF51] hover:underline"
+                    to="/diary/$id"
+                    params={{ id: diaryEntry.id }}
+                  >
+                    Erfahre mehr
+                  </Link>
+                </div>
+              )}
             </div>
             {isSignedIn && (
-              <div className="flex flex-col gap-2 py-2">
+              <div className="ml-2 flex flex-col gap-2 py-2">
                 <ClientOnly>
                   <EditDiary diaryEntry={diaryEntry} />
                   <DeleteDiary diaryId={diaryEntry.id} diaryTitle={diaryEntry.title} />
@@ -364,19 +375,6 @@ function FinalDiaryEntry({
               </div>
             )}
           </div>
-
-          {diaryEntry.contentHtml && (
-            <div className="gap-4 -translate-y-3">
-              <p dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}></p>
-              <Link
-                className="text-[#23CF51] hover:underline"
-                to="/diary/$id"
-                params={{ id: diaryEntry.id }}
-              >
-                Erfahre mehr
-              </Link>
-            </div>
-          )}
         </div>
       </DiaryEntryContent>
     </DiaryEntryItem>
