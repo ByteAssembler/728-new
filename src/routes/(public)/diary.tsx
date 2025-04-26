@@ -100,10 +100,9 @@ function FinalDiaryEntry({
     { width: 1433, height: 193, d: "M-18 52.4315L1433 29L1383.09 200L-18 95.5V52.4315Z" },
   ];
   let fontSize = 80;
-  if(diaryEntry.title.length >3){
+  if (diaryEntry.title.length > 3) {
     fontSize = 80 - (diaryEntry.title.length - 3) * 1;
   }
-
 
   const selectedSvg = largeSvgs[rand];
 

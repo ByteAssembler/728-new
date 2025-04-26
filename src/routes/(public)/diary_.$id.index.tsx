@@ -55,6 +55,8 @@ function secondsInHoursAndMinutes(seconds: number) {
 
 function DiaryEntry() {
   const { diaryEntry, html } = Route.useLoaderData();
+  const isMobile = useMediaQuery("(max-width: 431px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
 
   if (!diaryEntry.success || !diaryEntry.data) {
     return <div>Diary entry not found</div>;
@@ -63,8 +65,6 @@ function DiaryEntry() {
   const dayDate = new Date(diaryEntry.data.day);
   const day = dayDate.getDate();
   const month = dayDate.getMonth() + 1;
-  const isMobile = useMediaQuery("(max-width: 431px)");
-  const isTablet = useMediaQuery("(max-width: 768px)");
 
   const rand = Math.floor(Math.random() * 10) % 4;
   const largeSvgs = [
@@ -84,7 +84,7 @@ function DiaryEntry() {
 
   const selectedSvg = largeSvgs[rand];
   let fontSize = 80;
-  if(diaryEntry.data.title.length >3){
+  if (diaryEntry.data.title.length > 3) {
     fontSize = 80 - (diaryEntry.data.title.length - 3) * 1;
   }
 
