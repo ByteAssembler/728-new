@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import PROGRESS_GROUP_IMG from "~/assets/PROGRESS_GROUP.webp"
 
 export const Route = createFileRoute("/(public)/sponsor")({
   component: SponsorPage,
@@ -11,7 +12,7 @@ function SponsorPage() {
         {/* Progress Group Image */}
         <div className="w-full max-w-4xl mb-8">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/PROGRESS_GROUP.jpg/2880px-PROGRESS_GROUP.jpg?20161208153140"
+            src={PROGRESS_GROUP_IMG}
             alt="ProgressGroup Logo"
             style={{ width: "100%", height: "auto" }}
           />
