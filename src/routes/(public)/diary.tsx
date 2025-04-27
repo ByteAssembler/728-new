@@ -356,13 +356,15 @@ function FinalDiaryEntry({
               {diaryEntry.contentHtml && (
                 <div className="-translate-y-3">
                   <p dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}></p>
-                  <Link
-                    className="text-[#23CF51] hover:underline mt-2"
-                    to="/diary/$id"
-                    params={{ id: diaryEntry.id }}
-                  >
-                    Erfahre mehr
-                  </Link>
+                  {diaryEntry.workTableEntries.length > 0 && (
+                    <Link
+                      className="text-[#23CF51] hover:underline mt-2"
+                      to="/diary/$id"
+                      params={{ id: diaryEntry.id }}
+                    >
+                      Erfahre mehr
+                    </Link>
+                  )}
                 </div>
               )}
             </div>
