@@ -261,8 +261,7 @@ export async function dbReadDiaryEntry_server(
       collaboratorUserRelation,
       eq(diaryWorkTableEntryCollaborator.id, collaboratorUserRelation.collaboratorId),
     )
-    .leftJoin(userDb, eq(collaboratorUserRelation.userId, userDb.id))
-    .limit(1);
+    .leftJoin(userDb, eq(collaboratorUserRelation.userId, userDb.id));
 
   const result = await query;
   return result.length > 0 ? groupEntries(result)[0] : null;
