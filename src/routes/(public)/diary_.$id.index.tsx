@@ -36,11 +36,19 @@ export const Route = createFileRoute("/(public)/diary_/$id/")({
   ssr: false,
 });
 
-function getInitials(name: string) {
-  return name
+function getInitials(name: string, only2 = true) {
+  const list = name
     .split(/\s+/)
-    .map((word) => word[0])
-    .join("");
+    .map((word) => word[0]);
+
+  if (only2 && list.length > 2) {
+    const first = list[0];
+    const second = list[1];
+    // const last = list[list.length - 1];
+    return `${first}${second}`.toUpperCase();
+  }
+
+  return list.join("").toUpperCase();
 }
 
 function secondsInHoursAndMinutes(seconds: number) {
