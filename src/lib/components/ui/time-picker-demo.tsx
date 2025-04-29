@@ -21,6 +21,7 @@ export function WorkTimeInput({
   className,
 }: WorkTimeInputProps) {
   const [mode, setMode] = React.useState<InputMode>("normal");
+  const [activeField, setActiveField] = React.useState<string | null>(null);
 
   const [displayHours, setDisplayHours] = React.useState<string>("");
   const [displayNormalMinutes, setDisplayNormalMinutes] = React.useState<string>("");
@@ -30,29 +31,41 @@ export function WorkTimeInput({
   React.useEffect(() => {
     console.log("Sync Effect: workedMinutes changed to", workedMinutes);
     if (workedMinutes === undefined || workedMinutes === null || isNaN(workedMinutes)) {
-      setDisplayHours("");
-      setDisplayNormalMinutes("");
-      setDisplayTotalMinutes("");
-      setDisplayProjectHours("");
+      if (!activeField || activeField === "normal-hours") setDisplayHours("");
+      if (!activeField || activeField === "normal-minutes") setDisplayNormalMinutes("");
+      if (!activeField || activeField === "total-minutes") setDisplayTotalMinutes("");
+      if (!activeField || activeField === "project-hours") setDisplayProjectHours("");
       return;
     }
 
+    // Calculate values for all modes
     const normalH = Math.floor(workedMinutes / 60);
     const normalM = workedMinutes % 60;
-    setDisplayHours(String(normalH));
-    setDisplayNormalMinutes(String(normalM).padStart(2, '0'));
-    console.log(`Sync Effect: Set Normal display to ${normalH}h ${normalM}m`);
-
-    setDisplayTotalMinutes(String(workedMinutes));
-    console.log(`Sync Effect: Set Total Minutes display to ${workedMinutes}`);
-
     const projectHours = workedMinutes / MINUTES_PER_PROJECT_HOURS;
-    setDisplayProjectHours(projectHours.toFixed(2));
-    console.log(`Sync Effect: Set Project Hours display to ${projectHours.toFixed(2)}`);
 
-  }, [workedMinutes]);
+    // Only update fields that aren't currently being edited
+    if (!activeField || activeField !== "normal-hours") {
+      setDisplayHours(String(normalH));
+    }
+
+    if (!activeField || activeField !== "normal-minutes") {
+      setDisplayNormalMinutes(String(normalM).padStart(2, '0'));
+    }
+
+    if (!activeField || activeField !== "total-minutes") {
+      setDisplayTotalMinutes(String(workedMinutes));
+    }
+
+    if (!activeField || activeField !== "project-hours") {
+      setDisplayProjectHours(projectHours.toFixed(2));
+    }
+
+    console.log(`Sync Effect: Set displays based on ${workedMinutes} minutes (active field: ${activeField})`);
+
+  }, [workedMinutes, activeField]);
 
   const handleNormalHoursChange = (value: string) => {
+    setActiveField("normal-hours");
     setDisplayHours(value);
     const hours = parseInt(value, 10) || 0;
     const minutes = parseInt(displayNormalMinutes, 10) || 0;
@@ -63,6 +76,7 @@ export function WorkTimeInput({
   };
 
   const handleNormalMinutesChange = (value: string) => {
+    setActiveField("normal-minutes");
     setDisplayNormalMinutes(value);
     const rawMinutes = parseInt(value, 10);
     const clampedMinutes = isNaN(rawMinutes) ? 0 : Math.min(59, Math.max(0, rawMinutes));
@@ -76,9 +90,11 @@ export function WorkTimeInput({
     const rawMinutes = parseInt(value, 10);
     const clampedMinutes = isNaN(rawMinutes) ? 0 : Math.min(59, Math.max(0, rawMinutes));
     setDisplayNormalMinutes(String(clampedMinutes).padStart(2, '0'));
+    setActiveField(null);
   };
 
   const handleTotalMinutesChange = (value: string) => {
+    setActiveField("total-minutes");
     setDisplayTotalMinutes(value);
     const totalMins = parseFloat(value);
     const newTotalMinutes = isNaN(totalMins) || totalMins < 0 ? undefined : totalMins;
@@ -87,6 +103,7 @@ export function WorkTimeInput({
   };
 
   const formatTotalMinutesOnBlur = (value: string) => {
+    setActiveField(null);
     const totalMins = parseFloat(value);
     if (isNaN(totalMins) || totalMins < 0) {
       if (workedMinutes !== undefined && !isNaN(workedMinutes)) {
@@ -100,6 +117,7 @@ export function WorkTimeInput({
   };
 
   const handleProjectHoursChange = (value: string) => {
+    setActiveField("project-hours");
     setDisplayProjectHours(value);
     const projHours = parseFloat(value);
     let newTotalMinutes: number | undefined = undefined;
@@ -111,12 +129,9 @@ export function WorkTimeInput({
   };
 
   const formatProjectHoursOnBlur = (value: string) => {
+    setActiveField(null);
     const projHours = parseFloat(value);
-    if (!isNaN(projHours) && projHours >= 0) {
-      setDisplayProjectHours(projHours.toFixed(2));
-    } else if (value === '' || value === '.') {
-      setDisplayProjectHours('');
-    } else {
+    if (isNaN(projHours) && (value !== '' && value !== '.')) {
       if (workedMinutes !== undefined && !isNaN(workedMinutes)) {
         setDisplayProjectHours((workedMinutes / MINUTES_PER_PROJECT_HOURS).toFixed(2));
       } else {
@@ -153,6 +168,8 @@ export function WorkTimeInput({
               min="0"
               value={displayHours}
               onChange={(e) => handleNormalHoursChange(e.target.value)}
+              onFocus={() => setActiveField("normal-hours")}
+              onBlur={() => setActiveField(null)}
               className="w-[70px]"
             />
           </div>
@@ -168,6 +185,7 @@ export function WorkTimeInput({
               step="1"
               value={displayNormalMinutes}
               onChange={(e) => handleNormalMinutesChange(e.target.value)}
+              onFocus={() => setActiveField("normal-minutes")}
               onBlur={(e) => formatNormalMinutesOnBlur(e.target.value)}
               className="w-[70px]"
             />
@@ -189,6 +207,7 @@ export function WorkTimeInput({
               step="any"
               value={displayTotalMinutes}
               onChange={(e) => handleTotalMinutesChange(e.target.value)}
+              onFocus={() => setActiveField("total-minutes")}
               onBlur={(e) => formatTotalMinutesOnBlur(e.target.value)}
               className="w-[120px]"
             />
@@ -209,6 +228,7 @@ export function WorkTimeInput({
               step="0.01"
               value={displayProjectHours}
               onChange={(e) => handleProjectHoursChange(e.target.value)}
+              onFocus={() => setActiveField("project-hours")}
               onBlur={(e) => formatProjectHoursOnBlur(e.target.value)}
               className="w-[120px]"
             />
