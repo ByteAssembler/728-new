@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import MultipleSelector, { Option } from "~/lib/components/ui/multiselect";
 import { Button } from "~/lib/components/ui/button";
 import { Calendar } from "~/lib/components/ui/calendar";
@@ -12,7 +12,7 @@ import {
 import { Textarea } from "~/lib/components/ui/textarea";
 import { CalendarIcon, PlusIcon, TrashIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
-import { add, format } from "date-fns";
+import { format } from "date-fns";
 import {
   Table,
   TableBody,
@@ -21,23 +21,21 @@ import {
   TableHeader,
   TableRow,
 } from "~/lib/components/ui/table";
-import { TimePickerDemo } from "~/lib/components/ui/time-picker-demo";
+import { WorkTimeInput } from "~/lib/components/ui/time-picker-demo";
 import {
   dbDiaryEntryGetWorkers,
-  DiaryWorker,
   DiaryWorkTableEntryCollaboratorExtended,
 } from "~/lib/server/editor.js.server";
 import { useServerFn } from "@tanstack/react-start";
 
-function WorkerToOption(worker: DiaryWorker): Option {
-  console.log("WorkerToOption", worker);
+function WorkerToOption(worker: { id: string; name: string | null; email: string | null; }): Option {
   return {
     value: worker.id,
-    label: worker.email,
+    label: worker.name ?? worker.email ?? worker.id,
   };
 }
 
-function OptionToWorker(option: Option): DiaryWorker {
+function OptionToWorker(option: Option): { id: string; name: string | null; email: string; } {
   return {
     id: option.value,
     name: option.label,
@@ -46,8 +44,8 @@ function OptionToWorker(option: Option): DiaryWorker {
 }
 
 export default function DiaryWorkTableEntryEditor({
-  workTableData: rows,
-  setWorkTableData: setRows,
+  workTableData: initialRows,
+  setWorkTableData: setParentRows,
 }: {
   workTableData: DiaryWorkTableEntryCollaboratorExtended[];
   setWorkTableData: (
@@ -57,75 +55,148 @@ export default function DiaryWorkTableEntryEditor({
   const dbDiaryEntryGetWorkersFn = useServerFn(dbDiaryEntryGetWorkers);
   const [workersOptions, setWorkersOptions] = useState<Option[]>([]);
 
+  const [internalRows, setInternalRows] = useState<DiaryWorkTableEntryCollaboratorExtended[]>(initialRows);
+
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceDelay = 750;
+
+  useEffect(() => {
+    if (JSON.stringify(initialRows) !== JSON.stringify(internalRows)) {
+      console.log("External data changed, updating internal state.");
+      setInternalRows(initialRows);
+    }
+  }, [initialRows, internalRows]);
+
+  useEffect(() => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      console.log("Debounce timer fired. Calling setParentRows.");
+      setParentRows(internalRows);
+    }, debounceDelay);
+
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [internalRows, setParentRows, debounceDelay]);
+
   useEffect(() => {
     async function fetchData() {
-      const workersData = await dbDiaryEntryGetWorkersFn();
-      if (workersData.success && workersData.data) {
-        const options = workersData.data.map((worker) => ({
-          value: worker.id,
-          label: `${worker.name ?? "Unknown"}`,
-        }));
-        setWorkersOptions(options);
+      try {
+        const workersData = await dbDiaryEntryGetWorkersFn();
+        if (workersData.success && workersData.data) {
+          const options: Option[] = workersData.data.map(WorkerToOption);
+          setWorkersOptions(options);
+        } else if (!workersData.success) {
+          console.error("Failed to fetch workers:", workersData.reason);
+        }
+      } catch (error) {
+        console.error("Error fetching workers:", error);
       }
     }
+    console.log("Fetching workers...");
     fetchData();
   }, []);
 
-  const time30mins = 30 * 60 * 1000;
+  const defaultWorkedSeconds = 30 * 60;
 
   const addRow = () => {
-    setRows([
-      ...rows,
+    const tempId = -Date.now();
+    setInternalRows([
+      ...internalRows,
       {
-        id: Date.now(), // Generate a unique numeric ID using timestamp
+        id: tempId,
         workers: [],
-        workedAt: null,
-        workedSeconds: time30mins,
+        workedAt: new Date(),
+        workedSeconds: defaultWorkedSeconds,
         description: "",
       },
     ]);
   };
 
   const deleteRow = (index: number) => {
-    setRows(rows.filter((_, i) => i !== index));
+    setInternalRows(internalRows.filter((_, i) => i !== index));
   };
 
   const updateRow = (
     index: number,
     key: keyof DiaryWorkTableEntryCollaboratorExtended,
-    value: Option[] | Date | string | number | undefined,
+    value: Option[] | Date | string | number | undefined | null,
   ) => {
-    const updatedRows = [...rows];
-    if (key === "workers") {
-      updatedRows[index][key] = (value as Option[]).map(OptionToWorker);
-    } else if (key === "workedAt") {
-      const dateValueNew = value as Date;
-      const dateValueOld = updatedRows[index][key];
+    const updatedRows = [...internalRows];
+    const currentRow = updatedRows[index];
 
-      function setDate(date: Date) {
-        (updatedRows[index][key] as Date) = date;
+    if (!currentRow) return;
+
+    let changed = false;
+
+    switch (key) {
+      case "workers": {
+        const newSelectedOptions = value as Option[];
+        const newWorkers = newSelectedOptions.map(OptionToWorker);
+        const currentWorkerIds = new Set(currentRow.workers.map(w => w.id));
+        const newWorkerIds = new Set(newWorkers.map(w => w.id));
+
+        if (currentWorkerIds.size !== newWorkerIds.size || ![...currentWorkerIds].every(id => newWorkerIds.has(id))) {
+          // The type assertion is no longer needed as OptionToWorker now returns the correct type
+          currentRow.workers = newWorkers;
+          changed = true;
+          console.log("Worker selection changed.");
+        }
+        break;
       }
+      case "workedAt": {
+        const dateValueNew = value as Date | null | undefined;
+        const dateValueOld = currentRow.workedAt;
+        let finalDate: Date | null = currentRow.workedAt;
 
-      if (!dateValueNew) return;
-      if (!dateValueOld) {
-        setDate(dateValueNew);
-        return;
+        if (dateValueNew === undefined || dateValueNew === null) {
+          finalDate = null;
+        } else if (!dateValueOld) {
+          finalDate = dateValueNew;
+        } else {
+          const newDateFull = new Date(dateValueOld);
+          newDateFull.setFullYear(dateValueNew.getFullYear());
+          newDateFull.setMonth(dateValueNew.getMonth());
+          newDateFull.setDate(dateValueNew.getDate());
+          finalDate = newDateFull;
+        }
+
+        if (finalDate?.getTime() !== dateValueOld?.getTime()) {
+          currentRow.workedAt = finalDate;
+          changed = true;
+        }
+        break;
       }
-      const diff = dateValueNew.getTime() - dateValueOld.getTime();
-      const diffInDays = diff / (1000 * 60 * 60 * 24);
-      const newDateFull = add(dateValueOld, { days: Math.ceil(diffInDays) });
-      setDate(newDateFull);
-
-      updatedRows[index][key] = value as Date;
-    } else if (key === "workedSeconds") {
-      updatedRows[index][key] = value as number;
-    } else if (key === "description") {
-      updatedRows[index][key] = value as string;
+      case "workedSeconds": {
+        const seconds = typeof value === 'number' && !isNaN(value) && value >= 0 ? value : 0;
+        if (currentRow.workedSeconds !== seconds) {
+          currentRow.workedSeconds = seconds;
+          changed = true;
+        }
+        break;
+      }
+      case "description": {
+        const newDescription = typeof value === 'string' ? value : "";
+        if (currentRow.description !== newDescription) {
+          currentRow.description = newDescription;
+          changed = true;
+        }
+        break;
+      }
+      default:
+        console.warn(`Unhandled key in updateRow: ${key}`);
+        break;
     }
 
-    console.log(updatedRows);
-
-    setRows(updatedRows);
+    if (changed) {
+      console.log("Internal state updated for row:", index, "key:", key);
+      setInternalRows(updatedRows);
+    }
   };
 
   return (
@@ -138,16 +209,17 @@ export default function DiaryWorkTableEntryEditor({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {rows.map((row, index) => (
+        {internalRows.map((row, index) => (
           <TableRow key={row.id}>
             <TableCell>
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex flex-col items-start gap-2">
                 <MultipleSelector
                   value={row.workers.map(WorkerToOption)}
                   onChange={(value) => updateRow(index, "workers", value)}
                   options={workersOptions}
                   placeholder="Select workers"
                   hideClearAllButton
+                  className="w-full"
                 />
                 <Popover>
                   <PopoverTrigger asChild>
@@ -160,10 +232,8 @@ export default function DiaryWorkTableEntryEditor({
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {row.workedAt
-                        ? (
-                          format(row.workedAt, "PPP (HH:mm)")
-                        )
-                        : <span>Pick a date and time</span>}
+                        ? format(row.workedAt, "PPP")
+                        : <span>Pick a date</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
@@ -174,10 +244,14 @@ export default function DiaryWorkTableEntryEditor({
                       initialFocus
                     />
                     <div className="p-3 border-t border-border">
-                      <TimePickerDemo
-                        setDate={(date: Date | undefined) =>
-                          updateRow(index, "workedAt", date)}
-                        date={row.workedAt ?? undefined}
+                      <WorkTimeInput
+                        workedMinutes={row.workedSeconds / 60}
+                        setWorkedMinutes={(newMinutes) => {
+                          const newSeconds = (newMinutes === undefined || isNaN(newMinutes))
+                            ? 0
+                            : Math.round(newMinutes * 60);
+                          updateRow(index, "workedSeconds", newSeconds);
+                        }}
                       />
                     </div>
                   </PopoverContent>
@@ -191,23 +265,24 @@ export default function DiaryWorkTableEntryEditor({
                   updateRow(index, "description", e.target.value)}
                 placeholder="Enter description"
                 rows={3}
+                className="min-h-[80px]"
               />
             </TableCell>
-            <TableCell className="w-min">
+            <TableCell className="w-min align-top pt-2">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => deleteRow(index)}
-                className="text-red-500"
+                className="text-red-500 hover:text-red-700"
               >
-                <TrashIcon />
+                <TrashIcon className="h-4 w-4" />
               </Button>
             </TableCell>
           </TableRow>
         ))}
         <TableRow>
-          <TableCell colSpan={5}>
-            <Button variant="ghost" onClick={addRow} className="w-full">
+          <TableCell colSpan={3}>
+            <Button variant="outline" onClick={addRow} className="w-full">
               <PlusIcon className="h-4 w-4 mr-2" /> Add Row
             </Button>
           </TableCell>

@@ -3,7 +3,7 @@ interface NormalTime {
   minutes: number;
 }
 
-const MINUTES_PER_PROJECT_HOURS = 50;
+export const MINUTES_PER_PROJECT_HOURS = 50;
 
 export function projectHoursToNormalHours(workHours: number): NormalTime {
   if (workHours < 0) {
