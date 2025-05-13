@@ -355,7 +355,12 @@ function FinalDiaryEntry({
             <div className="flex-grow w-full">
               {diaryEntry.contentHtml && (
                 <div className="-translate-y-3">
-                  <p dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}></p>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: diaryEntry.contentHtml }}
+                    style={{
+                      color: "white",
+                    }}
+                  ></p>
                   {diaryEntry.workTableEntries.length > 0 && (
                     <Link
                       className="text-[#23CF51] hover:underline mt-2"
